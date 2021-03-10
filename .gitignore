@@ -37,3 +37,6 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
+
+# Build Outputs
+.output

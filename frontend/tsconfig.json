@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "lib": [
+      "es2016",
+      "dom",
+      "es2017.object",
+      "es2017.string"
+    ],
+    "moduleResolution": "node",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "experimentalDecorators": true,
+    "allowUmdGlobalAccess": true
+  }
+}

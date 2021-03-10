@@ -3,7 +3,6 @@
     "target": "es2016",
     "lib": [
       "es2016",
-      "dom",
       "es2017.object",
       "es2017.string"
     ],
@@ -16,10 +15,6 @@
     "noImplicitThis": true,
     "experimentalDecorators": true,
     "allowUmdGlobalAccess": true,
-    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
-  },
-  "exclude": [
-    "node_modules"
-  ]
+  }
 }
