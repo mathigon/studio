@@ -1,20 +1,8 @@
 {
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es2016",
-    "lib": [
-      "es2016",
-      "es2017.object",
-      "es2017.string"
-    ],
-    "moduleResolution": "node",
-    "strict": true,
+    "lib": ["es2019"],
     "types" : ["node"],
-    "noImplicitAny": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "experimentalDecorators": true,
-    "allowUmdGlobalAccess": true,
     "resolveJsonModule": true
   }
 }

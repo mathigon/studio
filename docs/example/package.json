@@ -1,0 +1,23 @@
+{
+  "name": "@mathigon/studio-example",
+  "version": "0.1.0",
+  "description": "Example Server for Mathigon Studio",
+  "license": "",
+  "main": "server/app.ts",
+  "scripts": {
+    "start": "ts-node server/app.ts",
+    "start-dev": "nodemon --watch 'server/**/*.ts' --exec 'ts-node' server/app.ts",
+    "watch": "mathigon-studio --watch",
+    "build": "mathigon-studio --minify",
+    "dev": "npm-run-all --parallel start-dev watch"
+  },
+  "dependencies": {
+    "@mathigon/studio": "file:../..",
+    "ts-node": "9.1.1",
+    "typescript": "4.2.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "npm-run-all": "^4.1.5"
+  }
+}
