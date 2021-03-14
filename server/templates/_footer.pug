@@ -1,0 +1,24 @@
+footer.global-footer
+  .footer-left
+    for row in config.footer.rows
+      .footer-row
+        for link, i in row.links
+          if i
+            span.dot •
+          a(href=link.url)= __(link.title)
+
+  .footer-right
+    .footer-row= config.footer.copyright
+    .footer-row
+      if config.social.twitter
+        a.footer-social(href=`https://twitter.com/${config.social.twitter.handle}` title="Twitter" target="_blank" rel="noopener")
+          x-icon(name="twitter" size=20)
+      if config.social.facebook
+        a.footer-social(href=`https://www.facebook.com/${config.social.facebook.page}/` title="Facebook" target="_blank" rel="noopener")
+          x-icon(name="facebook" size=20)
+      if config.social.instagram
+        a.footer-social(href=`https://www.instagram.com/${config.social.instagram.handle}/` title="Instagram" target="_blank" rel="noopener")
+          x-icon(name="instagram" size=20)
+      if config.social.youtube
+        a.footer-social(href=`https://www.youtube.com/c/${config.social.youtube.channel}` title="YouTube" target="_blank" rel="noopener")
+          x-icon(name="youtube" size=20)

@@ -58,16 +58,21 @@ function watchFiles(dependencies, callback) {
 // -----------------------------------------------------------------------------
 // Console Utilities
 
+const prefixLength = process.cwd().split('').findIndex((k, i) => __dirname[i] !== k);
+const commonPath = __dirname.slice(0, prefixLength);
+
 function success(file, duration) {
-  console.log('\x1b[32m', `  Built ${file} in ${duration}ms`, '\x1b[0m');
+  const shortFile = file.replace(commonPath, '');
+  console.log(`\x1b[32m  ✔ Built ${shortFile} in ${duration}ms\x1b[0m`);
 }
 
 function warning(message) {
-  console.log('\x1b[32m', '  [WARNING] ' + message, '\x1b[0m');
+  console.log(`\x1b[33m  ★ [WARNING] ${message}\x1b[0m`);
 }
 
 function error(file) {
-  return (error) => console.log('\x1b[31m', `  [ERROR] Building ${file}:`, '\x1b[0m', '\n', error);
+  const shortFile = file.replace(commonPath, '');
+  return (error) => console.log(`\x1b[31m  ✖ [ERROR] Building ${shortFile}:\x1b[0m\n`, error);
 }
 
 

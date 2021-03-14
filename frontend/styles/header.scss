@@ -1,0 +1,139 @@
+// =============================================================================
+// Global Header Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "variables";
+
+header {
+  $hover-grey: mix($grey, $medium-grey, 60%);
+
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 44px;
+  background: $dark-grey;
+  z-index: 450;
+  color: white;
+  user-select: none;
+  box-shadow: 0 0 12px rgba(black, 25%);
+
+  #logo, .nav-link {
+    display: block;
+    font-size: 18px;
+    line-height: 44px;
+    height: 44px;
+  }
+
+  #logo {
+    float: left;
+    padding: 4px 4px 4px 16px;
+    margin-right: -12px;
+    box-sizing: border-box;
+    svg, img { height: 36px; float: left; }
+    span { line-height: 36px; display: inline-block; float: left; margin: 0 8px; }
+  }
+
+  #skip-nav {
+    position: absolute;
+    top: 2px;
+    left: -9999px;
+    height: 32px;
+    padding: 2px 18px;
+    background: $grey;
+    border: 2px solid #181824;
+    border-radius: 30px;
+    html.is-tabbing &:focus { left: 2px; }
+  }
+
+  nav { float: right; display: flex; }
+
+  .nav-link {
+    padding: 0 16px;
+    opacity: 0.8;
+    transition: opacity .2s, background .2s;
+    cursor: pointer;
+
+    &:hover, &:focus { opacity: 1; background: $hover-grey; }
+    x-icon { margin: 0 8px -6px -2px; vertical-align: baseline;}
+    &.narrow { padding: 0 12px; }
+    &.narrow x-icon { margin: 0; display: block; }
+    &.popup-target { padding-right: 18px; }
+  }
+  .nav-item.open .nav-link { opacity: 1; background: $hover-grey; }
+
+  .nav-user-icon {
+    display: block;
+    width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    border: 1px solid rgba(white, 50%);
+  }
+
+  .popup-body {
+    position: absolute;
+    top: 44px;
+    right: 0;
+    display: none;
+    background: rgba($dark-grey, 91%);
+    backdrop-filter: blur(4px);
+    border-radius: 0 0 0 6px;
+    border-left: 1px solid rgba(white, 30%);
+    border-bottom: 1px solid rgba(white, 30%);
+    background-clip: content-box;
+  }
+
+  .popup-body .nav-link {
+    padding: 0 18px;
+    white-space: nowrap;
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: left;
+    @include dividers(calc(100% - 36px));
+
+    &.logout { max-width: 300px; @include ellipsis(); }
+    &:last-child { border-radius: 0 0 0 6px; }
+
+    img { float: right; margin: 10px 2px 0 12px; }
+    .form-checkbox { float: right; margin: 8px 2px 0 12px; padding-left: 24px; }
+  }
+
+  @media (max-width: 680px) {
+    .nav-link { padding: 0 12px; }
+    .nav-link.narrow { padding: 0 10px; }
+    .nav-link x-icon { margin-right: 6px; }
+  }
+  @media (max-width: 620px) {
+    .nav-item > .nav-link {   padding: 4px 8px 4px; height: 36px; }
+    .nav-item > .nav-link x-icon { display: block; margin: 0 auto; width: 24px; height: 24px; }
+    .nav-text { display: block; line-height: 12px; font-size: 10px; text-align: center; }
+  }
+  @media (max-width: 415px) { nav { display: none; } }
+}
+
+
+
+// -----------------------------------------------------------------------------
+// Language Switcher
+
+x-modal#language { width: 540px; user-select: none; }
+
+.locale-list {
+  column-count: 3;
+  @media (max-width: 560px) { column-count: 2; }
+  @media (max-width: 420px) { column-count: 1; }
+}
+
+.locale-link {
+  display: block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background .2s;
+  margin: 2px 0;
+  -webkit-column-break-inside: avoid;
+  &:hover { @include theme(background, mix($light-grey, white), rgba(white, 20%)); }
+  img { margin-right: 8px; }
+}
+

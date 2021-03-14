@@ -50,7 +50,7 @@ async function parseYAML(courseId, file, locale, markdownField) {
 
 /** Merge and filter the YAML files for a course. */
 async function bundleYAML(file, courseID, locale, filterKeys) {
-  const mdField = file === 'gloss.yaml' ? 'text' : file === 'bios.yaml' ? 'bio' : '*';
+  const mdField = file === 'glossary.yaml' ? 'text' : file === 'bios.yaml' ? 'bio' : '*';
   const course = await parseYAML(courseID, file, locale, mdField);
   const shared = await parseYAML('shared', file, locale, mdField);
 
@@ -63,7 +63,7 @@ async function bundleYAML(file, courseID, locale, filterKeys) {
     if (!result[key]) missing.push(key);
   }
 
-  if (locale === 'en' && missing.length) warning(`Missing keys in ${file}: ${missing.join(', ')}`);
+  if (locale === 'en' && missing.length) warning(`Missing ${file.split('.')[0]} keys in ${courseID}: ${missing.join(', ')}`);
   return result;
 }
 
@@ -84,22 +84,22 @@ async function parseCourse(srcDir, locale) {
   const bios = new Set();
 
   const steps = content.split(/\n---+\n/);
-  const stepsParsed = await Promise.all(steps.map((s, i) => parseStep(s, i, courseId, locale)));
+  const parsed = await Promise.all(steps.map((s, i) => parseStep(s, i, courseId, locale)));
 
   const course = {
     id: courseId, locale,
-    title: steps[0].courseTitle || 'Untitled Course',
-    description: steps[0].description || '',
-    color: steps[0].color || '#2274e8',
-    trailer: steps[0].trailer || undefined,
-    author: steps[0].author || undefined,
-    level: steps[0].level || undefined,
-    icon: steps[0].icon ? path.join(srcDir, steps[0].icon) : undefined,
-    hero: path.join(srcDir, steps[0].hero || 'hero.jpg'),
+    title: parsed[0].courseTitle || 'Untitled Course',
+    description: parsed[0].description || '',
+    color: parsed[0].color || '#2274e8',
+    trailer: parsed[0].trailer || undefined,
+    author: parsed[0].author || undefined,
+    level: parsed[0].level || undefined,
+    icon: parsed[0].icon ? path.join(srcDir, parsed[0].icon) : undefined,
+    hero: path.join(srcDir, parsed[0].hero || 'hero.jpg'),
     goals: 0, sections: [], steps: {}
   };
 
-  for (const step of stepsParsed) {
+  for (const step of parsed) {
     if (course.steps[step.id]) warning(`Duplicate Step ID: ${step.id}`);
 
     // Update course-level data
@@ -148,9 +148,9 @@ async function parseCourse(srcDir, locale) {
   if (!course.description) course.description = course.sections.map(s => s.title).join(', ');
   course.availableLocales = [];  // TODO Set this!
 
-  course.biosJSON = JSON.stringify(bundleYAML('bios.yaml', courseId, locale, bios));
-  course.glossJSON = JSON.stringify(bundleYAML('gloss.yaml', courseId, locale, gloss));
-  course.hintsJSON = JSON.stringify(bundleYAML('hints.yaml', courseId, locale));
+  course.biosJSON = JSON.stringify(await bundleYAML('bios.yaml', courseId, locale, bios));
+  course.glossJSON = JSON.stringify(await bundleYAML('glossary.yaml', courseId, locale, gloss));
+  course.hintsJSON = JSON.stringify(await bundleYAML('hints.yaml', courseId, locale));
 
   return {course, srcFile};
 }

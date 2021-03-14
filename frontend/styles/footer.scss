@@ -1,0 +1,53 @@
+// =============================================================================
+// Global Footer Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "variables";
+
+.global-footer {
+  margin: 50px 0 40px;
+  border-top: 1px solid $border-light;
+  padding-top: 6px;
+  font-size: 15px;
+  color: $text-light;
+  display: flex;
+
+  .footer-left { flex-grow: 1; }
+  .footer-right { text-align: right; }
+  .footer-row { margin: 4px 0; }
+
+  button { position: relative; cursor: pointer; margin-left: 24px; line-height: inherit; }
+  button img { position: absolute; left: -24px; top: 2px; }
+
+  .dot { display: inline-block; margin: 0 8px; }
+
+  .footer-left a, button {
+    display: inline-block;
+    @include underline2(2px, 1px);
+    &:hover { @include theme(color, $text-dark, white); }
+  }
+
+  .footer-social {
+    display: inline-block;
+    padding: 6px 3px;
+    margin: -5px 0 -11px;
+    color: $text-light;
+    transition: color .2s;
+    svg { display: block; }
+    &:hover { @include theme(color, $text-dark, white); }
+  }
+
+  @media (max-width: 760px) {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 30px;
+
+    .footer-left, .footer-right { text-align: center; }
+    .footer-row { margin-bottom: 10px; }
+    .footer-social { padding: 6px; }
+    .footer-social svg { width: 28px; height: 28px; margin: 0 4px; }
+    button img { width: 20px; height: 20px; left: -26px; top: 3px; }
+  }
+}
