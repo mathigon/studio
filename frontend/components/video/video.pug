@@ -1,0 +1,15 @@
+.video-wrap: video(preload playsinline)
+.credit
+x-play-btn
+.controls
+  .shadow
+  .play-pause-btn
+    .play-icon(tabindex="0" aria-label=__("Play Video")): x-icon(name="play" size=32)
+    .pause-icon(aria-label=__("Pause Video")): x-icon(name="pause" size=32)
+  .timeline
+    .bar
+      .background
+      .buffer
+      .progress
+    .handle
+  .timecode

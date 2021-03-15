@@ -1,0 +1,79 @@
+// =============================================================================
+// Tabbox Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-tabbox {
+  display: block;
+  margin: 1.5em 0;
+
+  .body {
+    @include theme(background, $grey-background, $dark-mode-background);
+    border-radius:6px;
+    padding-top: 18px;
+  }
+
+  .tab {
+    display: none;
+    padding: 1em 24px;
+    p:last-child { margin-bottom: 0; }
+  }
+
+  &.full-width .tab {
+    padding: 0;
+    position: relative;
+    svg { margin: 0; }
+  }
+}
+
+x-tabbox .titles,
+x-select.tabs {
+  display: flex;
+  margin: 0 auto -18px;
+  @include overflow-scroll();
+  width: fit-content;
+  max-width: calc(100% - 12px);
+}
+x-select.tabs { z-index: 1; position: relative; }
+x-tabbox.sticky .titles { position: sticky; top: 48px; z-index: 2; }
+.webview x-tabbox.sticky .titles { top: 4px; }
+
+x-tabbox h3,
+x-select.tabs > * {
+  cursor: pointer;
+  height: 36px;
+  margin: 0;
+  line-height: 36px;
+  text-align: center;
+  padding: 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+  transition: color .2s, background .2s;
+  flex-shrink: 0;
+  border: 1px solid;
+  @include theme(background, $light-grey, mix($dark-mode, white, 40%));
+  @include theme(color, $text-dark, $grey);
+  @include theme(border-color, white, $dark-mode);
+
+  &:hover, &:focus { color: white; background: mix($light-grey, $grey); }
+  &.active { color: white; @include theme(background, $grey, mix($dark-mode, white, 10%)); cursor: default; }
+
+  &:first-child { border-radius: 20px 0 0 20px; }
+  &:last-child { border-top-right-radius: 20px; border-bottom-right-radius: 20px; }
+  &:nth-child(n+2) { border-left: none; }
+
+  .check { margin: 0 -6px 3px 6px; border: 1px solid white; }
+}
+
+@media screen and (max-width: $browser-small) {
+  x-tabbox { margin: 1.5em -24px; }
+  x-tabbox .body { padding: 0; border-radius: 0; }
+  x-tabbox .titles, x-select.tabs { margin: 0 0 0 -1px; max-width: 100%; }
+  x-tabbox h3, x-select.tabs > * {
+    &:first-child { border-radius: 0; }
+    &:last-child { border-radius: 0 8px 0 0; }
+  }
+}

@@ -1,0 +1,23 @@
+// =============================================================================
+// Target Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+.target-body {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  display: none;
+  pointer-events: none;
+  z-index: 900;
+  opacity: 0;
+  transform: translateZ(0);
+  will-change: opacity;
+  transition: opacity .3s;
+
+  & > rect { @include theme(fill, white, $dark-mode); }
+  #arrow path { @include theme(fill, black, white); }
+  .target-arrow { @include theme(stroke, black, white); }
+}

@@ -1,0 +1,95 @@
+// =============================================================================
+// Video Player Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-video {
+  display: block;
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+
+  .video-wrap { cursor: pointer; height: 0; }  // Set relatively using padding.
+  video { position: absolute;  width: 100%; height: 100%; border-radius: 4px; -webkit-touch-callout: none; }
+  x-icon { display: block; fill: white; }
+
+  .credit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(black, 80%);
+    padding: 1px 8px;
+    font-size: 10px;
+    color: white;
+    opacity: 0;
+    transition: opacity .2s;
+    border-top-right-radius: 4px;
+    &:empty { display: none; }
+  }
+  &:hover .credit { opacity: 0.8; }
+
+  // ---------------------------------------------------------------------------
+
+  .controls { display: none; transition: opacity .2s; }
+  &.playing:not(:hover) .controls { opacity: 0; }
+
+  .shadow {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    opacity: 0.5;
+    background: linear-gradient(to bottom, transparent, black);
+  }
+
+  .play-pause-btn {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 6px;
+    cursor: pointer;
+    transition: transform .2s;
+    &:hover { transform: scale(1.2); }
+  }
+  .pause-icon, &.playing .play-icon { display: none; }
+  &.playing .pause-icon { display: block; }
+
+  .timeline {
+    position: absolute;
+    left: 50px;
+    bottom: 16px;
+    right: 60px;
+    height: 12px;
+  }
+
+  .bar { cursor: pointer; position: relative; padding: 4px 0; height: 4px; }
+  .bar > * { position: absolute; top: 4px; height: 4px; border-radius: 2px; }
+  .background { width: 100%; background: rgba(white, 50%); }
+  .buffer { background: rgba(white, 50%); }
+  .progress { background: $primary; }
+
+  .handle {
+    cursor: pointer;
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: -1px;
+    margin-left: -7px;
+    border-radius: 8px;
+    background: $primary;
+    transition: transform .2s, background .2s;
+    &:hover, &:active { background: lighten($primary, 10%); transform: scale(1.4); }
+  }
+
+  .timecode {
+    position: absolute;
+    right: 16px;
+    bottom: 9px;
+    color: white;
+    font-size: 16px;
+    pointer-events: none;
+  }
+}

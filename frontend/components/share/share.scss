@@ -1,0 +1,24 @@
+// =============================================================================
+// Share Component Styles
+// (c) Mathigon
+// =============================================================================
+
+
+x-share {
+  display: flex;
+  margin: -4px;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .btn {
+    width: 36px;
+    height: 36px;
+    margin: 4px;
+    padding: 8px;
+    min-width: 0;
+    border-radius: 8px;
+    box-shadow: none;
+    x-icon { margin: 0; }
+    &.classroom { background: url(https://www.gstatic.com/classroom/logo_square_48.svg); background-size: cover; }
+  }
+}

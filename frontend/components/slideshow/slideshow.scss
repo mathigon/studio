@@ -1,0 +1,55 @@
+// =============================================================================
+// Slideshow Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-slideshow {
+  display: block;
+
+  .legend-box {
+    border: solid $border-light;
+    border-width: 2px 0;
+    & > * { padding: .7em 0; display: none; }
+    & > p, & p:last-child { margin-bottom: 0; }
+  }
+
+  .nav { height: 0; position: relative; }
+
+  .next, .back {
+    position: absolute;
+    display: block;
+    bottom: -2px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    min-width: 0;
+    border-radius: 6px 6px 0 0;
+    transform-origin: center bottom;
+    z-index: 1;
+    &.disabled { opacity: 0; }
+    x-icon { margin: 6px; }
+    [dir="rtl"] & x-icon { transform: scaleX(-1); }
+  }
+  .next { right: 0; }
+
+  .dots {
+    left: 50%;
+    position: absolute;
+    bottom: 8px;
+    transform: translateX(-50%);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    @include theme(background, rgba($dark-grey, 20%), rgba(white, 40%));
+    float: left;
+    margin: 4px;
+    transition: background .2s;
+    &.on { @include theme(background, rgba(black, 80%), white); }
+  }
+}

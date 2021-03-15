@@ -1,0 +1,62 @@
+// =============================================================================
+// Picker Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-picker {
+  display: flex;
+  margin: 1.5em -4px;
+  justify-content: space-between;
+
+  .item {
+    width: 100px;
+    border: 4px solid transparent;
+    border-radius: 8px;
+    margin: 4px;
+    cursor: pointer;
+    position: relative;
+    transition: border .2s, opacity .2s;
+  }
+
+  .item:hover { border-color: #eee; }
+  .item.correct { border-color: $success; cursor: default; }
+  .item.incorrect { border-color: $error; cursor: default; }
+
+  .item:after {
+    content: "";
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    border: 4px solid white;
+    border-radius: 100%;
+    transform: scale(0);
+    transition: transform .5s $bounce;
+  }
+
+  .item.correct:after { background: $success icon('check', 'white'); transform: scale(1); }
+  .item.incorrect:after { background: $error icon('cross', 'white'); transform: scale(1); }
+
+  &.solved .item { border-color: transparent; cursor: default; }
+  &.solved .item:after { background-color: #ccc; }
+  &.solved .item[data-error] { opacity: .2; }
+
+  &.list { display: block; margin: 1em 24px; }
+  &.list .item {
+    border: none;
+    border-radius: 5px;
+    width: auto;
+    max-width: 480px;
+    margin: 8px auto;
+    padding: 4px 12px 4px 42px;
+    transition: background .2s;
+    &:not(.correct):not(.incorrect):hover { background: #eee; }
+    &:after { top: -1px; left: 0; }
+  }
+
+  &.wrap { justify-content: center; flex-wrap: wrap; }
+}

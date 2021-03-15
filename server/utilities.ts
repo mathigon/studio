@@ -40,6 +40,8 @@ export const CONFIG = loadYAML(CORE_DIR + '/config.yaml') as Config;
 const PROJECT_CONFIG = loadYAML(PROJECT_DIR + '/config.yaml');
 deepExtend(CONFIG, PROJECT_CONFIG, (a, b) => b);
 
+export const CONTENT_DIR = path.join(PROJECT_DIR, CONFIG.contentDir);
+
 
 // -----------------------------------------------------------------------------
 // Utility Functions
