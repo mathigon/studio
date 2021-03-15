@@ -40,6 +40,7 @@ social:
     channel: Mathigon
 
 courses:
+  # Reveal all steps at once, even if they have not all been completed.
   revealAll: false
 
 tutor:

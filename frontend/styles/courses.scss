@@ -1,0 +1,63 @@
+// =============================================================================
+// Course List Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "variables";
+
+.course {
+  border-top: 1px solid $light-grey;
+  column-count: 2;
+  column-gap: 10px;
+  min-height: 80px;
+  padding: 18px 0 18px 90px;
+  position: relative;
+  @media screen and (max-width: 660px) { column-count: 1; }
+
+  .course-img {
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    border-radius: 6px;
+    position: absolute;
+    left: 0;
+    top: 18px;
+  }
+
+  h3 { margin: 0 0 8px 8px; column-span: all; }
+  h3 img { margin: -4px 0 0 8px; }
+
+  .course-banner {
+    float: right;
+    color: white;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin: 0 0 4px 6px;
+  }
+
+  .course-section {
+    border-radius: 4px;
+    break-inside: avoid;
+    font-size: 16px;
+    line-height: 1.2;
+    padding: 7px 8px 7px 34px;
+    page-break-inside: avoid;
+    &.locked { color: $text-light; }
+  }
+
+  a.course-section {
+    display: block;
+    transition: background .2s;
+    outline: none;
+    &:hover, &:focus { @include theme(background, mix($light-grey, white), rgba(white, 20%)); }
+  }
+
+  x-progress, .course-section.locked x-icon {
+    display: inline-block;
+    margin: 0 6px -4px -26px;
+    fill: $light-grey;
+  }
+}

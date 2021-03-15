@@ -15,7 +15,7 @@ production mode:
 | Development                                       | Production                                   |
 | ----------------------------------------------- | --------------------------------------- |
 | Start a local development server: `npm run dev` | Build the website: `npm run build`      |
-| The server will automatically watch for changes to content files and recompile. | Deploy to your server |
+| The server will automatically watch for changes to files and recompile. | Deploy to your server |
 |                                                 | Start a production server: `npm start`  |
 
 ## Directory Structure
@@ -23,7 +23,7 @@ production mode:
 Here is a breakdown of all the components included in this repository:
 
 * [__build/__](build): Build tools like a custom markdown parser and JS/CSS asset bundling.
-* [__frontend/__](frontend): Client-side [TypeScript](https://www.typescriptlang.org/) code and [SCSS](https://sass-lang.com/) styles. Ever top-level `.ts` or `.scss` file in this directory will get bundled
+* [__frontend/__](frontend): Client-side [TypeScript](https://www.typescriptlang.org/) code and [SCSS](https://sass-lang.com/) styles. Ever top-level `.ts` or `.scss` file in this directory will get bundled into a separate `.js` or `.css` file in the `.output` directory.
 * [__docs/__](docs): Documentation and a sample implementation
 * [__server/__](server): A NodeJS Express application for serving the course website.
 
