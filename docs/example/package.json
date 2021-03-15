@@ -7,9 +7,11 @@
   "scripts": {
     "start": "ts-node --project server/tsconfig.json server/app.ts",
     "start-dev": "nodemon --watch 'server/**/*.ts' --exec 'ts-node' --project server/tsconfig.json server/app.ts",
-    "watch": "mgon-build --watch",
-    "build": "mgon-build --minify",
-    "dev": "npm-run-all --parallel start-dev watch",
+    "watch": "mgon-build --assets --watch",
+    "build": "mgon-build --assets --minify",
+    "clean": "rm -rf node_modules/@mathigon/studio/.output",
+    "dev": "npm-run-all --parallel watch start-dev",
+    "thumbnails": "mgon-build --thumbnails",
     "screenshots": "mgon-screenshots --output screenshots"
   },
   "dependencies": {

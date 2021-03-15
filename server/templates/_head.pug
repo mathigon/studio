@@ -52,7 +52,7 @@ meta(name="msapplication-square310x310logo" content="/images/favicons/mstile-310
 meta(property="og:title" content=title)
 meta(property="og:description" content=description)
 meta(property="og:url" content=href())
-meta(property="og:image" content=(thumbnail.startsWith('http') ? thumbnail : config.domain + thumbnail))
+meta(property="og:image" content=(thumbnail.startsWith('http') ? thumbnail : 'https://' + config.domain + thumbnail))
 meta(property="og:type" content="website")
 meta(property="og:site_name" content="Mathigon")
 meta(name="twitter:card" content="summary_large_image")

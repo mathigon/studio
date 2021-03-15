@@ -1,0 +1,29 @@
+html
+head
+  style.
+    html, body { margin: 0; padding: 0; font-family: Source Sans Pro, sans-serif; text-align: center; color: white; line-height: 1.2; }
+    .header { background: #181824; height: 40px; }
+    .header img { width: auto; margin: 1px 0; }
+    .body { background-size: cover; background-position: center; }
+    .shadow { height: 270px; padding-top: 50px; background: linear-gradient(to bottom, transparent 25%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 0.5) 100%); }
+    .icon { border: 4px solid white; border-radius: 12px; display: block; margin: 0 auto 12px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); width: 110px; height: 110px; background-size: cover; }
+    .gap { height: 130px; }
+    .title { font-size: 54px; text-shadow: 0 5px 10px rgba(0, 0, 0, 0.9); }
+    .subtitle { font-size: 34px; text-shadow: 0 4px 8px rgba(0, 0, 0, 0.9); }
+    .title, .subtitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin: 0 20px; }
+body
+  .header
+    img(src=logo1 height=38)
+    img(src=logo2 height=38)
+  .body(style=`background-image: url(${hero})`)
+    .shadow
+      if icon
+        .icon(style=`background-color: ${course.color}; background-image: url(${icon})`)
+      else
+        .gap
+      if section.title === 'Introduction'
+        .title= course.title
+        .subtitle= section.title
+      else
+        .title= section.title
+        .subtitle= course.title

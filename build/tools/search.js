@@ -7,8 +7,8 @@
 const path = require('path');
 const glob = require('glob');
 const {unique} = require('@mathigon/core');
-const {parseYAML} = require('./markdown');
-const {OUTPUT, success, writeFile} = require('./utilities');
+const {parseYAML} = require('../markdown');
+const {OUTPUT, success, writeFile} = require('../utilities');
 
 // TODO Support search for non-English languages
 // TODO Find a better way to clean and configure the special words below.
