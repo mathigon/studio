@@ -8,7 +8,7 @@
     "start": "ts-node --project server/tsconfig.json server/app.ts",
     "start-dev": "nodemon --watch 'server/**/*.ts' --exec 'ts-node' --project server/tsconfig.json server/app.ts",
     "watch": "mathigon-studio --watch",
-    "build": "mathigon-studio --minify --search",
+    "build": "mathigon-studio --minify",
     "dev": "npm-run-all --parallel start-dev watch"
   },
   "dependencies": {

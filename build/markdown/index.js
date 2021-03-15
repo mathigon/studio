@@ -157,3 +157,4 @@ async function parseCourse(srcDir, locale) {
 }
 
 module.exports.parseCourse = parseCourse;
+module.exports.parseYAML = parseYAML;

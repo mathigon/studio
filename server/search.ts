@@ -4,14 +4,14 @@
 // =============================================================================
 
 
-import {stringDistance, unique, Cache} from '@mathigon/core';
+import {Cache, stringDistance, unique} from '@mathigon/core';
 import {loadJSON} from './utilities';
 
 export const SEARCH_DOCS = loadJSON('../.output/search-docs.json') as Record<string, string>;
 const SEARCH_INDEX = loadJSON('../.output/search-index.json') as Record<string, string>;
 const KEYWORDS = Object.keys(SEARCH_INDEX);
 
-const CACHE = new Cache(500);  // Cache the last 500 search queries
+const CACHE = new Cache(1000);  // Cache the last 1000 search queries
 
 
 function autocomplete(str: string): string[] {

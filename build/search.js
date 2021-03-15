@@ -6,9 +6,12 @@
 
 const path = require('path');
 const glob = require('glob');
-const {OUTPUT, writeFile} = require('./utilities');
 const {unique} = require('@mathigon/core');
+const {parseYAML} = require('./markdown');
+const {OUTPUT, success, writeFile} = require('./utilities');
 
+// TODO Support search for non-English languages
+// TODO Find a better way to clean and configure the special words below.
 
 const IGNORED_WORDS = ['introduction', 'then', 'diagrams', 'first', 'second',
   'third', 'fourth', 'fifth', 'table', 'the', 'and', 'sum', 'for', 'von',
@@ -31,6 +34,7 @@ async function loadDocuments(locale = 'en') {
   const documents = [];
 
   const courses = glob.sync('*', {cwd: OUTPUT + '/content'}).map(c => path.join(OUTPUT, 'content', c, `data_${locale}.json`));
+  const glossary = await parseYAML('shared', 'glossary.yaml', locale, 'text');
 
   for (const courseId of courses) {
     const course = require(courseId);
@@ -44,15 +48,21 @@ async function loadDocuments(locale = 'en') {
       const sectionTitle = section.title === 'Introduction' ? course.title : section.title;
       const keywords = [[sectionTitle], [course.title], [], []];
 
-      // Manually added step keywords (as keywords: metadata)
+      // Find manually added step keywords (as keywords: metadata)
       for (const step of steps) keywords[1].push(...step.keywords);
 
-      // Select subtitles
+      // Find subtitles
       for (const title of (html.match(/<h2>[\w\s]+<\/h2>/g) || [])) {
         keywords[2].push(title.slice(4, title.length - 5));
       }
 
-      // Bold words
+      // Find glossary entries in this course
+      for (const link of (html.match(/xid="[\w-]+"/g) || [])) {
+        const key = link.slice(5, link.length - 1);
+        if (glossary[key]) keywords[2].push(glossary[key].title);
+      }
+
+      // Find bold words
       for (const strong of (html.match(/<strong>[\w\s]+<\/strong>/g) || [])) {
         keywords[3].push(strong.slice(8, strong.length - 9));
       }
@@ -66,6 +76,20 @@ async function loadDocuments(locale = 'en') {
         url: section.url
       });
     }
+  }
+
+  for (const [key, data] of Object.entries(glossary)) {
+    let body = (data.image) ? `<img alt="" src="/content/shared/glossary/${data.image}"/>` : '';
+    body += data.text;
+    const multiWord = data.title.split(' ').length > 1;
+    // Single-word glossary entries have a higher priority, to fix sorting.
+    const keywords = multiWord ? [[], [data.title]] : [[data.title], []];
+    documents.push({
+      id: `gloss:${key}`,
+      keywords: [...keywords, [data.keywords || '']],
+      title: data.title,
+      subtitle: body
+    });
   }
 
   return documents;
@@ -96,6 +120,7 @@ function addKeyword(index, keyword, docId, priority) {
 }
 
 async function buildSearch() {
+  const start = Date.now();
   const documents = await loadDocuments();
   const index = {};
 
@@ -133,6 +158,7 @@ async function buildSearch() {
   const sortedDocs = {};
   for (const s of Object.keys(docs).sort()) sortedDocs[s] = docs[s];
   await writeFile(OUTPUT + '/search-docs.json', JSON.stringify(sortedDocs));
+  success('search-index.json and search-docs.json', Date.now() - start);
 }
 
 module.exports.buildSearch = buildSearch;

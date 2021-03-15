@@ -206,6 +206,6 @@ x-modal#language { width: 540px; user-select: none; }
     padding-right: 32px;
     color: $text-light;
     @media screen and (max-width: 420px) { padding: 0; }
-    .sketch { display: block; margin: 0 auto; fill: $text-light; }
+    svg { width: 80px; margin: 0 auto; fill: $text-light; }
   }
 }
