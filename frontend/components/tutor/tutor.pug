@@ -1,0 +1,10 @@
+.toasts
+  .msg-wrap: button.msg.archie(aria-label=__("Virtual Tutor")): slot(name="icon")
+.chat(data-display="flex")
+  .chat-header
+    slot(name="header")
+    button.close: x-icon(name="close" size=24)
+  .chat-body
+  .chat-footer
+    .input(contenteditable)
+    button.hint: x-icon(name="lightbulb" size=24)

@@ -1,0 +1,11 @@
+extends /_layout
+
+block vars
+  - var title = 'Course Library';
+
+block main
+  .container
+    h1 Courses
+    +course('geography')
+    +course('science')
+    include /_footer
