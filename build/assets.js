@@ -167,7 +167,7 @@ async function createPolyfill() {
   const f1 = readFile(src + '/web-animations-js/web-animations.min.js');
   const f2 = readFile(src + '/@webcomponents/custom-elements/custom-elements.min.js');
 
-  const polyfill = [f1, f2].join('\n').replace(/\nsourceMappingURL=.*\n/g, '\n');  // No Sourcemaps
+  const polyfill = [f1, f2].join('\n').replace(/\n\/\/# sourceMappingURL=.*\n/g, '\n');  // No Sourcemaps
   return writeFile(path.join(OUTPUT, 'polyfill.js'), polyfill);
 }
 
@@ -228,7 +228,7 @@ async function buildAssets(minify = false, watch = false) {
       promises.push(bundleScripts(src, dest, minify, watch, 'StepFunctions').catch(error(src)));
     }
     for (const {src, dest} of getCourseFiles(id, '*.scss', '.css')) {
-      promises.push(bundleStyles(src, false, dest, minify, watch).catch(error(src)));
+      promises.push(bundleStyles(src, dest, minify, watch).catch(error(src)));
     }
     for (const locale of CONFIG.locales) {
       promises.push(bundleMarkdown(id, locale, watch).catch(error(`course ${id} [${locale}]`)));
