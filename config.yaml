@@ -17,6 +17,11 @@ search:
 
 sitemap: []
 
+header:
+  logo: images/logo.svg
+  title: images/title.svg
+  links: []
+
 footer:
   rows: []
   copyright: © Mathigon, 2021
@@ -24,4 +29,4 @@ footer:
 tutor:
   enabled: true
   name: Archie
-  icon: /images/tutor.png
+  icon: images/archie.svg

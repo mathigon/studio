@@ -25,7 +25,7 @@ export const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
 
 
 // -----------------------------------------------------------------------------
-// Data Loading
+// File Loading
 
 export const loadYAML = cache((file: string) => {
   // TODO Support both .yaml and .yml extensions
@@ -52,6 +52,15 @@ const PROJECT_CONFIG = loadYAML(PROJECT_DIR + '/config.yaml');
 deepExtend(CONFIG, PROJECT_CONFIG, (a, b) => b);
 
 export const CONTENT_DIR = path.join(PROJECT_DIR, CONFIG.contentDir);
+
+/** Helper functions for dynamic PUG includes. */
+export const include = cache((file: string, base = 'frontend/assets') => {
+  const p1 = path.join(PROJECT_DIR, base, file);
+  if (fs.existsSync(p1)) return fs.readFileSync(p1, 'utf-8');
+  const p2 = path.join(CORE_DIR, base, file);
+  if (fs.existsSync(p2)) return fs.readFileSync(p2, 'utf-8');
+  throw new Error(`Can't find file "${file}" in "${base}".`);
+});
 
 
 // -----------------------------------------------------------------------------

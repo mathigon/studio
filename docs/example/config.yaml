@@ -11,9 +11,13 @@ search:
   enabled: true
   popular: ['course:science:optics', 'course:geography:hydrology']
 
+# All custom (non-course) URLs to add to the sitemap
+sitemap: [/courses, /custom]
+
 header:
-  logo: assets/images/logo.svg
-  title: assets/images/title.svg
+  # File paths are relative to frontend/assets
+  logo: images/logo.svg
+  title: images/title.svg
   links:
     - title: Courses
       icon: library
@@ -46,4 +50,3 @@ courses:
 tutor:
   enabled: true
   name: Archie
-  icon: /tutor.png
