@@ -38,5 +38,6 @@ _site
 .jekyll-metadata
 vendor
 
-# Build Outputs
+# Build and Test Outputs
 .output
+screenshots

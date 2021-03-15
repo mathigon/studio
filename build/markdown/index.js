@@ -10,6 +10,8 @@ const {toTitleCase, last, words} = require('@mathigon/core');
 const {readFile, warning, loadYAML, CONFIG, CONTENT} = require('../utilities');
 const {parseStep, parseSimple} = require('./parser');
 
+const COURSE_URLS = new Set();  // Used for Sitemap generation
+
 
 // -----------------------------------------------------------------------------
 // YAML Parsing utilities
@@ -113,15 +115,16 @@ async function parseCourse(srcDir, locale) {
       // TODO We should always auto-generate section IDs using the English
       // section title, to prevent errors when switching between locales.
       const sectionId = step.section || step.sectionTitle.toLowerCase().replace(/\s/g, '-').replace(/[^\w-]/g, '');
+      const url = step.url || `/course/${courseId}/${sectionId}`;
       course.sections.push({
         id: sectionId,
         title: step.sectionTitle.replace(/\\/g, ''),  // No escape characters in title strings
         background: step.sectionBackground || undefined,
         locked: (step.sectionStatus === 'dev') || undefined,
         autoTranslated: (step.translated === 'auto') || undefined,
-        url: step.url || `/course/${courseId}/${sectionId}`,
-        steps: [], goals: 0, duration: 0
+        url, steps: [], goals: 0, duration: 0
       });
+      if (locale === 'en') COURSE_URLS.add(url);
     }
 
     // Update section-level data
@@ -163,3 +166,4 @@ async function parseCourse(srcDir, locale) {
 
 module.exports.parseCourse = parseCourse;
 module.exports.parseYAML = parseYAML;
+module.exports.COURSE_URLS = COURSE_URLS;

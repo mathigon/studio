@@ -9,7 +9,8 @@
     "node": "14.x"
   },
   "bin": {
-    "mathigon-studio": "build/index.js"
+    "mgon-build": "build/index.js",
+    "mgon-screenshots": "tests/screenshots.js"
   },
   "scripts": {
     "lint": "eslint . --ext .ts,.js",
@@ -52,7 +53,6 @@
     "pug": "3.0.2",
     "rtlcss": "3.1.2",
     "sass": "1.32.8",
-    "sitemap": "6.4.0",
     "tslib": "2.1.0",
     "typescript": "4.2.3",
     "validator": "13.5.2",

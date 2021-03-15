@@ -6,7 +6,7 @@ Welcome to Mathigon Studio – an award-winning platform for creating interactiv
 
 This repository is not intended to be used standalone. You will need to create a parent repository
 containing the content, settings, and any customisations for this course. You can see a sample
-repository at [docs/sample](docs/sample). Then install Mathigon Studio as a dependency using
+repository at [docs/example](docs/example). Then install Mathigon Studio as a dependency using
 `npm install @mathigon/coursekit`.
 
 The scripts and server behave slightly different depending on whether they run in development or
@@ -23,7 +23,9 @@ production mode:
 Here is a breakdown of all the components included in this repository:
 
 * [__build/__](build): Build tools like a custom markdown parser and JS/CSS asset bundling.
-* [__frontend/__](frontend): Client-side [TypeScript](https://www.typescriptlang.org/) code and [SCSS](https://sass-lang.com/) styles. Ever top-level `.ts` or `.scss` file in this directory will get bundled into a separate `.js` or `.css` file in the `.output` directory.
+* [__frontend/__](frontend): Client-side [TypeScript](https://www.typescriptlang.org/) code and
+  [SCSS](https://sass-lang.com/) styles. Ever top-level `.ts` or `.scss` file in this directory will
+  get bundled into a separate `.js` or `.css` file in the `.output` directory.
 * [__docs/__](docs): Documentation and a sample implementation
 * [__server/__](server): A NodeJS Express application for serving the course website.
 
