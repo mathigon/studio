@@ -6,8 +6,9 @@ const {buildSearch} = require('./search');
 
 const minify = process.argv.includes('--minify');
 const watch = process.argv.includes('--watch');
+const search = process.argv.includes('--search');
 
 (async () => {
   await buildAssets(minify, watch);
-  await buildSearch();
+  if (search) await buildSearch();
 })();

@@ -5,7 +5,7 @@
 
 
 const path = require('path');
-const {toTitleCase, last} = require('@mathigon/core');
+const {toTitleCase, last, words} = require('@mathigon/core');
 const {readFile, warning, loadYAML, CONTENT} = require('../utilities');
 const {parseStep, parseSimple} = require('./parser');
 
@@ -130,7 +130,8 @@ async function parseCourse(srcDir, locale) {
 
     // Set step-level data
     const title = step.title || toTitleCase(step.id.replace(/-|[0-9]+$/g, ' '));
-    course.steps[step.id] = {id: step.id, title, html: step.html, goals: step.goals};
+    const keywords = step.keywords ? words(step.keywords) : [];
+    course.steps[step.id] = {id: step.id, title, html: step.html, goals: step.goals, keywords};
   }
 
   for (const [i, section] of course.sections.entries()) {
