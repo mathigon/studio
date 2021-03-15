@@ -1,0 +1,15 @@
+// =============================================================================
+// Icon Styles
+// (c) Mathigon
+// =============================================================================
+
+
+x-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  svg { width: 100%; height: 100%; }
+}
+
+.button x-icon { margin: -10px 3px -10px -8px; }

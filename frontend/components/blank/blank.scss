@@ -1,0 +1,128 @@
+// =============================================================================
+// Inline Blank Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-blank, x-blank-mc {
+  display: inline-block;
+  position: relative;
+  &.done { display: inline; white-space: normal; }
+
+  .target {
+    @include inline-block($blank-color);
+    color: white;
+    text-align: center;
+    transition: border-radius .2s, background .2s, color .2s, margin .2s, padding .2s, width .2s, min-width .2s, box-shadow .2s;
+  }
+  &.on .target, &:hover .target { box-shadow: $shadow-1; }
+
+  // Blanks inside fractions
+  mfrac & .target { margin: 0 2px; }
+  mfrac &.done .target { line-height: 1; }
+
+  &.invalid .target:before {
+    content: "\00d7";
+    line-height: 1;
+    display: block;
+    background: $error;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    padding: 4px 0 3px;
+    width: 20px;
+    text-align: center;
+    border-radius: 5px 0 0 5px;
+    font-weight: 700;
+    color: white;
+  }
+
+  &.done .target {
+    margin: 0;
+    padding-top: 1px;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    display: inline;
+    min-width: 0;
+    cursor: default;
+    background: transparent;
+    background-image: none;
+    color: $blue;
+    box-shadow: none;
+  }
+  &.done:hover .target { color: $blank-color; }
+}
+
+x-blank {
+  .target { padding: 0; cursor: text; }
+  &.invalid .target { padding-left: 20px; }
+
+  input {
+    text-align: center;
+    margin: 0;
+    background: none !important;
+    color: inherit;
+    min-width: 60px;
+    width: 40px;
+    &:focus { color: white; }
+    html.is-tabbing &:focus { box-shadow: 0 0 0 2px currentColor, 0 0 0 4px $blank-color; outline: none; }
+  }
+
+  ::-webkit-input-placeholder { color: inherit !important; opacity: 1 !important; }
+  ::-moz-placeholder { color: inherit !important; opacity: 1 !important; }
+  :-moz-placeholder { color: inherit !important; opacity: 1 !important; }
+}
+
+x-blank-mc {
+  .target { min-width: 50px; line-height: 24px; padding: 2px 12px; }
+  &.invalid .target { padding-left: 30px; }
+  html.is-tabbing & .target:focus { box-shadow: 0 0 0 2px currentColor, 0 0 0 4px $blank-color; outline: none; }
+
+  .popup { @include popup(mix(black, $blank-color, 10%)); min-width: 90px; width: max-content; left: 2px; box-shadow: $shadow-2; }
+  &.left .popup { left: auto; right: 2px; border-radius: 6px 0 6px 6px; transform-origin: right top; }
+  &.top .popup { top: auto; bottom: 100%; border-radius: 6px 6px 6px 0; transform-origin: left bottom; }
+  &.left.top .popup { border-radius: 6px 6px 0 6px; transform-origin: right bottom; }
+  .caption &.top .popup { bottom: 24px; }
+
+  strong { color: white; }
+  &.done strong { color: $blank-color; }
+
+  &.on, &:focus-within {
+    z-index: 100;
+
+    .target { border-radius: 5px 5px 0 0; }
+    &.top .target { border-radius: 0 0 5px 5px; }
+    &.invalid .target:before { border-radius: 5px 0 0 0; }
+    &.top.invalid .target:before { border-radius: 0 0 0 5px; }
+
+    .popup { opacity: 1; pointer-events: all; transform: none; }
+  }
+
+  .choice {
+    box-sizing: border-box;
+    display: block;
+    font-size: 16px;
+    line-height: 22px;
+    padding: 6px 16px 6px 12px;
+    cursor: pointer;
+    color: rgba(white, 80%);
+    transition: color .2s, background .2s, box-shadow .2s;
+    width: 100%;
+    text-align: left;
+
+    &:hover, &:focus { color: white; background: rgba(white, 20%); }
+    html.is-tabbing &:focus { box-shadow: 0 0 0 2px currentColor, 0 0 0 4px $blank-color; outline: none; }
+
+    &:first-child { border-top-right-radius: 6px; }
+    &:last-child { border-radius: 0 0 6px 6px; }
+
+    &:before { content: " "; display: block; height: 1px; margin-top: -6px;
+      background: rgba(white, 50%); transition: background .2s; position: absolute; left: 12px; right: 16px; }
+    &:first-child:before, &:hover:before, &:focus:before,
+    &:hover + .choice:before, &:focus + .choice:before { background: transparent; }
+  }
+}

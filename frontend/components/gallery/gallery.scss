@@ -1,0 +1,71 @@
+// =============================================================================
+// Gallery Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-gallery {
+  display: block;
+  position: relative;
+
+  .wrapper {
+    overflow: hidden;
+    cursor: ew-resize;
+    position: relative;
+  }
+
+  .panel {
+    @include clearfix();
+    transform: translateX(0);
+  }
+
+  .panel > * {
+    padding: 10px;
+    float: left;
+    box-sizing: border-box;
+    & img, & x-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
+  .nav { position: relative; border-top: 2px solid $light-grey; height: 34px; }
+
+  .next, .back {
+    position: absolute;
+    display: block;
+    top: -2px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    min-width: 0;
+    border-radius: 0 0 6px 6px;
+    transform-origin: center top;
+    &.disabled { opacity: 0; }
+    x-icon { margin: 6px; display: block; }
+  }
+
+  .next { right: 0; }
+
+  .dots {
+    left: 50%;
+    position: absolute;
+    top: 10px;
+    transform: translateX(-50%);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba($dark-grey, 20%);
+    float: left;
+    margin: 4px;
+    transition: opacity .2s;
+    &.on { background: rgba($dark-grey, 80%); }
+  }
+}

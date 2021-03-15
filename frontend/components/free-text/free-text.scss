@@ -1,0 +1,72 @@
+// =============================================================================
+// Free Text Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-free-text {
+  display: block;
+  position: relative;
+  margin: 1.5em 0;
+
+  .text-area {
+    appearance: none;
+    background: $grey-background;
+    border: 1px solid $border-light;
+    color: $text-dark;
+    line-height: 1.4em;
+    padding: 10px 16px 42px;
+    transition: background .2s, border .2s, box-shadow .2s;
+    border-radius: 6px;
+    height: auto;
+    cursor: text;
+    &:empty:after { content: "What do you notice or wonder?"; color: $text-light; }
+  }
+  .text-area:hover, &:focus-within .text-area { z-index: 2; border-color: $blue; background-color: #eee; }
+  &:focus-within .text-area { outline: none; box-shadow: 0 0 0 3px rgba($blue, 50%); }
+
+  .toolbar {
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+    right: 1px;
+    display: flex;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .2s;
+    border-top: 1px solid mix($medium-grey, $grey-background);
+    background: mix($light-grey, $grey-background);
+    border-radius: 0 0 5px 5px;
+    .space { flex-grow: 1; }
+  }
+
+  &:focus-within .toolbar,
+  .text-area:focus + .toolbar { opacity: 1; pointer-events: all; }
+
+  .toolbar .command {
+    display: block;
+    height: 20px;
+    padding: 6px;
+    border-right: 1px solid mix($medium-grey, $grey-background);
+    cursor: pointer;
+    transition: background .2s, fill .2s;
+    fill: $grey;
+    &:hover, &:focus { background: $light-grey; fill: $dark-grey; }
+    &:first-child { border-bottom-left-radius: 5px; }
+    x-icon { @include bouncy(); display: block; margin: 0; transition: transform .2s; }
+  }
+
+  .toolbar .submit {
+    border-radius: 0 0 5px 0;
+    font-size: 16px;
+    padding: 0 12px 0 8px;
+    margin-top: -1px;
+    height: 33px;
+    line-height: 33px;
+    &.invisible { opacity: 0; pointer-events: none; transform: scale(0.5); }
+    x-icon { margin-right: 2px; }
+    &:hover, &:focus { background: $success; }
+  }
+}

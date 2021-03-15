@@ -6,7 +6,7 @@
 
 const marked = require('marked');
 const pug = require('pug');
-const JSDom = require('jsdom').JSDOM;
+const JSDom = require('jsdom').JSDOM;  // Could switch to cheerio.js.org for speed?
 const {last, cache} = require('@mathigon/core');
 const htmlMinify = require('html-minifier').minify;
 

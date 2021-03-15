@@ -66,7 +66,7 @@ module.exports.getRenderer = function(metadata, courseId, locale='en') {
 
   // Parse blockquote (>) blocks as YAML metadata.
   renderer.blockquote = (quote) => {
-    Object.assign(metadata, yaml.load(originalP || quote));
+    Object.assign(metadata, yaml.load(entities.decode(originalP || quote)));
     return '';
   };
 

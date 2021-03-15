@@ -95,7 +95,7 @@ async function parseCourse(srcDir, locale) {
     author: parsed[0].author || undefined,
     level: parsed[0].level || undefined,
     icon: parsed[0].icon ? path.join(srcDir, parsed[0].icon) : undefined,
-    hero: path.join(srcDir, parsed[0].hero || 'hero.jpg'),
+    hero: path.join('/content', courseId, parsed[0].hero || 'hero.jpg'),
     goals: 0, sections: [], steps: {}
   };
 
