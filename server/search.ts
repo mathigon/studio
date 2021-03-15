@@ -7,6 +7,7 @@
 import {Cache, stringDistance, unique} from '@mathigon/core';
 import {loadJSON} from './utilities';
 
+// TODO Ensure that these files have been generated before restarting!
 export const SEARCH_DOCS = loadJSON('../.output/search-docs.json') as Record<string, string>;
 const SEARCH_INDEX = loadJSON('../.output/search-index.json') as Record<string, string>;
 const KEYWORDS = Object.keys(SEARCH_INDEX);
