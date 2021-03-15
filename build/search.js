@@ -6,8 +6,7 @@
 
 const path = require('path');
 const glob = require('glob');
-const {OUTPUT} = require('./utilities');
-const {writeFile} = require('./utilities');
+const {OUTPUT, writeFile} = require('./utilities');
 const {unique} = require('@mathigon/core');
 
 
@@ -63,7 +62,7 @@ async function loadDocuments(locale = 'en') {
         keywords,
         title: section.title,
         subtitle: (course.level ? course.level + ' – ' : '') + course.title,
-        image: `background-color: ${course.color}; background-image: url(${course.icon})`,
+        image: `background-color: ${course.color}; background-image: url(${course.icon || course.hero})`,
         url: section.url
       });
     }
@@ -126,14 +125,14 @@ async function buildSearch() {
 
   // Generate search documents
   const docs = {};
-  for (const {id, title, subtitle, url, icon, type} of documents) {
-    docs[id] = {title, type: type || id.split(':')[0], subtitle, url, icon};
+  for (const {id, title, subtitle, url, image, type} of documents) {
+    docs[id] = {title, type: type || id.split(':')[0], subtitle, url, image};
   }
 
   // Write search documents to file
   const sortedDocs = {};
   for (const s of Object.keys(docs).sort()) sortedDocs[s] = docs[s];
-  await writeFile(OUTPUT + '/search-documents.json', JSON.stringify(sortedDocs));
+  await writeFile(OUTPUT + '/search-docs.json', JSON.stringify(sortedDocs));
 }
 
 module.exports.buildSearch = buildSearch;

@@ -9,6 +9,7 @@ locales: [en, de, es, fr]
 
 search:
   enabled: true
+  popular: ['course:science:optics', 'course:geography:hydrology']
 
 header:
   logo: assets/images/logo.svg

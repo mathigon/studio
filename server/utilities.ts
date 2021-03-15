@@ -31,11 +31,19 @@ export const loadYAML = cache((file: string) => {
   return yaml.load(fs.readFileSync(file, 'utf8'));
 });
 
-export const getCourse = cache<Course>((courseId: string, locale: string) => {
-  return require(`../.output/content/${courseId}/data_${locale}.json`);
+export const loadJSON = cache((file: string) => {
+  try {
+    return require(file);
+  } catch {
+    return {};
+  }
 });
 
-// Configuration
+export function getCourse(courseId: string, locale: string) {
+  return loadJSON(`../.output/content/${courseId}/data_${locale}.json`) as Course;
+}
+
+// Configuration files
 export const CONFIG = loadYAML(CORE_DIR + '/config.yaml') as Config;
 const PROJECT_CONFIG = loadYAML(PROJECT_DIR + '/config.yaml');
 deepExtend(CONFIG, PROJECT_CONFIG, (a, b) => b);

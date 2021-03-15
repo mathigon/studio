@@ -5,8 +5,8 @@
   "license": "",
   "main": "server/app.ts",
   "scripts": {
-    "start": "ts-node server/app.ts",
-    "start-dev": "nodemon --watch 'server/**/*.ts' --exec 'ts-node' server/app.ts",
+    "start": "ts-node --project server/tsconfig.json server/app.ts",
+    "start-dev": "nodemon --watch 'server/**/*.ts' --exec 'ts-node' --project server/tsconfig.json server/app.ts",
     "watch": "mathigon-studio --watch",
     "build": "mathigon-studio --minify --search",
     "dev": "npm-run-all --parallel start-dev watch"

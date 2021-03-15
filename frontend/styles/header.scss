@@ -114,7 +114,6 @@ header {
 }
 
 
-
 // -----------------------------------------------------------------------------
 // Language Switcher
 
@@ -137,3 +136,76 @@ x-modal#language { width: 540px; user-select: none; }
   img { margin-right: 8px; }
 }
 
+
+// -----------------------------------------------------------------------------
+// Search Modal
+
+#search {
+  width: 480px;
+  .modal-body { padding: 12px; overflow: visible; }
+
+  .form-field {
+    padding: 0;
+    input { padding: 8px 16px 8px 48px; font-size: 24px; border-radius: 40px; line-height: 32px; }
+    input::placeholder { color: inherit; opacity: 0.5; }
+    input:focus { box-shadow: 0 0 0 3px mix($blue, white); }
+    x-icon { position: absolute; left: 13px; top: 11px; fill: currentColor; }
+  }
+
+  .search-body {
+    padding: 8px 8px 6px 48px;
+    min-height: 180px;
+    max-height: calc(100vh - 160px);
+    overflow: auto;
+    @include clearfix();
+    @media screen and (max-width: 420px) { padding-left: 8px; }
+  }
+
+  .search-section { font-weight: 600; font-size: 14px; text-transform: uppercase; }
+
+  .search-result {
+    margin: 0 -6px;
+    height: 48px;
+    display: block;
+    padding: 6px;
+    border-radius: 6px;
+    line-height: 1.2;
+    transition: background .2s;
+    &:hover, &:focus { @include theme(background, mix($light-grey, white), rgba(white, 20%)); }
+  }
+
+  .search-img {
+    width: 48px;
+    height: 48px;
+    background: black;
+    background-size: cover;
+    border-radius: 4px;
+    float: left;
+    margin-right: 10px;
+  }
+
+  .search-subtitle { font-size: 14px; color: $text-light; margin-top: 4px; @include ellipsis; }
+  .search-title { font-size: 20px; font-weight: 600; @include ellipsis; }
+
+  .search-gloss {
+    background: mix($yellow, white, 40%);
+    border-radius: 6px;
+    margin: 6px 0;
+    padding: 8px 14px;
+    font-size: 16px;
+    line-height: 1.4;
+    @include clearfix;
+    img { border: 0; float: right; width: 160px; margin: 0 -12px 0 0; }
+    .math, x-math { white-space: nowrap; }
+    p, li, ul { margin-bottom: .3em; &:last-child { margin-bottom: 0; }}
+  }
+
+  .no-results {
+    margin-top: 32px;
+    text-align: center;
+    padding-right: 32px;
+    color: $text-light;
+    @media screen and (max-width: 420px) { padding: 0; }
+    .sketch { display: block; margin: 0 auto; fill: $text-light; }
+  }
+}
