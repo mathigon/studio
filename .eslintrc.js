@@ -8,7 +8,7 @@ module.exports = {
   env: {
     node: true
   },
-  ignorePatterns: ['node_modules/**'],
+  ignorePatterns: ['node_modules/**', '**/.*', '**/assets/**'],
   plugins: ['@typescript-eslint'],
   extends: [
     'eslint:recommended',
@@ -25,6 +25,8 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',  // Remove eventually!
 
     'require-jsdoc': 'off',  // Remove eventually!
+    'valid-jsdoc': 'off',  // Remove eventually!
+
     'max-len': 'off',
     'padded-blocks': 'off',
     'arrow-parens': 'off',

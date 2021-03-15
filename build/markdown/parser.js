@@ -13,6 +13,7 @@ const htmlMinify = require('html-minifier').minify;
 const {fillTexPlaceholders} = require('./mathjax');
 const {getRenderer} = require('./renderer');
 const {addNarrationTags} = require('./audio');
+const {warning} = require('../utilities');
 
 const $$ = (el, query) => Array.from(el.querySelectorAll(query));
 
@@ -199,7 +200,7 @@ async function parseSimple(text, locale = 'en') {
   return htmlMinify(doc.innerHTML, MINIFY_CONFIG);
 }
 
-module.exports.parseStep = cache(parseStep)
+module.exports.parseStep = cache(parseStep);
 module.exports.parseSimple = parseSimple;
 
 

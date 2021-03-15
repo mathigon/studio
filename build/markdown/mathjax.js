@@ -68,4 +68,4 @@ module.exports.fillTexPlaceholders = async function(doc) {
 module.exports.writeTexCache = async function() {
   if (storeChanged) await writeFile(cacheFile, JSON.stringify(mathJaxStore));
   storeChanged = false;
-}
+};
