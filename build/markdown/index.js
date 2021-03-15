@@ -4,9 +4,10 @@
 // =============================================================================
 
 
+const fs = require('fs');
 const path = require('path');
 const {toTitleCase, last, words} = require('@mathigon/core');
-const {readFile, warning, loadYAML, CONTENT} = require('../utilities');
+const {readFile, warning, loadYAML, CONFIG, CONTENT} = require('../utilities');
 const {parseStep, parseSimple} = require('./parser');
 
 
@@ -18,7 +19,7 @@ const YAML_CACHE = new Map();
 /** Resolve locale-based filenames. */
 function resolvePath(courseId, file, locale = 'en') {
   if (locale === 'en') return path.join(CONTENT, courseId, file);
-  return path.join(CONTENT, 'translations', locale, courseId, file);
+  return path.join(CONTENT, '../translations', locale, courseId, file);
 }
 
 /** Some YAML files contain markdown that needs to be parsed separately. */
@@ -109,6 +110,8 @@ async function parseCourse(srcDir, locale) {
 
     // Create a new section
     if (step.sectionTitle) {
+      // TODO We should always auto-generate section IDs using the English
+      // section title, to prevent errors when switching between locales.
       const sectionId = step.section || step.sectionTitle.toLowerCase().replace(/\s/g, '-').replace(/[^\w-]/g, '');
       course.sections.push({
         id: sectionId,
@@ -147,7 +150,9 @@ async function parseCourse(srcDir, locale) {
   }
 
   if (!course.description) course.description = course.sections.map(s => s.title).join(', ');
-  course.availableLocales = [];  // TODO Set this!
+
+  // Find all locales that this course has been translated into.
+  course.availableLocales = CONFIG.locales.filter(l => fs.existsSync(resolvePath(courseId, 'content.md', l)));
 
   course.biosJSON = JSON.stringify(await bundleYAML('bios.yaml', courseId, locale, bios));
   course.glossJSON = JSON.stringify(await bundleYAML('glossary.yaml', courseId, locale, gloss));

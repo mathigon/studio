@@ -16,6 +16,7 @@ import {Config, Course} from './interfaces';
 
 export const CORE_DIR = path.join(__dirname, '../');
 export const PROJECT_DIR = process.cwd();
+export const OUT_DIR = CORE_DIR + '/.output';
 
 export const ENV = process.env.NODE_ENV || 'development';
 export const IS_PROD = ENV === 'production';
@@ -28,20 +29,22 @@ export const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
 
 export const loadYAML = cache((file: string) => {
   // TODO Support both .yaml and .yml extensions
-  return yaml.load(fs.readFileSync(file, 'utf8'));
+  if (!fs.existsSync(file)) return undefined;
+  return yaml.load(fs.readFileSync(file, 'utf8')) as unknown;
 });
 
 export const loadJSON = cache((file: string) => {
-  try {
-    return require(file);
-  } catch {
-    return {};
-  }
+  // TODO Maybe should use require() instead?
+  if (!fs.existsSync(file)) return undefined;
+  return JSON.parse(fs.readFileSync(file, 'utf8')) as unknown;
 });
 
-export function getCourse(courseId: string, locale: string) {
-  return loadJSON(`../.output/content/${courseId}/data_${locale}.json`) as Course;
-}
+export const getCourse = cache((courseId: string, locale = 'en'): Course => {
+  const course = loadJSON(OUT_DIR + `/content/${courseId}/data_${locale}.json`) as Course;
+  if (!course && locale !== 'en') return getCourse(courseId);  // Return English fallback
+  if (!course) throw new Error(`Invalid course ID: ${courseId}`);
+  return course;
+});
 
 // Configuration files
 export const CONFIG = loadYAML(CORE_DIR + '/config.yaml') as Config;

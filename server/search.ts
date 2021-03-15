@@ -5,11 +5,11 @@
 
 
 import {Cache, stringDistance, unique} from '@mathigon/core';
-import {loadJSON} from './utilities';
+import {loadJSON, OUT_DIR} from './utilities';
 
 // TODO Ensure that these files have been generated before restarting!
-export const SEARCH_DOCS = loadJSON('../.output/search-docs.json') as Record<string, string>;
-const SEARCH_INDEX = loadJSON('../.output/search-index.json') as Record<string, string>;
+export const SEARCH_DOCS = loadJSON(OUT_DIR + '/search-docs.json') as Record<string, string> || {};
+const SEARCH_INDEX = loadJSON(OUT_DIR + '/search-index.json') as Record<string, string> || {};
 const KEYWORDS = Object.keys(SEARCH_INDEX);
 
 const CACHE = new Cache(1000);  // Cache the last 1000 search queries
