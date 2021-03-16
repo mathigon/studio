@@ -39,14 +39,17 @@ export const loadJSON = cache((file: string) => {
   return JSON.parse(fs.readFileSync(file, 'utf8')) as unknown;
 });
 
-export const getCourse = cache((courseId: string, locale = 'en'): Course => {
+export const getCourse = cache((courseId: string, locale = 'en'): Course|undefined => {
   const course = loadJSON(OUT_DIR + `/content/${courseId}/data_${locale}.json`) as Course;
   if (!course && locale !== 'en') return getCourse(courseId);  // Return English fallback
-  if (!course) throw new Error(`Invalid course ID: ${courseId}`);
+  if (!course) return undefined;
   return course;
 });
 
-/** Helper functions for dynamic PUG includes. */
+/**
+ * On its own, PUG doesn't allow dynamic includes (e.g. for file paths provided
+ * in a configuration file). Here, we manually load and insert an external file.
+ */
 export const include = cache((file: string, base = 'frontend/assets') => {
   const p1 = path.join(PROJECT_DIR, base, file);
   if (fs.existsSync(p1)) return fs.readFileSync(p1, 'utf-8');

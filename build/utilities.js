@@ -49,7 +49,7 @@ function loadYAML(file) {
 function watchFiles(dependencies, callback) {
   const watcher = chokidar.watch(dependencies);
   watcher.on('change', async () => {
-    console.log('\x1b[33m', `  Updating...`, '\x1b[0m');
+    console.log('\x1b[33m  Updating...\x1b[0m');
     await callback();
   });
 }

@@ -9,14 +9,12 @@ containing the content, settings, and any customisations for this course. You ca
 repository at [docs/example](docs/example). Then install Mathigon Studio as a dependency using
 `npm install @mathigon/coursekit`.
 
-The scripts and server behave slightly different depending on whether they run in development or
-production mode:
+For more details on how to set up a server, customise its settings, and create interactive
+courses, take a look at our documentation:
 
-| Development                                       | Production                                   |
-| ----------------------------------------------- | --------------------------------------- |
-| Start a local development server: `npm run dev` | Build the website: `npm run build`      |
-| The server will automatically watch for changes to files and recompile. | Deploy to your server |
-|                                                 | Start a production server: `npm start`  |
+* [Setup and Customisation](docs/setup.md)
+* [Course Markdown Syntax](docs/markdown.md)
+* [Interactive Components](docs/interactives.md)
 
 ## Directory Structure
 

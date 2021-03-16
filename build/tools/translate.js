@@ -26,7 +26,7 @@ async function translate(key, allLocales = false) {
     if (locale === 'en') continue;
     if (!allLocales && !available.includes(locale)) continue;
 
-    console.log(`\x1b[33m  Translating ${locale}...`);
+    console.log(`\x1b[33m  Translating ${locale}...\x1b[0m`);
     const file = process.cwd() + `/translations/${locale}/strings.yaml`;
 
     const data = loadYAML(file);

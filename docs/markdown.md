@@ -7,6 +7,8 @@ Here is the basic outline of a chapter:
 ```markdown
 # Chapter Title
 
+> color: #f42621
+> description: Here is a custom course description
 > id: step-1
 > section: section-id
 

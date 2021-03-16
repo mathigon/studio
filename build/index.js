@@ -24,5 +24,5 @@ const {translate} = require('./tools/translate');
   // Translate content using `mgon-build --translate --key service-account.json`
   if (argv.translate) await translate(argv.key, argv.all || false);
 
-  console.log('\x1b[32m  DONE!');
+  console.log('\x1b[32m  DONE!\x1b[0m');
 })();

@@ -84,7 +84,7 @@ export interface ServerOptions {
   sessionSecret: string;
   csrfBlocklist?: string[];
   maxBodySize?: string;
-  cookieDomain?: string;  // For shared cookies across multiple subdomains
+  cacheAge?: number;  // Cache duration for static files (in ms)
 }
 
 // -----------------------------------------------------------------------------
@@ -141,15 +141,9 @@ export interface Config {
     youtube?: {
       channel: string;
     }
-    pinterest?: {
-
-    }
-    reddit?: {
-
-    }
-    googleClassroom?: {
-
-    }
+    pinterest?: {}
+    reddit?: {}
+    googleClassroom?: {}
   }
   courses: {
     revealAll: boolean;
