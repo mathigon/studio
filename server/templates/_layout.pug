@@ -1,0 +1,72 @@
+include _mixins
+
+//- Default template variables
+block vars
+- var title = title ? title + ' - ' + config.siteName : config.siteName
+- var description = description || config.description
+- var thumbnail = thumbnail || '/images/thumbnail.jpg';
+
+if xhr
+  title= title
+  block main
+
+else
+  doctype html
+  html(lang=locale.id dir=(locale.dir || 'ltr') theme=theme class=htmlClass)
+    head
+      include _head
+      block head
+
+      block fonts
+        //- Source Sans Pro on Google Fonts doesn't have full support for Cyrillic characters.
+        if locale.id !== 'ru'
+          link(href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,300,400i,600i&amp;subset=greek" rel="stylesheet")
+          link(rel="dns-prefetch" href="https://fonts.googleapis.com")
+          link(rel="preconnect" href="https://fonts.gstatic.com/" crossorigin)
+
+      script window.csrfToken = '#{_csrf}'
+      meta(name="csrf-token" content=_csrf)
+
+      for s in (styles || ['/main.css'])
+        link(href=cacheBust(s) rel='stylesheet')
+
+    body
+      noscript.warning
+        .warning-body
+          include ../../frontend/assets/images/logo.svg
+          p= __('Please enable JavaScript in your browser to access $0.', config.siteName)
+
+      <!--[if IE]>
+      .warning
+        .warning-body
+          include ../../frontend/assets/images/logo.svg
+          p= __('Unfortunately, Internet Explorer does not support all of $0’s features. We recommend using <a href="https://www.google.com/chrome/" target="_blank" rel="noopener">Google Chrome</a>.', config.siteName)
+      <![endif]-->
+
+      include _header
+
+      if showCookieConsent
+        .cookie-warning
+          p #{__(`${config.siteName} uses cookies to personalise and improve this website.`)}
+          .btn-row
+            button#yes-to-cookies.btn.btn-white.btn-small #{__('Accept')}
+            a.btn.btn-white.btn-small(href=config.privacyURL) #{__('Privacy Policy')}
+
+      main
+        block main
+
+      script(src=cacheBust('/polyfill.js'))
+      for s in (scripts || ['/main.js'])
+        script(src=cacheBust(s))
+
+      block scripts
+
+      if env === 'production' && config.googleAnalytics
+        script.
+          window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};
+          ga.l = +new Date;
+          ga('create', #{config.googleAnalytics}, 'auto');
+          ga('set', 'transport', 'beacon');
+          ga('require', 'displayfeatures');
+          ga('require', 'pageVisibilityTracker', {sendInitialPageview: true});
+        script(async src="https://www.google-analytics.com/analytics.js")

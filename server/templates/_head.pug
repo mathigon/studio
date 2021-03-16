@@ -25,26 +25,21 @@ meta(name="mobile-web-app-capable" content="yes")
 meta(name="mobile-web-app-title" content="Mathigon")
 meta(name="theme-color" content="#181824")
 link(rel="manifest" href="/manifest.json")
-link(rel="icon" sizes="64x64", href="/images/favicons/favicon-64.png")
-link(rel="icon" sizes="96x96", href="/images/favicons/favicon-96.png")
-link(rel="icon" sizes="192x192", href="/images/favicons/favicon-192.png")
+link(rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32.png")
+link(rel="icon" type="image/png" sizes="64x64" href="/favicons/favicon-64.png")
+link(rel="icon" type="image/png" sizes="192x192" href="/favicons/favicon-192.png")
 
-//- iOS Web Apps and App Store
+//- Apple Web Apps
 meta(name="apple-mobile-web-app-capable" content="yes")
 meta(name="apple-mobile-web-app-title" content="Mathigon")
 meta(name="apple-mobile-web-app-status-bar-style" content="black")
-link(rel="apple-touch-icon" href="/images/favicons/favicon-192.png")
+link(rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png")
 
 //- Windows Web Apps
 meta(name="application-name" content="Mathigon")
-meta(name="msapplication-config" content="/images/favicons/ms-config.xml")
-meta(name="msapplication-tooltip" content=description)
-meta(name="msapplication-navbutton-color" content="#181824")
 meta(name="msapplication-TileColor" content="#181824")
-meta(name="msapplication-TileImage" content="/images/favicons/favicon-192.png")
-meta(name="msapplication-square150x150logo" content="/images/favicons/mstile-150.png")
-meta(name="msapplication-wide310x150logo" content="/images/favicons/mstile-310x150.png")
-meta(name="msapplication-square310x310logo" content="/images/favicons/mstile-310.png")
+meta(name="msapplication-TileImage" content="/favicons/favicon-192.png")
+meta(name="msapplication-config" content="/favicons/browserconfig.xml")
 
 //- Open Graph
 //- Validate at https://developers.facebook.com/tools/debug/
@@ -71,7 +66,7 @@ script(type="application/ld+json").
     "url": "https://#{config.domain}/",
     "logo": "https://#{config.domain}/images/favicons/favicon-512.png",
     "sameAs": [
-      "https://www.facebook.com/#{config.social.facebook.page}",
+      "https://facebook.com/#{config.social.facebook.page}",
       "https://twitter.com/#{config.social.twitter.handle}"
     ]
   }
