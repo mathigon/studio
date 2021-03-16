@@ -201,7 +201,7 @@ export class MathigonStudioApp {
       }
     });
 
-    this.app.use((error: Error, req: express.Request, res: express.Response) => {
+    this.app.use((error: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       if (error.name === 'URIError') {
         // This handles requests with invalid query parameters that can't be parsed by Express.
         res.status(400);

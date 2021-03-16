@@ -27,8 +27,9 @@ else
       script window.csrfToken = '#{_csrf}'
       meta(name="csrf-token" content=_csrf)
 
-      for s in (styles || ['/main.css'])
-        link(href=cacheBust(s) rel='stylesheet')
+      block styles
+        for s in (styles || ['/main.css'])
+          link(href=cacheBust(s) rel='stylesheet')
 
     body
       noscript.warning
@@ -55,11 +56,10 @@ else
       main
         block main
 
-      script(src=cacheBust('/polyfill.js'))
-      for s in (scripts || ['/main.js'])
-        script(src=cacheBust(s))
-
       block scripts
+        script(src=cacheBust('/polyfill.js'))
+        for s in (scripts || ['/main.js'])
+          script(src=cacheBust(s))
 
       if env === 'production' && config.googleAnalytics
         script.

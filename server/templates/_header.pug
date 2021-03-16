@@ -1,9 +1,10 @@
 include _mixins
 
 header
-  a#logo(href="/" title=config.siteName)
-    != include('images/logo.svg')
-    != include('images/title.svg')
+  block logo
+    a#logo(href="/" title=config.siteName)
+      != include('images/logo.svg')
+      != include('images/title.svg')
 
   //- Accessibility Button
   button#skip-nav= __("Skip Navigation")
@@ -21,12 +22,13 @@ header
         button.nav-link.narrow(title=__('Search') data-modal="search")
           x-icon(name="search")
 
-    block nav-user
-      x-popup(animation="fade").nav-item
+    x-popup(animation="fade").nav-item
+      block nav-user-btn
         button.nav-link.narrow.popup-target#login-btn
           x-icon(name="settings")
 
-        .popup-body
+      .popup-body
+        block nav-user-body
           label.nav-link
             x-icon(name="brightness")
             | #{__('Dark Mode')}

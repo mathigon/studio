@@ -5,7 +5,8 @@ block vars
 
 block main
   .container
-    h1 #{message} (#{code}) #[br]
-    if env === 'development' && error
-      pre= error
+    block error-body
+      h1 #{message} (#{code}) #[br]
+      if env === 'development' && error
+        pre= error
     include _footer
