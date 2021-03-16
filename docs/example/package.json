@@ -8,10 +8,11 @@
     "start": "ts-node --project server/tsconfig.json server/app.ts",
     "start-dev": "nodemon --watch 'server/**/*.ts' --exec 'ts-node' --project server/tsconfig.json server/app.ts",
     "watch": "mgon-build --assets --watch",
-    "build": "mgon-build --assets --minify",
+    "build": "mgon-build --assets --minify --search",
     "clean": "rm -rf node_modules/@mathigon/studio/.output",
     "dev": "npm-run-all --parallel watch start-dev",
     "thumbnails": "mgon-build --thumbnails",
+    "translate": "mgon-build --translate --key ../../google-service-account.json",
     "screenshots": "mgon-screenshots --output screenshots"
   },
   "dependencies": {

@@ -25,19 +25,15 @@ nbproject
 .idea
 .vscode
 
-# Node and Typescript Files
+# Node and TypeScript Files
 node_modules/
 *.tsbuildinfo
 .npm
 .eslintcache
 
-# Jekyll Documentation
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
-
 # Build and Test Outputs
 .output
 screenshots
+
+# Private Keys
+google-service-account.json

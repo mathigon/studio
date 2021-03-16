@@ -9,16 +9,6 @@ ar:
   flag: sa
   dir: rtl
 
-az:
-  key: Azerbaijani
-  name: Azərbaycan
-  flag: az
-
-ca:
-  key: Catalan
-  name: Català
-  flag: ad
-
 cn:
   key: Chinese
   name: 中文

@@ -14,9 +14,9 @@ import {cache, Color, deepExtend} from '@mathigon/core';
 import {Config, Course} from './interfaces';
 
 
-export const CORE_DIR = path.join(__dirname, '../');
+export const STUDIO_DIR = path.join(__dirname, '../');
 export const PROJECT_DIR = process.cwd();
-export const OUT_DIR = CORE_DIR + '/.output';
+export const OUT_DIR = STUDIO_DIR + '/.output';
 
 export const ENV = process.env.NODE_ENV || 'development';
 export const IS_PROD = ENV === 'production';
@@ -46,21 +46,26 @@ export const getCourse = cache((courseId: string, locale = 'en'): Course => {
   return course;
 });
 
-// Configuration files
-export const CONFIG = loadYAML(CORE_DIR + '/config.yaml') as Config;
-const PROJECT_CONFIG = loadYAML(PROJECT_DIR + '/config.yaml');
-deepExtend(CONFIG, PROJECT_CONFIG, (a, b) => b);
-
-export const CONTENT_DIR = path.join(PROJECT_DIR, CONFIG.contentDir);
-
 /** Helper functions for dynamic PUG includes. */
 export const include = cache((file: string, base = 'frontend/assets') => {
   const p1 = path.join(PROJECT_DIR, base, file);
   if (fs.existsSync(p1)) return fs.readFileSync(p1, 'utf-8');
-  const p2 = path.join(CORE_DIR, base, file);
+  const p2 = path.join(STUDIO_DIR, base, file);
   if (fs.existsSync(p2)) return fs.readFileSync(p2, 'utf-8');
   throw new Error(`Can't find file "${file}" in "${base}".`);
 });
+
+/** Merge two YAML files from the studio directory and the project directory. */
+export function loadCombinedYAML(file: string, deep = false) {
+  const studio = loadYAML(path.join(STUDIO_DIR, file)) || {};
+  const project = loadYAML(path.join(PROJECT_DIR, file)) || {};
+  deep ? deepExtend(studio, project, (a, b) => b) : Object.assign(studio, project);
+  return studio as unknown;
+}
+
+// Configuration files
+export const CONFIG = loadCombinedYAML('config.yaml', true) as Config;
+export const CONTENT_DIR = path.join(PROJECT_DIR, CONFIG.contentDir);
 
 
 // -----------------------------------------------------------------------------
