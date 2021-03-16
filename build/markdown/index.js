@@ -6,13 +6,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
 const {toTitleCase, last, words} = require('@mathigon/core');
-const {readFile, warning, loadYAML, CONFIG, CONTENT} = require('../utilities');
+const {readFile, warning, loadYAML, CONFIG, COURSES, CONTENT} = require('../utilities');
 const {parseStep, parseSimple} = require('./parser');
 
 const COURSE_URLS = new Set();  // Used for Sitemap generation
-const COURSES = glob.sync('*', {cwd: CONTENT}).filter(id => id !== 'shared');
 
 
 // -----------------------------------------------------------------------------

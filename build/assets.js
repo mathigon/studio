@@ -16,7 +16,7 @@ const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const rtlcss = require('rtlcss');
 
-const {error, readFile, success, writeFile, CONFIG, CORE_ASSETS, PROJECT_ASSETS, CONTENT, OUTPUT, watchFiles} = require('./utilities');
+const {error, readFile, success, writeFile, CONFIG, CORE_ASSETS, PROJECT_ASSETS, CONTENT, COURSES, OUTPUT, watchFiles} = require('./utilities');
 const {parseCourse, COURSE_URLS} = require('./markdown');
 const {writeTexCache} = require('./markdown/mathjax');
 
@@ -255,8 +255,7 @@ async function buildAssets(minify = false, watch = false) {
   }
 
   // Individual Courses
-  for (const id of glob.sync('*', {cwd: CONTENT})) {
-    if (id === 'shared') continue;
+  for (const id of COURSES) {
     for (const {src, dest} of getCourseFiles(id, '*.ts', '.js')) {
       promises.push(bundleScripts(src, dest, minify, watch, 'StepFunctions').catch(error(src)));
     }

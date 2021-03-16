@@ -15,7 +15,7 @@ import * as path from 'path';
 import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './i18n';
 import {search, SEARCH_DOCS} from './search';
 import {CourseRequestOptions, ServerOptions} from './interfaces';
-import {cacheBust, CONFIG, CONTENT_DIR, ENV, getCourse, findNextSection, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities';
+import {cacheBust, CONFIG, CONTENT_DIR, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities';
 
 
 declare global {

@@ -5,20 +5,14 @@
 
 
 const checker = require('license-checker');
-const {unique} = require('@mathigon/core');
 const {OUTPUT, writeFile} = require('../utilities');
 
 
 const LICENSE_RENAME = {
   'Apache 2.0': 'Apache-2.0',
   '(BSD-3-Clause OR GPL-2.0)': 'BSD-3-Clause',
-  'AFLv2.1 or BSD': 'BSD',
+  'AFLv2.1 or BSD': 'BSD'
 };
-
-function extract(array, key) {
-  return unique(array.map(i => i[key]).filter(t => t)).join(', ');
-}
-
 
 async function getLicenses() {
   const data = new Map();
@@ -46,7 +40,7 @@ async function getLicenses() {
   let text = '# Open Source Licenses';
   for (const [name, items] of data.entries()) {
     text += `\n\n## ${name} (${items.size})`;
-    for (const item of items) text += `\n* ${item}`
+    for (const item of items) text += `\n* ${item}`;
   }
 
   await writeFile(OUTPUT + '/licenses.md', text);

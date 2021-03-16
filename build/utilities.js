@@ -7,6 +7,7 @@
 const fs = require('fs');
 const path = require( 'path');
 const crypto = require('crypto');
+const glob = require( 'glob');
 const yaml = require('js-yaml');
 const chokidar = require('chokidar');
 const {deepExtend} = require('@mathigon/core');
@@ -25,6 +26,7 @@ const CORE_ASSETS = path.join(__dirname, '../frontend');
 const PROJECT_ASSETS = path.join(process.cwd(), 'frontend');
 const CONTENT = path.join(process.cwd(), CONFIG.contentDir);
 const OUTPUT = path.join(__dirname, '../.output');
+const COURSES = glob.sync('*', {cwd: CONTENT}).filter(id => id !== 'shared');
 
 
 // -----------------------------------------------------------------------------
@@ -102,6 +104,7 @@ module.exports.CORE_ASSETS = CORE_ASSETS;
 module.exports.PROJECT_ASSETS = PROJECT_ASSETS;
 module.exports.CONTENT = CONTENT;
 module.exports.OUTPUT = OUTPUT;
+module.exports.COURSES = COURSES;
 
 module.exports.readFile = readFile;
 module.exports.writeFile = writeFile;
