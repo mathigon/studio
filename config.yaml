@@ -25,6 +25,10 @@ footer:
   rows: []
   copyright: © Mathigon, 2021
 
+courses:
+  revealAll: false
+  audio: false
+
 tutor:
   enabled: true
   name: Archie

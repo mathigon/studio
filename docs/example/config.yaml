@@ -44,8 +44,8 @@ social:
     channel: Mathigon
 
 courses:
-  # Reveal all steps at once, even if they have not all been completed.
-  revealAll: false
+  revealAll: true  # Reveal all steps at once, even if they have not all been completed
+  audio: false  # Generate audio narrations
 
 tutor:
   enabled: true

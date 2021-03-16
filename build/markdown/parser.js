@@ -13,7 +13,7 @@ const htmlMinify = require('html-minifier').minify;
 const {fillTexPlaceholders} = require('./mathjax');
 const {getRenderer} = require('./renderer');
 const {addNarrationTags} = require('./audio');
-const {warning} = require('../utilities');
+const {CONFIG, warning} = require('../utilities');
 
 const $$ = (el, query) => Array.from(el.querySelectorAll(query));
 
@@ -153,7 +153,7 @@ async function parseStep(content, index, courseId, locale = 'en') {
   }
 
   // Create sentence elements for audio narrations
-  addNarrationTags(doc, courseId, locale);
+  if (CONFIG.courses.audio) addNarrationTags(doc, courseId, locale);
 
   // Every step has a list of "goals": things that students need to achieve
   // before moving on. You can provide a list of custom goals in the metadata
