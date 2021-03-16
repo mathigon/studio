@@ -5,6 +5,7 @@
 
 
 import * as fs from 'fs';
+import * as path from 'path';
 import * as yaml from 'js-yaml';
 import * as express from 'express';
 import {CONFIG, IS_PROD, loadCombinedYAML, loadYAML, PROJECT_DIR, STUDIO_DIR} from './utilities';
@@ -72,7 +73,7 @@ export function translate(locale: string, str: string, args: string[] = []) {
   // are already defined in the studio repo.
   if (!IS_PROD && AVAILABLE_LOCALES.length >= 1 && !(str in STRINGS)) {
     STRINGS[str] = '';
-    const isExample = false; // process.cwd() === path.join(__dirname, '../docs/example');
+    const isExample = process.cwd() === path.join(__dirname, '../docs/example');
     const file = (isExample ? STUDIO_DIR : PROJECT_DIR) + '/translations/strings.yaml';
     const replacer = isExample ? undefined : (k: string, v: any) => (!k || !(k in STUDIO_STRINGS) ? v : undefined);
     fs.writeFileSync(file, yaml.dump(STRINGS, {sortKeys: true, replacer}));

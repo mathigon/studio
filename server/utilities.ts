@@ -11,7 +11,7 @@ import * as crypto from 'crypto';
 import * as yaml from 'js-yaml';
 
 import {cache, Color, deepExtend} from '@mathigon/core';
-import {Config, Course} from './interfaces';
+import {Config, Course, Section} from './interfaces';
 
 
 export const STUDIO_DIR = path.join(__dirname, '../');
@@ -108,6 +108,15 @@ export function safeToJson<T>(str: string, fallback?: T, allowedKeys?: string[])
   } catch (e) {
     return fallback;
   }
+}
+
+/** Determine which section or course to link to at the end of this one. */
+export function findNextSection(course: Course, section: Section) {
+  // TODO Personalise this, based on users' previous work
+  const nextSection = course.sections[course.sections.indexOf(section) + 1];
+  if (nextSection) return {section: nextSection};
+  const nextCourse = getCourse(course.nextCourse, course.locale);
+  return {course: nextCourse, section: nextCourse.sections[0]};
 }
 
 

@@ -9,6 +9,7 @@ const {CONFIG} = require('./utilities');
 const {buildSearch} = require('./tools/search');
 const {buildCourseThumbnails} = require('./tools/thumbnails');
 const {translate} = require('./tools/translate');
+const {getLicenses} = require('./tools/licenses');
 
 
 (async () => {
@@ -23,6 +24,9 @@ const {translate} = require('./tools/translate');
 
   // Translate content using `mgon-build --translate --key service-account.json`
   if (argv.translate) await translate(argv.key, argv.all || false);
+
+  // Generate list of all OS dependency licenses
+  if (argv.licenses) await getLicenses();
 
   console.log('\x1b[32m  DONE!\x1b[0m');
 })();

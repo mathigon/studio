@@ -24,6 +24,9 @@ const {writeTexCache} = require('./markdown/mathjax');
 // -----------------------------------------------------------------------------
 // Styles
 
+/** Supported browsers */
+const BROWSERLIST = ['defaults', 'not ie <= 11', 'not ios < 10'];
+
 /** CSS properties to exclude from RTL conversion. */
 const RTL_EXCLUDE = ['background', 'background-color', 'background-image',
   'background-repeat', 'background-size', 'cursor'];
@@ -67,7 +70,7 @@ async function bundleStyles(srcPath, destPath, minify = false, watch = false) {
   });
   const files = output.stats.includedFiles;
 
-  const postCSSOptions = [autoprefixer(), safeAreaCSS];
+  const postCSSOptions = [autoprefixer(BROWSERLIST), safeAreaCSS];
   if (rtl) postCSSOptions.shift(rtlcss({blacklist: RTL_EXCLUDE}));
   if (minify) postCSSOptions.push(cssnano());
   output = (await postcss(postCSSOptions).process(output.css, {from: undefined})).css;

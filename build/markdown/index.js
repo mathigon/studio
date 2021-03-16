@@ -6,11 +6,13 @@
 
 const fs = require('fs');
 const path = require('path');
+const glob = require('glob');
 const {toTitleCase, last, words} = require('@mathigon/core');
 const {readFile, warning, loadYAML, CONFIG, CONTENT} = require('../utilities');
 const {parseStep, parseSimple} = require('./parser');
 
 const COURSE_URLS = new Set();  // Used for Sitemap generation
+const COURSES = glob.sync('*', {cwd: CONTENT}).filter(id => id !== 'shared');
 
 
 // -----------------------------------------------------------------------------
@@ -89,8 +91,12 @@ async function parseCourse(srcDir, locale) {
   const steps = content.split(/\n---+\n/);
   const parsed = await Promise.all(steps.map((s, i) => parseStep(s, i, courseId, locale)));
 
+  // By default, set the next course alphabetically as nextCourse.
+  const nextCourse = COURSES[(COURSES.indexOf(courseId) + 1) % COURSES.length];
+
   const course = {
     id: courseId, locale,
+    nextCourse: parsed[0].nextCourse || nextCourse,
     title: parsed[0].courseTitle || 'Untitled Course',
     description: parsed[0].description || '',
     color: parsed[0].color || '#2274e8',
@@ -140,16 +146,9 @@ async function parseCourse(srcDir, locale) {
     course.steps[step.id] = {id: step.id, title, html: step.html, goals: step.goals, keywords};
   }
 
-  for (const [i, section] of course.sections.entries()) {
-    // Round the duration of every section to the nearest multiple of 5 (minutes).
+  // Round the duration of every section to the nearest multiple of 5 (minutes).
+  for (const section of course.sections) {
     section.duration = Math.max(5, 5 * Math.ceil(section.duration / 5));
-
-    // Set up the next links for all sections
-    if (course.sections[i + 1]) {
-      section.next = {sectionId: course.sections[i + 1].id};
-    } else {
-      section.next = {courseId: '', sectionId: ''}; // TODO Set this!
-    }
   }
 
   if (!course.description) course.description = course.sections.map(s => s.title).join(', ');
