@@ -164,17 +164,17 @@ async function bundleMarkdown(id, locale, watch = false) {
 // -----------------------------------------------------------------------------
 // Miscellaneous Files
 
-let iconsPath = '/icons.svg'
+let iconsPath = '/icons.svg';
 
 async function bundleIcons() {
   const start = Date.now();
   const icons = getAssetFiles('assets/icons/*.svg').map(({src}) => {
     const id = path.basename(src, '.svg');
     return readFile(src).replace(' xmlns="http://www.w3.org/2000/svg"', '')
-      .replace('<svg ', `<symbol id="${id}" `).replace('</svg>', '</symbol>');
+        .replace('<svg ', `<symbol id="${id}" `).replace('</svg>', '</symbol>');
   });
 
-  const symbols = `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">${icons.join('')}</svg>`
+  const symbols = `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">${icons.join('')}</svg>`;
 
   const hash = crypto.createHash('md5').update(symbols).digest('hex').slice(0, 8);
   iconsPath = `/icons.${hash}.svg`;  // Add cache bust

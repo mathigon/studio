@@ -5,7 +5,6 @@
 
 
 import * as fs from 'fs';
-import * as path from 'path';
 import * as yaml from 'js-yaml';
 import * as express from 'express';
 import {CONFIG, IS_PROD, loadCombinedYAML, loadYAML, PROJECT_DIR, STUDIO_DIR} from './utilities';
@@ -58,7 +57,7 @@ export function getLocale(req: express.Request, fallback = 'en'): Locale {
 
 // In development mode, we keep a list of all strings accessed using __().
 const STRINGS = IS_PROD ? {} : loadCombinedYAML('translations/strings.yaml') as Record<string, string>;
-const STUDIO_STRINGS = IS_PROD ? {} : loadYAML(STUDIO_DIR +  '/translations/strings.yaml') as Record<string, string>;
+const STUDIO_STRINGS = IS_PROD ? {} : loadYAML(STUDIO_DIR + '/translations/strings.yaml') as Record<string, string>;
 
 // We load the files with all translated UI strings.
 const TRANSLATIONS: Record<string, Record<string, string>> = {};

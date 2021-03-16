@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
-const yargs = require('yargs-parser')
-const argv = yargs(process.argv.slice(2))
+const yargs = require('yargs-parser');
+const argv = yargs(process.argv.slice(2));
 
 const {buildAssets} = require('./assets');
 const {CONFIG} = require('./utilities');

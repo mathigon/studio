@@ -7,7 +7,7 @@
 const path = require('path');
 const yaml = require('js-yaml');
 const {Translate} = require('@google-cloud/translate').v2;
-const {loadYAML, CONFIG, writeFile} =  require('../utilities')
+const {loadYAML, CONFIG, writeFile} = require('../utilities');
 
 
 async function loadFromGoogle(api, string, locale) {
@@ -29,7 +29,7 @@ async function translate(key, allLocales = false) {
     console.log(`\x1b[33m  Translating ${locale}...`);
     const file = process.cwd() + `/translations/${locale}/strings.yaml`;
 
-    const data = loadYAML(file)
+    const data = loadYAML(file);
     for (const str of strings) {
       if (!data[str]) data[str] = await loadFromGoogle(api, str, options.google || locale);
     }
