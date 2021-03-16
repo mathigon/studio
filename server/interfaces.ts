@@ -141,9 +141,9 @@ export interface Config {
     youtube?: {
       channel: string;
     }
-    pinterest?: {}
-    reddit?: {}
-    googleClassroom?: {}
+    pinterest?: boolean;
+    reddit?: boolean;
+    googleClassroom?: boolean;
   }
   courses: {
     revealAll: boolean;
