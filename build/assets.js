@@ -6,6 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const glob = require('glob');
 const esbuild = require('esbuild');
 const pug = require('pug');
@@ -120,7 +121,9 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, n
   });
 
   for (const file of result.outputFiles) {
-    const text = file.text.replace(/\/\*![\s\S]*?\*\//g, '').trim();
+    const text = file.text.replace(/\/\*![\s\S]*?\*\//g, '')
+        .replace(/\/icons\.svg/, iconsPath)  // Cache busting for icons
+        .trim();
     await writeFile(destPath, text);
   }
 
@@ -154,13 +157,31 @@ async function bundleMarkdown(id, locale, watch = false) {
     // TODO Also watch markdown dependencies (e.g. SVG, PUG or YAML files)
   }
 
-  const ms = Date.now() - start;
-  success(`course ${id} [${locale}]`, ms);
+  success(`course ${id} [${locale}]`, Date.now() - start);
 }
 
 
 // -----------------------------------------------------------------------------
 // Miscellaneous Files
+
+let iconsPath = '/icons.svg'
+
+async function bundleIcons() {
+  const start = Date.now();
+  const icons = getAssetFiles('assets/icons/*.svg').map(({src}) => {
+    const id = path.basename(src, '.svg');
+    return readFile(src).replace(' xmlns="http://www.w3.org/2000/svg"', '')
+      .replace('<svg ', `<symbol id="${id}" `).replace('</svg>', '</symbol>');
+  });
+
+  const symbols = `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">${icons.join('')}</svg>`
+
+  const hash = crypto.createHash('md5').update(symbols).digest('hex').slice(0, 8);
+  iconsPath = `/icons.${hash}.svg`;  // Add cache bust
+
+  await writeFile(path.join(OUTPUT, 'icons.svg'), symbols);
+  success(`icons.svg`, Date.now() - start);
+}
 
 async function createPolyfill() {
   const src = path.join(__dirname, '../node_modules');
@@ -168,7 +189,7 @@ async function createPolyfill() {
   const f2 = readFile(src + '/@webcomponents/custom-elements/custom-elements.min.js');
 
   const polyfill = [f1, f2].join('\n').replace(/\n\/\/# sourceMappingURL=.*\n/g, '\n');  // No Sourcemaps
-  return writeFile(path.join(OUTPUT, 'polyfill.js'), polyfill);
+  await writeFile(path.join(OUTPUT, 'polyfill.js'), polyfill);
 }
 
 async function createSitemap() {
@@ -178,14 +199,18 @@ async function createSitemap() {
   const urls = ['/', ...Array.from(COURSE_URLS), ...CONFIG.sitemap]
       .map(url => `<url><loc>https://${CONFIG.domain}${url}</loc>${options}</url>`);
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.join('')}</urlset>`;
-  return writeFile(path.join(OUTPUT, 'sitemap.xml'), sitemap);
+  await writeFile(path.join(OUTPUT, 'sitemap.xml'), sitemap);
 }
 
 
 // -----------------------------------------------------------------------------
 // Tools
 
-function getAssetFiles(pattern, extension) {
+/**
+ * Select all files in the project or the core frontend/ directory. Note that
+ * the project may overwrite files with the same name.
+ */
+function getAssetFiles(pattern, extension = path.extname(pattern)) {
   const projectFiles = glob.sync(pattern, {cwd: PROJECT_ASSETS}).map(c => path.join(PROJECT_ASSETS, c));
   const projectFileNames = projectFiles.map(p => path.basename(p));
 
@@ -210,11 +235,15 @@ function getCourseFiles(id, pattern, extension) {
 async function buildAssets(minify = false, watch = false) {
   const promises = [];
 
+  // SVG Icons need to be built BEFORE TS files, so that iconsPath is set.
+  await bundleIcons().catch(error('icons.svg'));
+
   // Top-level TypeScript files
   for (const {src, dest} of getAssetFiles('*.ts', '.js')) {
     if (src.endsWith('.d.ts')) continue;
     promises.push(bundleScripts(src, dest, minify, watch).catch(error(src)));
   }
+  promises.push(await createPolyfill().catch(error('polyfill.js')));
 
   // Top-level SCSS files
   for (const {src, dest} of getAssetFiles('*.scss', '.css')) {
@@ -234,9 +263,6 @@ async function buildAssets(minify = false, watch = false) {
       promises.push(bundleMarkdown(id, locale, watch).catch(error(`course ${id} [${locale}]`)));
     }
   }
-
-  // Miscellaneous Files
-  promises.push(await createPolyfill().catch(error('polyfill.js')));
 
   // Generate the sitemap after all other assets have been compiled
   await Promise.all(promises);

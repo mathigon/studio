@@ -116,7 +116,7 @@ export function cacheBust(file: string) {
   if (!fs.existsSync(fileName)) return file;
 
   const content = fs.readFileSync(fileName);
-  const token = crypto.createHash('md5').update(content).digest('hex').substr(26);
+  const token = crypto.createHash('md5').update(content).digest('hex').slice(0, 8);
   const newFile = file.replace(/\.(\w+)$/g, `.${token}.$1`);
 
   // We only cache the result in production, to allow real-time updating.
