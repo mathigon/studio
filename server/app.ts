@@ -260,6 +260,7 @@ export class MathigonStudioApp {
     });
 
     this.post('/course/:course/feedback', async (req, res, next) => {
+      if (!CONFIG.courses.feedback) return next();
       const course = getCourse(req.params.course, req.locale.id);
       if (!course) return next();
 

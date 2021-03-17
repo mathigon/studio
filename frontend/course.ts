@@ -66,7 +66,7 @@ export class Course extends CustomElementView {
   ready() {
     this.$footer = this.$('footer')!;
     this.$skipStep = this.$footer.$('.skip-step')!;
-    this.$progress = this.$('.sidebar-row.on x-progress') as Progress;
+    this.$progress = this.$('.sidebar-row.active x-progress') as Progress;
     this.$tutor = this.$('x-tutor') as Tutor|undefined;
     this.$stepsWrap = this.$('.steps')!;
 

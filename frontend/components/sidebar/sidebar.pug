@@ -1,0 +1,117 @@
+//- Note: Unlike all other PUG files in frontend/components/, this template is
+//- imported directly by course.pug, not inlined as a string in sidebar.ts.
+//- TODO Convert it into a normal component with configuration options
+
+mixin linkBlock(active, className, href)
+  if active
+    div(class=`${className} active`)
+      block
+  else
+    a(class=className href=href)
+      block
+
+x-course-sidebar(style=`background-color: ${course.color}`)
+  .sidebar-hero(style=`background-image: url(${course.hero})`)
+    if !course.hideTitle
+      .sidebar-hero-gradient
+      .sidebar-title
+        if course.icon
+          .course-icon(style=`background-color: ${course.color}; background-image: url(${course.icon});`)
+        | #{course.title}
+        if course.author
+          a.sidebar-author by #{course.author}
+
+  .sidebar-body
+    if course.trailer
+      a.sidebar-row(data-modal="trailer" tabindex=0)
+        x-icon.left(name="youtube")
+        | #{__('Trailer')}
+        .connection
+    for s in course.sections
+      - var isCurrent = section.id === s.id;
+      +linkBlock(isCurrent, 'sidebar-row', s.url)
+        x-progress(r=10 p=0)
+        if s.locked
+          x-icon.right(name="construction")
+        | #{s.title}
+        .connection
+
+  .sidebar-footer
+    button.footer-link(data-modal="share")
+      x-icon(name="share")
+      .tooltip= __('Share')
+    if config.courses.feedback
+      button.footer-link(data-modal="feedback")
+        x-icon(name="feedback")
+        .tooltip= __('Send Feedback')
+    button.footer-link.s-hide(data-modal="glossary-search")
+      x-icon(name="glossary")
+      .tooltip= __('Glossary')
+    if req.user
+      button.footer-link(data-modal="reset")
+        x-icon(name="reset")
+        .tooltip=__('Reset Progress')
+
+.sidebar-shadow
+.sidebar-toggle: x-icon(name="progress")
+
+if course.trailer
+  x-modal.video#trailer
+    button.close: x-icon(name="close" size=24)
+    .video-wrap
+      iframe(width="560" height="315" data-src=`https://www.youtube.com/embed/${course.trailer}?autoplay=1&rel=0` frameborder="0" allow="autoplay; encrypted-media" allowfullscreen)
+
++modal('share')
+  h2 #[x-icon(name="share" size=32)] #{__('Share')}
+  x-share(url=`https://${config.domain}${section.url}` title=encodeURIComponent(section.title + ' – ' + course.title) body=course.description img=section.thumbnail)
+
+if config.courses.feedback
+  x-modal#feedback
+    button.close: x-icon(name="close" size=24)
+    .modal-body
+      h2 #[x-icon(name="feedback" size=32)] #{__('Send us Feedback')}
+      form.form-large(action=`/course/${course.id}/feedback`, method='POST')
+        p #{__('Please let us know if you have any feedback and suggestions, or if you find any errors and bugs in our content.')}
+        input(type='hidden' name='_csrf' value=_csrf)
+        if !user
+          label.form-field
+            input(type='text' name='name' autofill="name" placeholder="Name")
+            span.placeholder= __('Name (optional)')
+          label.form-field
+            input(type='email' name='email' autofill="email" placeholder="Email")
+            span.placeholder= __('Email (optional)')
+        label.form-field
+          textarea(name='message' rows=5 required placeholder="Message")
+        p.error.m-red.small.text-right= __('Sorry, your message couldn’t be submitted. Please try again!')
+        p.btn-row: button.btn.btn-red(type='submit')= __('Send')
+
+  x-modal#feedback-success
+    button.close: x-icon(name="close" size=24)
+    .modal-body
+      x-icon(name="form-check" size=120)
+      h2.m-blue= __('Thanks for your feedback!')
+
+if req.user
+  x-modal#reset
+    button.close: x-icon(name="close" size=24)
+    .modal-body
+      h2 #[x-icon(name="reset" size=32)] #{__('Reset Progress')}
+      p(style="margin: 0")= __('This will delete your progress and chat data for all chapters in this course, and cannot be undone!')
+      form(action=`/course/${course.id}/reset` method="POST")
+        input(type='hidden' name='_csrf' value=_csrf)
+        p.btn-row: button.btn.btn-red(type='submit')= __('Reset Now')
+
+x-modal#glossary-search(data-display="flex")
+  button.close: x-icon(name="close" size=24)
+  .gloss-sidebar
+    h2 #[x-icon(name="glossary" size=32)] #{__('Glossary')}
+    .gloss-search
+      x-icon(name="search" size=24)
+      input(type="text" placeholder=__('Search…'))
+    .gloss-list
+  .gloss-body
+    p.text-center= __('Select one of the keywords on the left…')
+
+x-modal#glossary-modal.light
+  button.close: x-icon(name="close" size=24)
+  .modal-body

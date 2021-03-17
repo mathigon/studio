@@ -149,6 +149,7 @@ export interface Config {
   courses: {
     revealAll: boolean;
     biosPath?: string;
+    feedback?: boolean;
     // TODO More options
   }
   tutor: {
