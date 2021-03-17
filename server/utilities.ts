@@ -27,19 +27,23 @@ export const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
 // -----------------------------------------------------------------------------
 // File Loading
 
-export const loadYAML = cache((file: string) => {
+function cacheIfProd<T>(fn: (...args: any[]) => T) {
+  return IS_PROD ? cache(fn) : fn;
+}
+
+export const loadYAML = cacheIfProd((file: string) => {
   // TODO Support both .yaml and .yml extensions
   if (!fs.existsSync(file)) return undefined;
   return yaml.load(fs.readFileSync(file, 'utf8')) as unknown;
 });
 
-export const loadJSON = cache((file: string) => {
+export const loadJSON = cacheIfProd((file: string) => {
   // TODO Maybe should use require() instead?
   if (!fs.existsSync(file)) return undefined;
   return JSON.parse(fs.readFileSync(file, 'utf8')) as unknown;
 });
 
-export const getCourse = cache((courseId: string, locale = 'en'): Course|undefined => {
+export const getCourse = cacheIfProd((courseId: string, locale = 'en'): Course|undefined => {
   const course = loadJSON(OUT_DIR + `/content/${courseId}/data_${locale}.json`) as Course;
   if (!course && locale !== 'en') return getCourse(courseId);  // Return English fallback
   if (!course) return undefined;
@@ -90,10 +94,10 @@ export function href(req: express.Request, locale = req.locale.id) {
   return `https://${subdomain}${CONFIG.domain}${path}`;
 }
 
-export function lighten(c: string) {
+export function lighten(c: string, amount: 0.15) {
   const hsl = Color.from(c).hsl as [number, number, number];
-  hsl[1] = Math.min(100, hsl[1] * 1.14);
-  hsl[2] = Math.min(100, hsl[2] * 1.14);
+  hsl[1] = Math.min(100, hsl[1] * (1 + amount));
+  hsl[2] = Math.min(100, hsl[2] * (1 + amount));
   return Color.fromHsl(...hsl).hex;
 }
 
@@ -115,7 +119,7 @@ export function findNextSection(course: Course, section: Section) {
   // TODO Personalise this, based on users' previous work
   const nextSection = course.sections[course.sections.indexOf(section) + 1];
   if (nextSection) return {section: nextSection};
-  const nextCourse = getCourse(course.nextCourse, course.locale);
+  const nextCourse = getCourse(course.nextCourse, course.locale)!;
   return {course: nextCourse, section: nextCourse.sections[0]};
 }
 

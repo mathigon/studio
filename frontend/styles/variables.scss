@@ -1,0 +1,290 @@
+// =============================================================================
+// CSS Variables
+// (c) Mathigon
+// =============================================================================
+
+
+@use "sass:map";
+
+// Rainbow
+$red:    #cd0e66 !default;
+$green:  #22ab24 !default;
+$yellow: #fd8c00 !default;
+$blue:   #0f82f2 !default;
+$orange: #f54b42 !default;
+$purple: #7a0fe0 !default;
+$teal:   #00a7c9 !default;
+$lime:   #9ed415 !default;
+
+// Theme Colours
+$primary: #cd0e66 !default;
+$secondary: #181824 !default;
+$background: white !default;
+
+$fonts: 'Source Sans Pro', Helvetica, sans-serif !default;
+
+$success: #22ab24 !default;
+$error: #cd0e66 !default;
+
+// Course component styles
+$variable-color: $red !default;
+$blank-color: $blue !default;
+$glossary-color: $yellow !default;
+
+$dark-grey: #181824 !default;
+$grey: #3a3645 !default;
+$medium-grey: #656073 !default;
+$light-grey: #c5c2cc !default;
+
+$text-dark:   #333 !default;
+$text-normal: #666 !default;
+$text-medium: #999 !default;
+$text-light:  #aaa !default;
+
+$border-light: #ccc !default;
+$grey-background: mix($grey, white, 5%) !default;
+
+$dark-mode: mix($grey, $dark-grey, 30%) !default;
+$dark-mode-background: mix($dark-mode, white, 95%) !default;
+
+$bounce: cubic-bezier(.33,1.9,.52,.7) !default;
+
+// TODO Clean up these shadow styles...
+$shadow: 0 3px 8px rgba(black, 30%) !default;
+$shadow-1: 0 0 10px rgba(black, 20%) !default;
+$shadow-2: 0 0 20px rgba(black, 30%) !default;
+
+$browser-small: 540px !default;
+$browser-medium: 840px !default;
+
+$colors: ("red": $red, "blue": $blue, "green": $green, "yellow": $yellow, "orange": $orange, "purple": $purple, "teal": $teal, "lime": $lime);
+
+
+// -----------------------------------------------------------------------------
+// Icons
+
+// TODO Use github.com/TrySound/postcss-inline-svg for inlined SVGs
+$icons: (
+  "play": "m7.5 6.17v11.66a1.12 1.12 0 0 0 1.73.94l9.16-5.77a1.13 1.13 0 0 0 0-1.91l-9.16-5.86a1.12 1.12 0 0 0 -1.73.94z",
+  "pause": "m8 19a2 2 0 0 0 2-2v-10a2 2 0 0 0 -2-2 2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2zm6-12v10a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-10a2 2 0 0 0 -2-2 2 2 0 0 0 -2 2z",
+  "check": "m19.7 6.3-.2-.4-.3-.2c-.1-.1-.3 0-.4 0a36.6 36.6 0 0 0 -9.8 8.4 36.1 36.1 0 0 0 -4.8-2.9h-.5l-1 .9a.4.4 0 0 0 -.1.3c0 .2 0 .3.1.4a72.1 72.1 0 0 1 6.6 7h.4a.5.5 0 0 0 .4-.2c3.8-6.8 5.7-9.6 9.4-13 .2.1.2-.1.2-.3z",
+  "cross": "M19,16l-4.7-4.3L18.6,7a1.2,1.2,0,0,0,0-1.5l-.4-.3a1,1,0,0,0-1.4,0L12,9.5,7.2,5.2a1,1,0,0,0-1.4,0l-.4.3A1.2,1.2,0,0,0,5.4,7l4.3,4.7L5,16a1.1,1.1,0,0,0-.1,1.4l1.5,1.4a.9.9,0,0,0,1.3,0L12,14.1l4.3,4.7a.9.9,0,0,0,1.3,0l1.5-1.4A1.1,1.1,0,0,0,19,16Z",
+  "dropdown": "m19.9 7.5a1.4 1.4 0 0 0 -2.1 0l-5.8 5.8-5.8-5.8a1.4 1.4 0 0 0 -2.1 0 1.5 1.5 0 0 0 0 2.1l6.8 6.9a1.6 1.6 0 0 0 2.2 0l6.8-6.9a1.4 1.4 0 0 0 0-2.1z",
+  "warning": "M22.1,19.5l-9.2-16a1,1,0,0,0-1.8,0l-9.2,16A1,1,0,0,0,2.7,21H21.3A1,1,0,0,0,22.1,19.5Zm-8.7-11v2.4l-.4,4.4H11.1l-.4-4.4V8.5ZM12,19.4a1.6,1.6,0,0,1-1.6-1.6,1.6,1.6,0,1,1,3.2,0A1.6,1.6,0,0,1,12,19.4Z"
+);
+
+@function inline-svg($body, $width: 24, $height: 24, $attrs: '') {
+  $svg: '<svg xmlns="http://www.w3.org/2000/svg" width="#{$width}" height="#{$height}"#{$attrs}>#{$body}</svg>';
+  @return url('data:image/svg+xml;utf8,#{uri-encode($svg)}');
+}
+
+@function icon($name, $fill, $size: 24, $viewBox: 24) {
+  $path: '<path fill="#{$fill}" d="#{map.get($icons, $name)}"/>';
+
+  @if $name == 'warning' {
+    // We add a white background for the ! in the warning sign.
+    $path: '<rect x="10" y="8" width="4" height="12" fill="#fff"/>' + $path
+  }
+
+  @return inline-svg($path, $size, $size, ' viewBox="0 0 #{$viewBox} #{$viewBox}"');
+}
+
+
+// -----------------------------------------------------------------------------
+// Utility Mixins
+
+@mixin clearfix(){
+  &:before, &:after { display: table; content: " "; clear: both; }
+}
+
+@mixin ellipsis() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin circled($size){
+  text-align: center;
+  display: inline-block;
+  width: $size;
+  height: $size;
+  line-height: $size;
+  border-radius: $size/2;
+}
+
+@mixin fillParent(){
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin overflow-scroll() {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+@mixin theme($prop, $light, $dark) {
+  #{$prop}: $light;
+  html[theme="dark"] & { #{$prop}: $dark; }
+}
+
+@mixin bouncy(){
+  // TODO Use $bounce easing mode.
+  &:hover { transform: scale(1.08); }
+  &:active { transform: scale(0.92); }
+}
+
+@mixin button(){
+  display: inline-block;
+  width: auto;
+  text-align: center;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  color: rgba(white, 95%);
+  transition: background .2s, color .2s, box-shadow .2s;
+
+  &:hover, &.on {
+    z-index: 10;
+    color: white;
+    box-shadow: 0 4px 12px rgba(black, 25%);
+  }
+
+  &.disabled, &[disabled] {
+    box-shadow: none;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+@mixin coloured-btn($color, $hover: lighten($color, 8%)){
+  background-color: $color;
+  -webkit-touch-callout: none;
+  outline: none;
+  &:hover, &:focus { background-color: $hover; }
+  html.is-tabbing &:focus { box-shadow: 0 0 0 2px currentColor, 0 0 0 4px $hover; }
+}
+
+@mixin underline($s1, $s2, $color: currentColor){
+  background-size: 0 100%;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(transparent calc(100% - #{$s1}), $color calc(100% - #{$s1}), $color calc(100% - #{$s2}), transparent calc(100% - #{$s2}));
+  transition: color .2s, background-size 0.2s ease-in-out;
+  &:hover { background-size: 100% 100%; }
+}
+
+@mixin inline-block($background, $underline: none){
+  -webkit-touch-callout: none;
+  display: inline-block;
+  position: relative;
+  margin: -3px 2px;
+  background: transparent;
+  line-height: 28px;
+  padding: 0 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: $background;
+  .caption & { height: 24px; line-height: 24px; }
+
+  @if $underline {
+    &:before {
+      content: " ";
+      background: $underline;
+      position: absolute;
+      height: 3px;
+      bottom: 1px;
+      left: 5px;
+      right: 5px;
+    }
+  }
+}
+
+@mixin inline-hover($color){
+  @include inline-block(transparent, $color);
+  transition: background .2s, color .2s, box-shadow .2s;
+  cursor: pointer;
+  &:hover, &:focus { color: rgba(black, 80%); box-shadow: $shadow-1; background: $color; }
+}
+
+@mixin popup($colour){
+  background: $colour;
+  position: absolute;
+  top: 100%;
+  border-radius: 0 6px 6px 6px;
+  transform-origin: left top;
+
+  // Reset paragraph styles from parent element.
+  text-align: left;
+  font-style: normal;
+
+  transition: opacity .2s, transform .2s;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+  white-space: normal;
+  .caption & { top: 24px; }
+}
+
+@mixin dividers($width){
+  transition: background .2s, color .2s;
+  color: rgba(white, 80%);
+  position: relative;
+
+  &:before {
+    content: " ";
+    display: block;
+    height: 1px;
+    background: rgba(white, 40%);
+    transition: background-color .2s;
+    position: absolute;
+    width: $width;
+    top: 0;
+  }
+
+  &:first-child:before { display: none; }
+
+  // TODO Remove the .on class and replace with .active everywhere.
+  &:hover, &:focus, &.on, &.active {
+    background: rgba(white, 20%);
+    color: white;
+    &:before, & + *:before { background: transparent; }
+  }
+  &.on, &.active { background: rgba(white, 32%); }
+}
+
+@mixin arrow($color, $a, $b, $c, $size, $height: $size){
+  background: $color;
+  position: relative;
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    $a: 100%;
+    $b: 50%;
+    margin-#{$b}: -$size;
+    border-#{$a}: $height $color solid;
+    border-#{$b}: $size transparent solid;
+    border-#{$c}: $size transparent solid;
+  }
+}
+
+@mixin svg-text-outline($width: 3px, $color: white, $dark-color: $dark-mode){
+  @include theme(stroke, $color, $dark-color);
+  stroke-width: $width;
+  paint-order: stroke;
+  stroke-linejoin: round;
+  // Safari has lots of bugs with paint-order rendering
+  html.is-safari & { stroke: none; }
+}
+
+@mixin no-scrollbar(){
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-track,
+  &::-webkit-scrollbar-thumb {
+    display: none; width: 0; height: 0; opacity: 0;
+  }
+}

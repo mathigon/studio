@@ -25,7 +25,7 @@
 
   .footer-left a, button {
     display: inline-block;
-    @include underline2(2px, 1px);
+    @include underline(2px, 1px);
     &:hover { @include theme(color, $text-dark, white); }
   }
 

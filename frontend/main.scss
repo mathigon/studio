@@ -99,7 +99,7 @@ svg.mathjax {
 
 .text-medium { color: $text-medium; }
 
-p a, label a, ul a, ol a, button.a { color: $blue; @include underline2(3px, 1px); }
+p a, label a, ul a, ol a, button.a { color: $blue; @include underline(3px, 1px); }
 
 .caption { font-size: 80%; margin: 0 0 0.6em 0; text-align: left; color: #888; }
 

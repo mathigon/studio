@@ -1,0 +1,395 @@
+// =============================================================================
+// Step Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-step {
+  @include theme(color, $text-normal, mix(white, $dark-mode, 85%));
+
+  display: block;
+  height: 0;
+  line-height: 1.7;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: relative;
+  transform: translateX(-160px);
+  word-spacing: .05em;
+  z-index: 1;
+  @include clearfix();
+
+  contain: layout style;  // 'paint' breaks popups and dropdowns.
+
+  x-course.ready & { will-change: opacity, transform; transition: opacity .8s linear, transform .8s cubic-bezier(0.165, 0.84, 0.44, 1); }
+  &.on { pointer-events: auto; overflow: visible; height: auto; opacity: 1; transform: none; }
+
+  &:hover { z-index: 2; }
+  &:focus-within { z-index: 3; }
+}
+
+.reveal { visibility: hidden; }
+
+.next-step {
+  @extend .btn;
+  @extend .btn-red;
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 12px);
+  width: 140px;
+  margin-left: -70px;
+  box-sizing: border-box;
+}
+
+
+// -----------------------------------------------------------------------------
+// Audio Narration
+
+x-step.hovering { z-index: 1; }
+
+p.voice {
+  margin-left: -40px;
+  padding-left: 40px;
+}
+
+.sentence {
+  background-image: linear-gradient(rgba($yellow, 30%), rgba($yellow, 30%));
+  background-repeat: no-repeat;
+  background-size: 0 100%;
+  transition: background .6s;
+  box-decoration-break: clone;
+  &.playing { background-size: 100% 100%; border-radius: 4px; padding: 0 4px; margin: 0 -4px; }
+}
+
+.playback-btn {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin: -4px 0 0 -38px;
+  li.voice & { margin-left: -56px; }
+
+  border: 10px solid transparent;
+  background: $light-grey icon('play', white, 14);
+  background-clip: content-box;
+  border-radius: 30px;
+
+  cursor: pointer;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity .2s, background .2s, transform .2s;
+
+  .voice:hover > &, &:focus, &.active { opacity: 1; transform: scale(1); pointer-events: all; }
+  .voice:hover > &:hover { transform: scale(1.3); }
+  &:hover, &:focus { background-color: $medium-grey; }
+  &.active { background: $yellow icon('pause', white, 14); background-clip: content-box; }
+}
+
+
+// -----------------------------------------------------------------------------
+// Step Content
+
+x-step {
+  h2, h3 { line-height: 1.15; font-weight: 600; @include theme(color, $text-dark, white); }
+
+  h2 { margin: 2em 0 1em; font-size: 1.6em; border-bottom: 2px solid #ddd; padding-bottom: 6px; }
+  .row h2 { border: none; padding: 0; }
+  &:first-child h2 { margin-top: 0; }
+
+  h3 { margin: 1.2em 0 0.8em; font-size: 1.3em; text-align: center; }
+  .row h3 { text-align: left; }
+
+  p strong, table strong, li strong { @include theme(color, $text-dark, white); font-weight: 700; }
+
+  figure + p, x-geopad + p { margin-top: .5em; }  // TODO fix margins
+
+  ul, ol { margin: 0 0 1em 0; padding: 0; text-align: left; }
+  ul { list-style-type: disc; }
+  li { margin: 0 0 0.5em 1.5em; }
+
+  .caption {
+    font-size: 0.85em;
+    margin: .5em 0 0 0;
+    text-align: center;
+    @include theme(color, $text-light, rgba(white, 55%));
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .quote {
+    font-style: italic;
+    margin: 1.5em 2em;
+    text-align: center;
+    @include theme(color, $text-light, rgba(white, 55%));
+  }
+
+  hr { height: 2px; background: #ddd; margin: 2em 0; }
+  hr:first-child { margin-top: 1em; }
+
+  code {
+    background: #eee;
+    border: 1px solid $border-light;
+    color: $text-dark;
+    font-family: Courier, monospace;
+    border-radius: 4px;
+    font-size: 90%;
+    padding: .2em .4em;
+    vertical-align: 1px;
+    margin: -.2em .1em;
+  }
+
+  pre { margin: 1em 0; }
+  pre code { display: block; padding: .3em .8em; }
+
+  table { margin: 0.5em auto 1.5em; border-collapse: collapse; border-spacing: 0; border: none; }
+  td, th { text-align: center; border: none; vertical-align: middle; padding: 0.6em; }
+  table.text-left td, table.text-left th { text-align: left; }
+  @media screen and (max-width: $browser-small) { td, th { padding: 0.25em; } }
+
+  td[align="left"] { text-align: left; }
+  td[align="center"] { text-align: center; }
+  td[align="right"] { text-align: right; }
+
+  .table-fixed { table-layout: fixed; width: 95%; }
+
+  .table-small, .table-tiny { margin: 0 auto 1em; }
+  .table-small td { padding: .3em .6em; }
+  .table-tiny td { padding: .2em .3em; }
+
+  table.grid td, table.grid th { border-bottom: 1px solid $light-grey; border-right: 1px solid $light-grey; }
+  table.grid td:last-child, table.grid th:last-child { border-right: none; }
+  table.grid tr:last-child td { border-bottom: none; }
+
+  table p { margin: 0; padding: 0; text-align: center !important; }
+  table h3 { margin: 0; padding: 0; text-align: center !important; }
+  table img { max-width: 95%; height: auto; }
+  table .caption { text-align: center !important; }
+  table .td_caption_small { padding-top: 0 !important; }
+
+  & .row, & .column { margin: -0.5em -0.5em 0.5em; }
+  & .row > *, article .column > * { width: 260px; margin: .5em; }
+  & .row.padded { margin: -0.5em -24px 0.5em; }
+  & .row.padded-thin { margin: -0.5em -12px 0.5em; }
+  & .row > .fit { width: fit-content; }
+
+  & .row > * > *:first-child { margin-top: 0; }
+  & .row > * > *:last-child { margin-bottom: 0; }
+  .row > * > p:first-child { margin-top: -6px; }
+
+  svg { max-width: 100%; height: auto; }
+}
+
+.sticky-wrap { position: relative; }
+.sticky { position: sticky; top: 54px; }
+
+.fixme { @include theme(background, #fcc, rgba(#c00, 50%)); }
+
+.todo {
+  border: 2px solid #aaa;
+  color: #999;
+  max-width: 580px;
+  margin: 2em auto;
+  @include theme(background, #eee, rgba(white, 15%));
+  padding: 22px 24px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 20px;
+  font-style: italic;
+}
+
+// Shift images that appear immediately under h2 headings
+@media (min-width: 720px) { .shifted { margin-top: -70px !important; } }
+
+x-slideshow, x-gallery, figure { margin: 2em auto; }
+figure > x-img, figure > img, figure > svg { display: block; margin: 0 auto .3em; }
+
+
+// -----------------------------------------------------------------------------
+// Coloured Frames and Boxes
+
+.frame {
+  padding: 16px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  @include theme(background, $grey-background, $dark-mode-background);
+  @include theme(color, rgba(black, 70%), inherit);
+
+  > p:last-child:not(.btn-row), > ul:last-child, > ol:last-child { margin-bottom: 0; }
+  .caption { @include theme(color, rgba(black, 40%), rgba(white, 55%)); }
+  hr { @include theme(background, rgba(black, 20%), rgba(white, 25%)); }
+
+  @each $name, $color in $colors {
+    &.#{$name} { @include theme(background, rgba($color, 25%), rgba($color, 40%)); }
+  }
+}
+
+.box {
+  @extend .frame;
+  padding: 20px;
+  position: relative;
+  margin: 2em 0;
+
+  // TODO Fix spacing between steps
+  &.with-title { border-top-left-radius: 0; margin-top: calc(2em + 37px); }
+  &.no-padding { padding: 0; }
+  figure & { margin: 0; }
+  figure .tabs + & { padding-top: 32px; }
+
+  h3 {
+    background: $dark-grey;
+    color: white;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 20px;
+    font-size: 18px;
+    border-radius: 12px 12px 0 0;
+    margin: 0;
+    position: absolute;
+    left: 0;
+    top: -37px;
+  }
+
+  @media screen and (max-width: $browser-small) {
+    padding-left: 24px; border-radius: 0;
+    h3 { padding-left: 24px; border-top-left-radius: 0; }
+  }
+
+  @each $name, $color in $colors {
+    &.#{$name} h3 { background: $color; }
+  }
+}
+
+.theorem {
+  @extend .frame;
+  margin: 1.5em 0;
+  padding: .6em 1em;
+  border-left: 6px solid;
+  border-radius: 3px 6px 6px 3px;
+  @include theme(background, rgba($red, 25%), rgba($red, 40%));
+
+  @each $name, $color in $colors {
+    &.#{$name} { border-color: $color; }
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+// More Typography and Inline Elements
+
+x-step p a {
+  @include inline-hover(mix($blue, white, 70%));
+  color: inherit;
+  padding-right: 17px;
+  margin: -3px -17px -3px -6px;
+  outline: none;
+  &:before { right: 17px; }
+
+  &:after {
+    content: " ";
+    background: inline-svg('<path fill="none" stroke="rgba(0,0,0,0.6)" stroke-width="2px" d="M2 2L6 7L2 12"/>', 8, 14);
+    width: 9px !important;
+    height: 14px;
+    right: 5px;
+    top: 7px;
+    left: auto;
+    opacity: 0;
+    transition: opacity .1s;
+    display: block;
+    position: absolute;
+  }
+  &:hover:after, &:focus:after { opacity: 1;  }
+}
+
+.circled {
+  @include circled(40px);
+  background: $grey;
+  color: white;
+
+  @each $name, $color in $colors {
+    &.#{$name} { background: $color; }
+  }
+}
+
+.pill {
+  color: white;
+  display: inline-block;
+  line-height: 1.5;
+  padding: 0 10px;
+  border-radius: 16px;
+  min-width: 10px;
+  text-align: center;
+
+  background: rgba($medium-grey, 60%);
+  @each $name, $color in $colors {
+    &.#{$name} { background: rgba($color, 60%); }
+  }
+
+  &.step-target {
+    cursor: pointer;
+    transition: background .2s, box-shadow .2s;
+    @include coloured-btn(rgba($medium-grey, 60%), $medium-grey);
+    @each $name, $color in $colors {
+      &.#{$name}:hover { @include coloured-btn(rgba($color, 60%), $color); }
+    }
+  }
+}
+
+.var-action {
+  @include inline-block($red);
+  @include coloured-btn($red);
+  @include bouncy();
+  color: rgba(white, 80%);
+  min-width: 20px;
+  padding: 0 8px;
+  transition: color .2s, background .2s, box-shadow .2s, transform .3s;
+  &:hover { color: white; box-shadow: $shadow-1; }
+  html.is-tabbing &:focus { outline: none; }
+}
+
+.check {
+  background: $green icon('check', 'white');
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  border-radius: 100%;
+  vertical-align: middle;
+  visibility: hidden;
+  &.incorrect { background: $red icon('cross', 'white'); }
+}
+
+.overflow-wrap {
+  @include overflow-scroll();
+  margin: 0 -40px;
+  padding: 0 40px;
+  &.overflow-table { margin: 1em -40px; }
+  table { margin: .5em auto; }
+}
+
+
+// -----------------------------------------------------------------------------
+// Print and Mobile Styles
+
+@media screen and (max-width: $browser-small) {
+  .box, figure, x-slideshow, x-gallery { margin-left: -24px; margin-right: -24px; }
+
+  x-parallax.full-width { height: 320px; }
+  figure .caption { padding: 0 24px; }
+  figure x-img img, figure x-video video, .frame.fill { border-radius: 0; }
+
+  x-slideshow .legend-box > * { padding-left: 24px; padding-right: 24px; }
+  x-slideshow .back { border-top-left-radius: 0; }
+  x-slideshow .next { border-top-right-radius: 0; }
+  x-gallery .back { border-bottom-left-radius: 0; }
+  x-gallery .next { border-bottom-right-radius: 0; }
+}
+
+@media print {
+  x-step { height: auto !important; opacity: 1 !important; transform: none !important; }
+  x-step > *, x-step .row { break-inside: avoid; }
+  .reveal { visibility: visible !important; }
+  p, strong, h2, h3, .caption { color: black !important; }
+  x-gloss .popup, x-bio .popup { display: none !important; }
+}

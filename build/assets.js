@@ -16,7 +16,7 @@ const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const rtlcss = require('rtlcss');
 
-const {error, readFile, success, writeFile, CONFIG, CORE_ASSETS, PROJECT_ASSETS, CONTENT, COURSES, OUTPUT, watchFiles} = require('./utilities');
+const {error, readFile, success, writeFile, CONFIG, STUDIO_ASSETS, PROJECT_ASSETS, CONTENT, COURSES, OUTPUT, watchFiles} = require('./utilities');
 const {parseCourse, COURSE_URLS} = require('./markdown');
 const {writeTexCache} = require('./markdown/mathjax');
 
@@ -220,7 +220,7 @@ function getAssetFiles(pattern, extension = path.extname(pattern)) {
   const projectFileNames = projectFiles.map(p => path.basename(p));
 
   // Don't include any core files that are overwritten by the project.
-  const studioFiles = glob.sync(pattern, {cwd: CORE_ASSETS}).map(c => path.join(CORE_ASSETS, c))
+  const studioFiles = glob.sync(pattern, {cwd: STUDIO_ASSETS}).map(c => path.join(STUDIO_ASSETS, c))
       .filter(p => !projectFileNames.includes(path.basename(p)));
 
   return [...studioFiles, ...projectFiles].map(src => {

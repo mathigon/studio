@@ -13,6 +13,16 @@ Here is a section
 
 Here is a question [[a]], [[b|c|d]]
 
+Here is a [link](https://mathigon.org) and a [pill](pill:red) and a [target](->x-blank)
+
+::: .box.yellow
+
+#### Here is a box
+
+With some text!
+
+:::
+
 ---
 
 And some more details about [atoms](gloss:atom)

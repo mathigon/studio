@@ -22,7 +22,7 @@ const PROJECT_CONFIG = loadYAML(path.join(process.cwd(), 'config.yaml'));
 deepExtend(CONFIG, PROJECT_CONFIG, (a, b) => b);
 
 // Directories
-const CORE_ASSETS = path.join(__dirname, '../frontend');
+const STUDIO_ASSETS = path.join(__dirname, '../frontend');
 const PROJECT_ASSETS = path.join(process.cwd(), 'frontend');
 const CONTENT = path.join(process.cwd(), CONFIG.contentDir);
 const OUTPUT = path.join(__dirname, '../.output');
@@ -100,7 +100,7 @@ function writeToCache(cacheFile, id, hash) {
 // -----------------------------------------------------------------------------
 
 module.exports.CONFIG = CONFIG;
-module.exports.CORE_ASSETS = CORE_ASSETS;
+module.exports.STUDIO_ASSETS = STUDIO_ASSETS;
 module.exports.PROJECT_ASSETS = PROJECT_ASSETS;
 module.exports.CONTENT = CONTENT;
 module.exports.OUTPUT = OUTPUT;

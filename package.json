@@ -51,6 +51,7 @@
     "mathjax": "3.1.2",
     "node-fetch": "2.6.1",
     "postcss": "8.2.8",
+    "postcss-inline-svg": "5.0.0",
     "pug": "3.0.2",
     "rtlcss": "3.1.2",
     "sass": "1.32.8",
