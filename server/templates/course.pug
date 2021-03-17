@@ -4,7 +4,7 @@ block vars
   - var title = (section.title !== 'Introduction' ? section.title + ' – ' : '') + course.title
   - var description = course.description
   - var styles = ['/course.css', `/content/${course.id}/styles.css`]
-  - var scripts = ['/course.js', `/content/${course.id}/functions.js`]
+  - var scripts = [`/content/${course.id}/functions.js`, '/course.js']
   - var thumbnail = `/content/${course.id}/thumbnails/${section.id}-${course.locale}.jpg`
   - var theme = (section.background && section.background.includes('dark')) ? 'dark' : undefined;
 
@@ -78,8 +78,8 @@ block main
             .small= __('Next up:')
             .title= nextUp.course ? nextUp.course.title : nextUp.section.title
 
-    if config.tutor.enabled
-      x-tutor
+    if config.tutor.enabled && !section.locked
+      x-tutor(api=`/course/${course.id}/ask`)
         div(slot="icon")!= include('images/archie.svg')
         div(slot="header")
           != include('images/archie.svg')

@@ -63,7 +63,7 @@ export class Gloss extends CustomElementView {
     const popupHeight = this.$popup.height;
 
     const spaceBelow = targetBounds.top + targetBounds.height + popupHeight < Browser.height - 10;
-    const spaceAbove = targetBounds.top - popupHeight > (window.isWebView ? 10 : 54);
+    const spaceAbove = targetBounds.top - popupHeight > (ENV === 'MOBILE' ? 10 : 54);
 
     this.setClass('top', spaceAbove && !spaceBelow);
     this.setClass('left', targetBounds.left + popupWidth > Browser.width - 15);
@@ -81,7 +81,7 @@ export class Gloss extends CustomElementView {
     let body = data.text;
     if (data.image) body += `<img class="gloss-img" alt="" src="/resources/shared/glossary/${data.image}"/>`;
 
-    if (data.link && !window.isWebView) {
+    if (data.link && ENV === 'WEB') {
       const samePage = (location.pathname === data.link.split('#')[0]);
       if (!samePage) body += `<p><a href="${data.link}" class="btn btn-white btn-small">Learn more…</a></p>`;
     }
@@ -97,7 +97,8 @@ export class Bio extends Gloss {
     const data = bios[this.xid];
     if (!data) return console.warn('missing bio:', this.xid);
 
-    const image = `<img class="bio-img" alt="" src="/resources/shared/portraits/${this.xid}.jpg"/>`;
+    // TODO Customise the timeline path, or decide whether it is visible.
+    const image = `<img class="bio-img" alt="" src="/content/shared/bios/${this.xid}.jpg"/>`;
     const btn = data.born ? `<p><a href="/timeline/${this.xid}" class="btn btn-white btn-small" target="_blank">Timeline</a></p>` : '';
     return ((data.image === false) ? '' : image) + data.bio + btn;
   }

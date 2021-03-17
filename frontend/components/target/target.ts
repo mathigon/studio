@@ -26,6 +26,7 @@ function distance(a: [number, number], b: [number, number]) {
 }
 
 
+// Parent elements with position: fixed, which we cannot scroll into view.
 const $fixed = $$('header, x-tutor, .sidebar');
 
 const $targets = $N('svg', {class: 'target-body', html: template}, $body);
@@ -69,7 +70,7 @@ export class Target extends CustomElementView {
         const bottom = Math.max(...bounds.map(x => x.top + x.height));
 
         const scrollUp = Browser.height - 12 - bottom;
-        const scrollDown = (window.isWebView ? 12 : 56) - top;
+        const scrollDown = (ENV === 'MOBILE' ? 12 : 56) - top;
         scroll = scrollUp < 0 ? scrollUp : scrollDown > 0 ? scrollDown : 0;
       }
 

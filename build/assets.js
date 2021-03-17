@@ -112,6 +112,7 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, n
 
   const result = await esbuild.build({
     entryPoints: [srcPath],
+    define: {ENV: '"WEB"'},  // could also be '"MOBILE"'
     bundle: true,
     minify,
     globalName: name,
@@ -134,7 +135,7 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, n
   if (watch) {
     const cwd = process.cwd();
     const files = Object.keys(result.metafile.inputs).filter(f => !f.startsWith('node_modules')).map(f => path.join(cwd, f));
-    watchFiles(files, () => bundleScripts(srcPath, destPath, minify));
+    watchFiles(files, () => bundleScripts(srcPath, destPath, minify, watch, name));
     // TODO Update watched files when output.includedFiles changes
   }
 
