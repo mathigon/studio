@@ -14,6 +14,12 @@ import {HintOptions} from '../tutor/tutor';
 import {Narration} from './narration';
 
 
+// Global variable exposed by the functions.ts files for courses.
+// TODO Better code splitting to avoid duplication.
+declare global {
+  const StepFunctions: Record<string, (step: Step) => void>|undefined;
+}
+
 export type UserData = {scores?: string[]; data?: Record<string, any>};
 
 export interface StepComponent {
