@@ -119,7 +119,7 @@ footer { height: 320px; position: relative; padding-top: 80px; }
     & + .small, & + .small + .title { padding-left: 74px; }
   }
 
-  // TODO Add shadow on hover
+  // TODO Add shadow on hover. This would currently be clipped by mask().
   &:hover, &:focus { transform: scale(1.05); }
 }
 

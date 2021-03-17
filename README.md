@@ -33,6 +33,7 @@ Here is a breakdown of all the components included in this repository:
 
 [![Build Status](https://github.com/mathigon/studio/workflows/CI%20Tests/badge.svg)](https://github.com/mathigon/studio/actions?query=workflow%3A%22CI+Tests%22)
 ![Code Quality](https://github.com/mathigon/studio/workflows/Code%20Quality/badge.svg)
+[![npm](https://img.shields.io/npm/v/@mathigon/studio)](https://www.npmjs.com/package/@mathigon/studio)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mathigon/studio)
 ![GitHub issues](https://img.shields.io/github/issues-raw/mathigon/studio)
 
