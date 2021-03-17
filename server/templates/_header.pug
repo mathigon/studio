@@ -1,0 +1,60 @@
+include _mixins
+
+header
+  block logo
+    a#logo(href="/" title=config.siteName)
+      != include('images/logo.svg')
+      != include('images/title.svg')
+
+  //- Accessibility Button
+  button#skip-nav= __("Skip Navigation")
+
+  nav
+    for link in config.header.links
+      .nav-item
+        a.nav-link(href=link.url)
+          x-icon(name=link.icon)
+          span.nav-text= __(link.title)
+
+    //- TODO Support search for non-English languages
+    if config.search.enabled && locale.id === 'en'
+      .nav-item
+        button.nav-link.narrow(title=__('Search') data-modal="search")
+          x-icon(name="search")
+
+    x-popup(animation="fade").nav-item
+      block nav-user-btn
+        button.nav-link.narrow.popup-target#login-btn
+          x-icon(name="settings")
+
+      .popup-body
+        block nav-user-body
+          label.nav-link
+            x-icon(name="brightness")
+            | #{__('Dark Mode')}
+            .form-checkbox
+              input.show-labels#dark-mode(type="checkbox")
+              .control
+          if availableLocales.length > 1
+            button.nav-link(data-modal="language")
+              x-icon(name="language")
+              | #{__('Change Language')}
+              img(src=`/images/flags/${locale.flag}.png` width=24 height=24 alt="")
+
+if config.search.enabled && locale.id === 'en'
+  x-modal#search(class=(req.query.search ? 'open' : undefined))
+    .modal-body
+      label.form-field
+        x-icon(name="search" size=28)
+        input(type="text" placeholder=__("Search…") inputmode="search" autocomplete="off" maxlength=50 value=(req.query.search || req.cookies.search || ''))
+      .search-body
+        include ./search
+
+if availableLocales.length > 1
+  +modal('language')
+    h2.text-center #[x-icon(name="language" size=32)] #{__('Change Language')}
+    .locale-list
+      for l in availableLocales
+        a.locale-link(href=`https://${l.id === 'en' ? '' : l.id + '.'}${config.domain}${req.path}`)
+          img(src=`/images/flags/${l.flag}.png` width=36 height=36 alt="")
+          | #{l.name}

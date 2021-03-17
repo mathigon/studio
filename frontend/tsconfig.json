@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["es2016", "dom", "es2017.object", "es2017.string"]
+  }
+}

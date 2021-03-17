@@ -1,0 +1,40 @@
+mixin course(id, progress)
+  - var course = getCourse(id, locale.id)
+  .course(lang=(course.locale !== locale.id ? course.locale : undefined))
+    .course-img(style=`background-color: ${course.color}; background-image: url(${course.icon || course.hero});`)
+    h3
+      | #{course.title}
+      if course.locale !== locale.id
+        img(src="images/flags/gb.png" width=20 height=20)
+    for section in course.sections
+      if section.locked
+        .course-section.locked(title=__('This chapter is still under construction.'))
+          x-icon(name="construction" size=20)
+          | #{section.title}
+      else
+        a.course-section(href=section.url)
+          x-progress(r=10 p=(progress ? progress[section.id] : user ? user.getProgress(id, section.id) : 0) style=`color: ${course.color}`)
+          | #{section.title}
+
+mixin flash(messages)
+  if messages.errors
+    .alert.fail
+      button.close: x-icon(name="close")
+      for error in messages.errors
+        p!= error
+  if messages.info
+    .alert
+      button.close: x-icon(name="close")
+      for info in messages.info
+        p= info
+  if messages.success
+    .alert.success
+      button.close: x-icon(name="close")
+      for success in messages.success
+        p= success
+
+mixin modal(id)
+  x-modal(id=id)&attributes(attributes)
+    button.close: x-icon(name="close")
+    .modal-body
+      block

@@ -1,0 +1,211 @@
+// =============================================================================
+// Global Header Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "variables";
+
+header {
+  $hover-grey: mix($grey, $medium-grey, 60%);
+
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 44px;
+  background: $dark-grey;
+  z-index: 450;
+  color: white;
+  user-select: none;
+  box-shadow: 0 0 12px rgba(black, 25%);
+
+  #logo, .nav-link {
+    display: block;
+    font-size: 18px;
+    line-height: 44px;
+    height: 44px;
+  }
+
+  #logo {
+    float: left;
+    padding: 4px 4px 4px 16px;
+    margin-right: -12px;
+    box-sizing: border-box;
+    svg, img { height: 36px; float: left; }
+    span { line-height: 36px; display: inline-block; float: left; margin: 0 8px; }
+  }
+
+  #skip-nav {
+    position: absolute;
+    top: 2px;
+    left: -9999px;
+    height: 32px;
+    padding: 2px 18px;
+    background: $grey;
+    border: 2px solid #181824;
+    border-radius: 30px;
+    html.is-tabbing &:focus { left: 2px; }
+  }
+
+  nav { float: right; display: flex; }
+
+  .nav-link {
+    padding: 0 16px;
+    opacity: 0.8;
+    transition: opacity .2s, background .2s;
+    cursor: pointer;
+
+    &:hover, &:focus { opacity: 1; background: $hover-grey; }
+    x-icon { margin: 0 8px -6px -2px; vertical-align: baseline;}
+    &.narrow { padding: 0 12px; }
+    &.narrow x-icon { margin: 0; display: block; }
+    &.popup-target { padding-right: 18px; }
+  }
+  .nav-item.open .nav-link { opacity: 1; background: $hover-grey; }
+
+  .nav-user-icon {
+    display: block;
+    width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    border: 1px solid rgba(white, 50%);
+  }
+
+  .popup-body {
+    position: absolute;
+    top: 44px;
+    right: 0;
+    display: none;
+    background: rgba($dark-grey, 91%);
+    backdrop-filter: blur(4px);
+    border-radius: 0 0 0 6px;
+    border-left: 1px solid rgba(white, 30%);
+    border-bottom: 1px solid rgba(white, 30%);
+    background-clip: content-box;
+  }
+
+  .popup-body .nav-link {
+    padding: 0 18px;
+    white-space: nowrap;
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: left;
+    @include dividers(calc(100% - 36px));
+
+    &.logout { max-width: 300px; @include ellipsis(); }
+    &:last-child { border-radius: 0 0 0 6px; }
+
+    img { float: right; margin: 10px 2px 0 12px; }
+    .form-checkbox { float: right; margin: 8px 2px 0 12px; padding-left: 24px; }
+  }
+
+  @media (max-width: 680px) {
+    .nav-link { padding: 0 12px; }
+    .nav-link.narrow { padding: 0 10px; }
+    .nav-link x-icon { margin-right: 6px; }
+  }
+  @media (max-width: 620px) {
+    .nav-item > .nav-link {   padding: 4px 8px 4px; height: 36px; }
+    .nav-item > .nav-link x-icon { display: block; margin: 0 auto; width: 24px; height: 24px; }
+    .nav-text { display: block; line-height: 12px; font-size: 10px; text-align: center; }
+  }
+  @media (max-width: 415px) { nav { display: none; } }
+}
+
+
+// -----------------------------------------------------------------------------
+// Language Switcher
+
+x-modal#language { width: 540px; user-select: none; }
+
+.locale-list {
+  column-count: 3;
+  @media (max-width: 560px) { column-count: 2; }
+  @media (max-width: 420px) { column-count: 1; }
+}
+
+.locale-link {
+  display: block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background .2s;
+  margin: 2px 0;
+  -webkit-column-break-inside: avoid;
+  &:hover { @include theme(background, mix($light-grey, white), rgba(white, 20%)); }
+  img { margin-right: 8px; }
+}
+
+
+// -----------------------------------------------------------------------------
+// Search Modal
+
+#search {
+  width: 480px;
+  .modal-body { padding: 12px; overflow: visible; }
+
+  .form-field {
+    padding: 0;
+    input { padding: 8px 16px 8px 48px; font-size: 24px; border-radius: 40px; line-height: 32px; }
+    input::placeholder { color: inherit; opacity: 0.5; }
+    input:focus { box-shadow: 0 0 0 3px mix($blue, white); }
+    x-icon { position: absolute; left: 13px; top: 11px; fill: currentColor; }
+  }
+
+  .search-body {
+    padding: 8px 8px 6px 48px;
+    min-height: 180px;
+    max-height: calc(100vh - 160px);
+    overflow: auto;
+    @include clearfix();
+    @media screen and (max-width: 420px) { padding-left: 8px; }
+  }
+
+  .search-section { font-weight: 600; font-size: 14px; text-transform: uppercase; }
+
+  .search-result {
+    margin: 0 -6px;
+    height: 48px;
+    display: block;
+    padding: 6px;
+    border-radius: 6px;
+    line-height: 1.2;
+    transition: background .2s;
+    &:hover, &:focus { @include theme(background, mix($light-grey, white), rgba(white, 20%)); }
+  }
+
+  .search-img {
+    width: 48px;
+    height: 48px;
+    background: black;
+    background-size: cover;
+    border-radius: 4px;
+    float: left;
+    margin-right: 10px;
+  }
+
+  .search-subtitle { font-size: 14px; color: $text-light; margin-top: 4px; @include ellipsis; }
+  .search-title { font-size: 20px; font-weight: 600; @include ellipsis; }
+
+  .search-gloss {
+    background: mix($yellow, white, 40%);
+    border-radius: 6px;
+    margin: 6px 0;
+    padding: 8px 14px;
+    font-size: 16px;
+    line-height: 1.4;
+    @include clearfix;
+    img { border: 0; float: right; width: 160px; margin: 0 -12px 0 0; }
+    .math, x-math { white-space: nowrap; }
+    p, li, ul { margin-bottom: .3em; &:last-child { margin-bottom: 0; }}
+  }
+
+  .no-results {
+    margin-top: 32px;
+    text-align: center;
+    padding-right: 32px;
+    color: $text-light;
+    @media screen and (max-width: 420px) { padding: 0; }
+    svg { width: 80px; margin: 0 auto; fill: $text-light; }
+  }
+}

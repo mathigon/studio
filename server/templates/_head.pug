@@ -1,0 +1,72 @@
+meta(charset="utf-8")
+meta(http-equiv='X-UA-Compatible' content='IE=edge')
+
+title= title
+meta(name="description" content=description)
+meta(name="format-detection" content="telephone=no")
+
+//- Canonical URLs and translated versions for Google search
+link(rel="canonical" href=href())
+if availableLocales.length > 1
+  link(rel="alternate" hreflang="x-default" href=href('en'))
+  for l in availableLocales
+    link(rel="alternate" hreflang=(l.google || l.id) href=href(l.id))
+
+//- Mobile Data
+//- Note that on iOS 10+, "user-scalable=no" is always disabled
+meta(name="HandheldFriendly" content="True")
+meta(name="MobileOptimized" content="480")
+//- TODO add viewport-fit=cover for iPhone X compatibility
+meta(name="viewport" content="width=device-width, initial-scale=1")
+meta(http-equiv="cleartype" content="on")
+
+//- Web Apps and Images
+meta(name="mobile-web-app-capable" content="yes")
+meta(name="mobile-web-app-title" content="Mathigon")
+meta(name="theme-color" content="#181824")
+link(rel="manifest" href="/manifest.json")
+link(rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32.png")
+link(rel="icon" type="image/png" sizes="64x64" href="/favicons/favicon-64.png")
+link(rel="icon" type="image/png" sizes="192x192" href="/favicons/favicon-192.png")
+
+//- Apple Web Apps
+meta(name="apple-mobile-web-app-capable" content="yes")
+meta(name="apple-mobile-web-app-title" content="Mathigon")
+meta(name="apple-mobile-web-app-status-bar-style" content="black")
+link(rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png")
+
+//- Windows Web Apps
+meta(name="application-name" content="Mathigon")
+meta(name="msapplication-TileColor" content="#181824")
+meta(name="msapplication-TileImage" content="/favicons/favicon-192.png")
+meta(name="msapplication-config" content="/favicons/browserconfig.xml")
+
+//- Open Graph
+//- Validate at https://developers.facebook.com/tools/debug/
+//- Validate at https://cards-dev.twitter.com/validator
+meta(property="og:title" content=title)
+meta(property="og:description" content=description)
+meta(property="og:url" content=href())
+meta(property="og:image" content=(thumbnail.startsWith('http') ? thumbnail : 'https://' + config.domain + thumbnail))
+meta(property="og:type" content="website")
+meta(property="og:site_name" content="Mathigon")
+meta(name="twitter:card" content="summary_large_image")
+if config.social.twitter
+  meta(name="twitter:site" content=`@${config.social.twitter.handle}`)
+if config.social.facebook
+  meta(property="fb:app_id" content=config.social.facebook.appId)
+
+//- Google Plus Scheme
+//- Docs at https://schema.org/docs/full.html, Validate in Google Webmaster Tools
+script(type="application/ld+json").
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": "#{config.siteName}",
+    "url": "https://#{config.domain}/",
+    "logo": "https://#{config.domain}/images/favicons/favicon-512.png",
+    "sameAs": [
+      "https://facebook.com/#{config.social.facebook.page}",
+      "https://twitter.com/#{config.social.twitter.handle}"
+    ]
+  }

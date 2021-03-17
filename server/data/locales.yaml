@@ -1,0 +1,116 @@
+en:
+  key: English
+  name: English
+  flag: gb
+
+ar:
+  key: Arabic
+  name: عربى
+  flag: sa
+  dir: rtl
+
+cn:
+  key: Chinese
+  name: 中文
+  flag: cn
+  google: zh-CN
+
+de:
+  key: German
+  name: Deutsch
+  flag: de
+
+es:
+  key: Spanish
+  name: Español
+  flag: es
+
+et:
+  key: Estonian
+  name: Eesti
+  flag: ee
+
+fr:
+  key: French
+  name: Français
+  flag: fr
+
+hi:
+  key: Hindi
+  name: हिन्दी
+  flag: in
+
+hr:
+  key: Croatian
+  name: Hrvatski
+  flag: hr
+
+id:
+  key: Indonesian
+  name: Bahasa Indonesia
+  flag: id
+
+it:
+  key: Italian
+  name: Italiano
+  flag: it
+
+ja:
+  key: Japanese
+  name: 日本語
+  flag: jp
+
+ko:
+  key: Korean
+  name: 한국어
+  flag: kr
+
+nl:
+  key: Dutch
+  name: Nederlands
+  flag: nl
+
+pl:
+  key: Polish
+  name: Polski
+  flag: pl
+
+pt:
+  key: Portugese
+  name: Português
+  flag: br
+
+ro:
+  key: Romanian
+  name: Română
+  flag: ro
+
+ru:
+  key: Russian
+  name: Русский
+  flag: ru
+
+sv:
+  key: Swedish
+  name: Svenska
+  flag: se
+
+th:
+  key: Thai
+  name: ภาษาไทย
+  flag: th
+
+tr:
+  key: Turkish
+  name: Türkçe
+  flag: tr
+
+uk:
+  key: Ukrainian
+  name: Українська
+  flag: ua
+
+vi:
+  key: Vietnamese
+  name: Tiếng Việt
+  flag: vn

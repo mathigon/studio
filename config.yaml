@@ -1,0 +1,35 @@
+# ==============================================================================
+# Mathigon Studio Default Settings
+# (c) Mathigon
+# ==============================================================================
+
+
+siteName: Mathigon Studio
+privacyURL: https://mathigon.org/policies
+banner: (c) Mathigon
+locales: [en]
+
+contentDir: content
+
+search:
+  enabled: true
+
+sitemap: []
+
+header:
+  logo: images/logo.svg
+  title: images/title.svg
+  links: []
+
+footer:
+  rows: []
+  copyright: © Mathigon, 2021
+
+courses:
+  revealAll: false
+  audio: false
+
+tutor:
+  enabled: true
+  name: Archie
+  icon: images/archie.svg

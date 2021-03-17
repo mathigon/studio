@@ -1,0 +1,89 @@
+// =============================================================================
+// Image Styles
+// (c) Mathigon
+// =============================================================================
+
+
+.lightbox-overlay {
+  cursor: zoom-out;
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(black, 0%);
+  z-index: 800;
+  will-change: background;
+  transition: background .4s;
+}
+
+.lightbox-overlay.on { background: rgba(black, 90%); }
+
+.lightbox-img {
+  position: absolute;
+  top: 30px;
+  bottom: 30px;
+  left: 30px;
+  right: 30px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  will-change: transition;
+  &.transitions { transition: transform .4s ease-in-out; }
+}
+
+@media screen and (max-width: $browser-small) {
+  .lightbox-img { top: 0; left: 0; bottom: 0; right: 0; }
+}
+
+// -----------------------------------------------------------------------------
+
+x-img {
+  display: block;
+  position: relative;
+  max-width: 100%;
+  &.interactive { cursor: zoom-in; }
+
+  .wrap { height: 0; }  // set relatively using padding
+  img { display: block; max-width: 100%; border-radius: 4px; }
+
+  .credit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: rgba(black, 80%);
+    padding: 4px 8px;
+    font-size: 11px;
+    color: white;
+    opacity: 0;
+    transition: opacity .2s;
+    border-bottom-right-radius: 4px;
+    max-width: 90%;
+    box-sizing: border-box;
+    line-height: 1.2;
+  }
+  &:hover .credit { opacity: 0.9; }
+
+  .zoom {
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    background: rgba(black, 70%);
+    top: 0;
+    right: 0;
+    opacity: 0.5;
+    transition: opacity .2s, background .2s;
+    border-top-right-radius: 4px;
+  }
+  &:hover .zoom { opacity: 0.9; }
+
+  x-icon { fill: white; margin: 6px; }
+}
+
+// -----------------------------------------------------------------------------
+
+@media print {
+  .lightbox-overlay, .lightbox-img, x-img .zoom { display: none !important; }
+  x-img .credit { opacity: 1 !important; }
+}

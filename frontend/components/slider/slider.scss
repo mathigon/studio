@@ -1,0 +1,59 @@
+// =============================================================================
+// Slider Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-slider {
+  margin: 20px auto 2em /* rtl:ignore */;
+  width: calc(100% - 24px);
+  max-width: 400px;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+
+  .bar {
+    background: mix($grey, white, 40%);
+    border-radius: 2px;
+    height: 4px;
+    position: relative;
+  }
+
+  .play + .bar { margin-left: 40px /* rtl:ignore */; }
+
+  .knob {
+    background: $primary;
+    border-radius: 12px;
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    margin:  -8px 0 0 -10px /* rtl:ignore */;
+    touch-action: pan-y;
+    transition: background .2s, transform .2s, box-shadow .2s;
+    cursor: grab;
+    left: 0 /* rtl:ignore */;
+  }
+
+  .knob:hover, .knob:active {
+    background: lighten($primary, 10%);
+    transform: scale(1.4);
+    box-shadow: 0 3px 8px rgba(black, 25%);
+  }
+
+  .play {
+    @include bouncy();
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    position: absolute;
+    top: -18px /* rtl:ignore */;
+    left: -8px /* rtl:ignore */;
+    color: mix($grey, white, 60%);
+    transition: fill .2s, transform .2s;
+    &:focus, &:hover { @include theme(color, $grey, white); transform: scale(1.2); }
+    &:active { transform: scale(0.9); }
+  }
+}

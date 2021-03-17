@@ -1,0 +1,97 @@
+// =============================================================================
+// Glossary Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+$width-small: 600px;
+$light: mix($glossary-color, white, 70%);
+$dark: mix(black, $glossary-color, 5%);
+
+
+x-bio, x-gloss {
+  display: inline-block;
+  position: relative;
+
+  .target {
+    @include inline-block(transparent, $light);
+    margin: -3px -6px;
+    transition: background .2s, color .2s, box-shadow .2s;
+  }
+  &.on .target { background: $light; color: rgba(black, 80%); }
+
+  html.is-tabbing & .target:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px $light;
+  }
+
+  .popup { font-size: 16px; font-weight: 400; }
+
+  @media screen and (max-width: $width-small) {
+    .popup { display: none; }
+  }
+
+  @media screen and (min-width: $width-small + 1px) {
+    .popup {
+      @include popup($dark);
+      width: 300px;
+      padding: 12px 16px 12px;
+      left: -6px;
+      box-shadow: $shadow-1;
+    }
+    &.left .popup { left: auto; right: -6px; border-radius: 6px 0 6px 6px; transform-origin: right top; }
+    &.top .popup { top: auto; bottom: 100%; border-radius: 6px 6px 6px 0; transform-origin: left bottom; }
+    &.left.top .popup { border-radius: 6px 6px 0 6px; transform-origin: right bottom; }
+    .caption &.top .popup { bottom: 24px; }
+
+    &.on, &:focus-within {
+      z-index: 100;
+
+      .target { border-radius: 5px 5px 0 0; }
+      &.top .target { border-radius: 0 0 5px 5px; }
+      &.invalid .target:before { border-radius: 5px 0 0 0; }
+      &.top.invalid .target:before { border-radius: 0 0 0 5px; }
+
+      .popup { opacity: 1; pointer-events: all; transform: none; }
+    }
+  }
+
+  .theorem & .target:before { background: $glossary-color; }
+  .theorem &.on .target:before { background: $light; }
+}
+
+x-bio .popup, x-gloss .popup, #glossary-modal {
+  color: rgba(white, 90%);
+  p, li { line-height: 1.4; margin: 0 0 .7em 0; }
+  li { margin-bottom: .3em; }
+  p:last-child { margin-bottom: 0; }
+  ul, ol { margin-left: 1.5em; }
+  strong { color: white; }
+}
+
+// Learn more links:
+x-gloss .popup a.btn, #glossary-modal a.btn, x-bio .popup a.btn {
+  color: $glossary-color;
+  font-weight: normal;
+  background: rgba(white, 80%);
+  margin: 0;
+  &:before, &:after { display: none; }
+  &:hover, &:focus { background: white; color: $glossary-color; }
+}
+
+.bio-img { float: right; width: 140px; height: auto; margin: 4px 0 5px 10px; border-radius: 4px; }
+.gloss-img { display: block; filter: invert(100%); }
+
+#glossary-modal {
+  background: $glossary-color;
+  width: 340px;
+  border-radius: 8px;
+  .modal-body { padding: 12px 18px 14px; }
+
+  p:first-child { margin-right: 18px; }  // space for X button
+  .bio-img { float: none; margin: 0 auto 12px; display: block; min-height: 160px; }
+  .gloss-img { min-height: 120px; }
+  .close { fill: rgba(white, 80%); }
+}

@@ -1,0 +1,181 @@
+// =============================================================================
+// Main Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "./styles/variables";
+@import "./styles/normalise";
+@import "./styles/forms";
+@import "./styles/maths";
+
+@import "./components/modal/modal";
+@import "./components/select/select";
+@import "./components/alert/alert";
+@import "./components/icon/icon";
+@import "./components/progress/progress";
+
+@import "./styles/header";
+@import "./styles/footer";
+@import "./styles/courses";
+
+
+html {
+  font-family: $fonts;
+  cursor: default;
+  background-color: $background;
+  min-width: 320px;
+  font-size: 18px;
+  line-height: 1.6;
+  touch-action: manipulation;
+  &[theme="dark"] { background: $dark-mode; }
+}
+
+html:not(.ready) * { transition: none !important; animation: none !important; }
+html:not(.is-tabbing) *:focus { outline: none !important; }
+html.grabbing { cursor: grabbing !important; }
+
+body { @include theme(color, $text-dark, rgba(white, 90%)); }
+
+main {
+  padding-top: 44px;
+  html.webview & { padding-top: 0; }
+}
+
+.container {
+  width: 1000px;
+  max-width: calc(100% - 48px);
+  margin: 0 auto;
+  position: relative;
+  &.narrow { width: 800px; }
+  &.wide { width: 1200px; }
+}
+.panel.narrow { max-width: 800px; margin: 0 auto; }
+
+// Fix display for MathJax SVG elements
+svg.mathjax {
+  display: inline-block;
+  g, use, path { transform-origin: 0 0; transform-box: border-box; }
+}
+
+
+// -----------------------------------------------------------------------------
+// Conditional Classes
+
+.is-mobile .only-desktop, .not-mobile .only-mobile, .not-touch .only-touch {
+  display: none !important;
+}
+
+.xs-hide { @media screen and (max-width: 480px) { display: none !important; } }
+.s-hide  { @media screen and (max-width: 640px) { display: none !important; } }
+.l-hide  { @media screen and (min-width: 641px) { display: none !important; } }
+.xl-hide { @media screen and (min-width: 801px) { display: none !important; } }
+
+
+// -----------------------------------------------------------------------------
+// Grids
+
+.r { position: relative; }
+
+.row, .column { display: flex; flex-wrap: wrap; justify-content: center; }
+.column { flex-direction: column; }
+.row.right { flex-direction: row-reverse; }
+
+// TODO Use `gap: 24px` once supported by Safari: https://caniuse.com/flexbox-gap
+.row.padded, .column.padded { margin: -24px; }
+.row.padded > *, .column.padded > * { margin: 24px; }
+.row.padded-thin, .column.padded-thin { margin: -12px; }
+.row.padded-thin > *, .column.padded-thin > * { margin: 12px; }
+
+.row .grow, .column .grow { flex-grow: 1; }
+.row .shrink, .column .shrink { flex-shrink: 1; }
+
+.row > * > h2:first-child, .row > * > h3:first-child { margin-top: 0; }
+.padded > * > p:last-child, .padded-thin > * > p:last-child { margin-bottom: 0; }
+
+
+// -----------------------------------------------------------------------------
+// Typography
+
+.text-medium { color: $text-medium; }
+
+p a, label a, ul a, ol a, button.a { color: $blue; @include underline(3px, 1px); }
+
+.caption { font-size: 80%; margin: 0 0 0.6em 0; text-align: left; color: #888; }
+
+.emoji {
+  font-size: inherit;
+  margin: -4px 2px 0;
+  display: inline-block;
+  line-height: normal;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+}
+img.emoji { width: auto; }
+
+.tooltip {
+  position: absolute;
+  top: -22px;
+  white-space: nowrap;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  background: $dark-grey;
+  opacity: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  padding: 2px 12px;
+  transition: opacity .1s;
+  color: white;
+  border: 1px solid white;
+  line-height: 18px;
+  z-index: 9999;
+  .not-mobile *:hover > &, .is-tabbing.not-mobile *:focus > & { opacity: 0.8; }
+}
+
+
+// -----------------------------------------------------------------------------
+// Alerts and Warnings
+
+.warning {
+  z-index: 900;
+  display: block;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: $dark-grey url('/images/tiles.png');
+  background-size: 240px 240px;
+}
+
+.warning-body {
+  max-width: calc(100% - 48px);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  svg { margin: 0 auto 20px; width: 100px; height: 100px; }
+  p { color: white; background: $error; border-radius: 4px; padding: 8px 16px; text-align: center; }
+  a:hover { color: lighten($blue, 10%); }
+}
+
+.cookie-warning {
+  border-radius: 4px;
+  background: darken($error, 5%);
+  padding: 10px 16px 12px;
+  box-sizing: border-box;
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  color: white;
+  z-index: 800;
+  max-width: calc(100vw - 20px);
+  box-shadow: 0 3px 6px rgba(black, 30%);
+  line-height: 1.4;
+
+  h2 { color: rgba(white, 80%); font-weight: 100; margin: 0 0 6px 0; font-size: 24px; }
+  p { margin-bottom: 12px; }
+  .btn { color: darken($error, 5%); }
+
+  .close { cursor: pointer; top: 2px; right: 2px; position: absolute; padding: 12px; opacity: 0.6; transition: opacity .2s; }
+  .close:hover { opacity: 1; }
+  x-icon { display: block; }
+}

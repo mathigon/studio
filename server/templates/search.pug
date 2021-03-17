@@ -1,0 +1,25 @@
+include _mixins
+
+mixin resultItem(doc)
+  a.search-result(href=doc.url)
+    .search-img(style=doc.image)
+    .search-subtitle= doc.subtitle
+    .search-title= doc.title
+
+if !search.results
+  .search-section= __('Popular Courses')
+  for doc in config.search.popular
+    +resultItem(search.docs[doc])
+
+else if !search.results.length
+  .no-results
+    include ./svgs/abakus.svg
+    | No results found…
+
+else
+  for doc in search.results
+    if doc.type === 'gloss'
+      //- You can directly search the glossary
+      .search-gloss!= doc.subtitle
+    else
+      +resultItem(doc)

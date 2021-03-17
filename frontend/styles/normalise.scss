@@ -1,0 +1,101 @@
+// =============================================================================
+// CSS Normalisation
+// (c) Mathigon
+// =============================================================================
+
+
+article, aside, details, figcaption, figure, footer, header, nav, main,
+section, summary, audio, canvas, video { display: block; }
+audio:not([controls]) { display: none; height: 0; }
+html { font-size: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+template { display: none; }
+
+svg { display: block; overflow: hidden; }
+p svg, li svg, td svg { display: inline-block; }
+
+// Don't do this for rect, because rects in Illustrator exports have transforms.
+g, use, path, circle, line, polyline, image {
+  transform-origin: center /* rtl:ignore */;
+  transform-box: fill-box;  // See https://bugzilla.mozilla.org/show_bug.cgi?id=1209061
+}
+
+* { -webkit-tap-highlight-color: transparent; cursor: inherit; color: inherit; }
+html, body { margin: 0; padding: 0; }
+
+
+// -----------------------------------------------------------------------------
+// Basic Typography
+
+p { margin: 0 0 1em 0; hanging-punctuation: first; }
+
+h1 { font-size: 40px; font-weight: 400; }
+h2 { font-size: 28px; font-weight: 600; }
+h3 { font-size: 20px; font-weight: 600; }
+
+h1, h2, h3, h4, h5, h6 {
+  color: inherit;
+  font-weight: bold;
+  line-height: 1.1;
+  padding: 0;
+  margin: 2em 0 .8em 0;
+  text-rendering: optimizelegibility;
+}
+
+a { text-decoration: none; cursor: pointer; }
+a:hover { text-decoration: none; }
+a, button { touch-action: manipulation; }
+button { user-select: none; box-sizing: content-box; }
+
+small, .small { font-size: 80%; }
+b, strong, .b { font-weight: bold; }
+em, i, dfn, .i { font-style: italic; }
+
+sub, sup { font-size: 65%; line-height: 0; position: relative; vertical-align: baseline; margin: 0 .1em; }
+sup { top: -0.6em; }
+sub { bottom: -0.25em; }
+
+.text-center  { text-align: center; }
+.break { word-break: break-all; hyphens: auto; }
+
+ul, ol { margin: 0 0 1em 1.5em; padding: 0; text-align: left; }
+ul ul, ul ol, ol ol, ol ul { margin: 0.5em 0 0 1.5em; }
+li { margin: 0 0 0.5em 0; }
+ul.unstyled, ol.unstyled { margin: 0; list-style: none; }
+ul.unstyled li, ol.unstyled li { margin: 0; }
+
+hr { display: block; height: 1px; border: 0; background: #AAA; margin: 1em 0; padding: 0; clear: both; }
+img { vertical-align: middle; border: 0; -ms-interpolation-mode: bicubic; max-width: 100%; height: auto; }
+figure { margin: 0; }
+
+blockquote { margin: 1.5em 0; font-style: italic; }
+q { quotes: none; font-style: italic; }
+q:before, q:after, blockquote:before, blockquote:after { content: none; }
+
+.hidden, [hidden] { display: none !important; visibility: hidden !important; }
+
+table { border-collapse: collapse; border-spacing: 0; border: none; }
+td { vertical-align: top; border: none; }
+table.fixed { table-layout: fixed; }
+
+table.grid td { border-bottom: 1px solid $light-grey; border-right: 1px solid $light-grey; }
+table.grid tr td:last-child { border-right: none; }
+table.grid tr:last-child td { border-bottom: none; }
+
+
+// -----------------------------------------------------------------------------
+// Print Styles
+
+@media print {
+  html, body { color: black; background: transparent; }
+
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h1, h2, h3 { page-break-after: avoid; }
+
+  p a, p a:visited { text-decoration: underline; }
+  p a[href]:after { content: " (" attr(href) ")"; }
+
+  pre, blockquote, tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+
+  @page { margin: 0.5cm; }
+}

@@ -1,0 +1,6 @@
+slot(name="stage")
+.nav
+  button.btn.back.disabled(aria-label=__("Previous Step")): x-icon(name="left" size=24)
+  button.btn.next(aria-label=__("Next Step")): x-icon(name="right" size=24)
+  .dots
+.legend-box: slot

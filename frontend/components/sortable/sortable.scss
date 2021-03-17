@@ -1,0 +1,51 @@
+// =============================================================================
+// Sortable Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-sortable {
+  display: block;
+  margin: 1.5em auto;
+  max-width: 600px;
+  position: relative;
+
+  > * {
+    background: $blank-color;
+    border-radius: 4px;
+    color: white;
+    cursor: grab;
+    left: 0;
+    top: 0;
+    padding: 8px 28px 8px 20px;
+    position: absolute;
+    transition: opacity .1s, box-shadow .1s;
+    width: calc(#{"100% - 48px"});
+
+    &:active { cursor: grabbing; z-index: 100; }
+
+    &:after {
+      content: "…";
+      position: absolute;
+      right: 0;
+      transform: rotate(90deg);
+      top: 7px;
+    }
+  }
+
+  &:active > * { opacity: 0.6; }
+  & > *:active { opacity: 1; box-shadow: 0 0 20px rgba(black, 30%); }
+
+  &.solved > *, &.solved:active > *, &.solved > *:active {
+    background: none;
+    padding: 7px 27px 7px 19px;
+    border: 1px solid $blank-color;
+    cursor: default;
+    color: inherit;
+    opacity: 1;
+    box-shadow: none;
+    &:after { display: none; }
+  }
+}

@@ -1,0 +1,33 @@
+// =============================================================================
+// Select Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-select.segmented {
+  display: flex;
+  margin: 0 auto .5em;
+  width: fit-content;
+
+  > * {
+    width: 100px;
+    text-align: center;
+    border: 1px solid $red;
+    border-left: none;
+    transition: color .2s, background .2s;
+    cursor: pointer;
+
+    &:first-child { border-radius: 20px 0 0 20px; border-left: 1px solid $red; }
+    &:last-child { border-radius: 0 20px 20px 0; }
+    &:hover { background: rgba($red, 18%); }
+    &.active { color: white; background: $red; cursor: default; }
+
+    html.is-tabbing &:focus {
+      box-shadow: 0 0 0 2px white, 0 0 0 4px $red;
+      outline: none;
+      z-index: 1;
+    }
+  }
+}

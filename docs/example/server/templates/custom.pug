@@ -1,0 +1,20 @@
+//- Absolute paths starting with a / are resolved in node_modules/@mathigon/studio/server/templates
+extends /_layout
+
+block vars
+  - var title = 'Custom page';
+  - var styles = ['/custom.css'];
+  - var scripts = ['/custom.js'];
+
+block main
+  .container
+    h1 Custom Page
+    p Here is a custom page for non-course content.
+
+//- Replace the default 'fonts' block defined in /_layout
+block fonts
+  link(href="https://fonts.googleapis.com/css2?family=Redressed&display=swap" rel="stylesheet")
+
+//- Append to the default 'styles' block defined in /_layout
+block append styles
+  style html, body { font-family: 'Redressed', cursive; }

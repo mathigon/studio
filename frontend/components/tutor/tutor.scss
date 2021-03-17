@@ -1,0 +1,132 @@
+// =============================================================================
+// Tutor Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+x-tutor {
+  display: block;
+  font-size: 16px;
+
+  .toasts {
+    position: fixed;
+    bottom: 8px; right: 8px;
+    max-width: 264px;
+    z-index: 300;
+    transition: transform .4s;
+    pointer-events: none;
+    @media (max-width: 400px) { max-width: calc(100% - 80px); }
+  }
+
+  .chat {
+    display: none;
+    position: fixed;
+    width: 280px;
+    height: 420px;
+    bottom: 0;
+    right: 0;
+    background: mix($blue, white, 40%);
+    border-radius: 12px 0 0 0;
+    box-shadow: 0 0 12px rgba(black, 25%);
+    flex-direction: column;
+    z-index: 301;
+    max-height: calc(100vh - 44px);
+    .webview & { max-height: 100vh; }
+  }
+
+  .chat-header {
+    background: mix($blue, black, 75%);
+    border-radius: 12px 0 0 0;
+    height: 44px;
+    color: white;
+    line-height: 44px;
+    padding: 0 12px;
+    font-size: 20px;
+    font-weight: 600;
+    div > svg { width: 32px; height: 32px; display: inline-block; margin: 0 8px -9px 0; }
+    @media (max-height: 450px) { border-radius: 0; }
+  }
+
+  .close {
+    position: absolute;
+    top: 0; right: 0;
+    padding: 10px;
+    transition: fill .2s, transform .2s;
+    cursor: pointer;
+    fill: rgba(white, 60%);
+    x-icon { display: block; }
+    &:hover, &:focus { fill: white; transform: scale(1.4); }
+  }
+
+  .chat-body {
+    flex: 1 1;
+    @include overflow-scroll();
+    padding: 2px 8px 44px;
+    user-select: text;
+    position: relative;
+  }
+
+  .chat-body.loading:after {
+    content: "";
+    width: 14px;
+    height: 14px;
+    border-radius: 14px;
+    border: 3px solid rgba($blue, 25%);
+    border-top-color: $blue;
+    display: block;
+    float: right;
+    margin: 8px 2px -28px 0;
+    animation: adjust-hue .7s infinite linear;
+  }
+
+  .chat-footer {
+    display: flex;
+    background: white;
+
+    .hint { cursor: pointer; fill: $medium-grey; transition: fill .2s; position: relative; }
+    .hint:hover, .hint:focus { fill: $grey; }
+    .hint x-icon { display: block; padding: 8px; }
+  }
+
+  .chat-footer .input {
+    flex-grow: 1;
+    padding: 10px 8px 10px 20px;
+    line-height: 1.3;
+    cursor: text;
+    max-height: 64px;
+    overflow: auto;
+    user-select: text;
+    -webkit-user-modify: read-write-plaintext-only;
+    &:empty:before { content: "Type a question… (beta)"; color: #aaa; }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  .msg-wrap { display: flex; flex-direction: column; align-items: flex-end; }
+  .msg { margin-top: 6px; border-radius: 16px 16px 3px 16px; width: fit-content; }
+  .toasts .msg { pointer-events: all; box-shadow: 0 2px 6px rgba(black, 25%); cursor: pointer; }
+
+  .msg.hint, .msg.question { line-height: 1.4; padding: 5px 12px; }
+  .msg.hint { background: $blue; color: rgba(white, 90%); }
+  .msg.question { color: $blue; background: white; border-radius: 16px 16px 16px 3px; align-self: flex-start;  }
+
+  .msg.archie { background: $blue; border-radius: 28px 28px 3px 28px; padding: 10px 6px 6px 10px; transition: background .2s; }
+  .msg.archie svg { display: block; width: 40px; height: 40px; }
+
+  .msg.correct { background: darken($success, 5%); }
+  .msg.incorrect { background: darken($error, 5%); }
+
+  .msg.img { width: 150px; height: 100px; background-color: black; background-size: cover; }
+
+  .msg.video { background: black; overflow: hidden; border-radius: 3px; }
+  .msg.video iframe { border: none; width: 224px; height: 126px; display: block; }
+
+  .msg {
+    p { margin: 0; }
+    .source { font-size: 10px; margin-top: 2px; color: rgba(white, 50%); text-align: right; }
+    a { transition: color .2s; }
+    a:hover { color: white; }
+  }
+}

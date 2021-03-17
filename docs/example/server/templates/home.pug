@@ -1,0 +1,11 @@
+//- Absolute paths starting with a / are resolved in node_modules/@mathigon/studio/server/templates
+extends /_layout
+
+block vars
+  - var title = 'Welcome!';
+
+block main
+  .container.narrow
+    h1 Welcome!
+    p This is the homepage.
+    include /_footer

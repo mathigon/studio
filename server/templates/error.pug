@@ -1,0 +1,12 @@
+extends _layout
+
+block vars
+  - var title = 'Error'
+
+block main
+  .container
+    block error-body
+      h1 #{message} (#{code}) #[br]
+      if env === 'development' && error
+        pre= error
+    include _footer

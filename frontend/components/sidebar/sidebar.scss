@@ -1,0 +1,244 @@
+// =============================================================================
+// Course Sidebar Styles
+// (c) Mathigon
+// =============================================================================
+
+
+x-course-sidebar {
+  width: 280px;
+  position: fixed;
+  top: 44px;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  background: $grey linear-gradient(rgba(black, 0%) 240px, rgba(black, 25%));
+  z-index: 301;
+  box-shadow: 0 0 12px rgba(black, 25%);
+
+  .sidebar-hero {
+    height: 220px;
+    padding: 0 20px;
+    background-size: cover;
+    position: relative;
+    flex-shrink: 0.5;
+  }
+
+  .sidebar-hero-gradient {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 40px;
+    background-image: linear-gradient(rgba(black, 0%), rgba(black, 60%) 140px);
+  }
+
+  .sidebar-title {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.1;
+    position: absolute;
+    bottom: 16px;
+  }
+
+  .course-icon {
+    border: 2px solid white;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    width: 54px;
+    height: 54px;
+    background-size: cover;
+  }
+
+  .sidebar-author {
+    display: block;
+    font-size: 16px;
+    margin-top: 6px;
+    width: fit-content;
+    opacity: 0.8;
+    transition: opacity .2s;
+    &:hover, &:focus { opacity: 1; }
+  }
+
+  .sidebar-body {
+    flex-grow: 1;
+    @include overflow-scroll();
+  }
+
+  .sidebar-row {
+    display: block;
+    padding: 11px 20px 11px 52px;
+    line-height: 20px;
+    font-weight: 600;
+    @include dividers(calc(100% - 72px));
+
+    x-progress {
+      position: absolute;
+      left: 20px;
+      top: 11px;
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+
+    .connection {
+      position: absolute;
+      width: 2px;
+      height: calc(100% - 18px);
+      left: 29px;
+      top: 30px;
+      background: white;
+      pointer-events: none;
+    }
+
+    x-icon.left {
+      position: absolute;
+      top: 9px;
+      left: 18px;
+      color: white;
+      + .connection { top: 28px; height: calc(100% - 16px); }
+    }
+
+    x-icon.right {
+      margin: -2px -2px 0 6px;
+      float: right;
+      color: rgba(white, 60%);
+    }
+
+    &:last-child .connection { display: none; }
+    &:first-child { margin-top: 16px; }
+  }
+
+  .sidebar-footer {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .footer-link {
+    position: relative;
+    cursor: pointer;
+    padding: 12px 10px;
+
+    x-icon { display: block; fill: rgba(white, 70%); transition: fill .2s }
+    &:hover x-icon, &:focus x-icon { fill: rgba(white, 90%); }
+  }
+}
+
+.sidebar-toggle {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  bottom: 8px;
+  left: 8px;
+  background: $red;
+  border-radius: 24px;
+  display: none;
+  z-index: 300;
+  cursor: pointer;
+  padding: 10px;
+  box-shadow: $shadow;
+  x-icon { fill: white; }
+}
+
+.sidebar-shadow {
+  display: none;
+  position: fixed;
+  z-index: 300;
+  top: 0; left: 0; right: 0; bottom: 0;
+}
+
+
+// -----------------------------------------------------------------------------
+// Modals
+
+x-modal { user-select: text; }
+
+#feedback .error { display: none; color: $red; margin: 5px 8px; }
+#feedback button[disabled]:after { content: "ing…"; }
+x-modal#feedback-success { width: 320px; text-align: center; }
+
+x-modal#share { width: 400px; }
+
+#glossary-search {
+  width: 600px;
+  height: 440px;
+  font-size: 16px;
+  background: mix($yellow, white, 30%);
+}
+
+.gloss-sidebar {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  background: $yellow;
+  border-radius: 12px 0 0 12px;
+  h2 { margin: 20px 24px; color: white; fill: white; }
+}
+
+.gloss-search {
+  position: relative;
+  x-icon { position: absolute; top: 9px; left: 24px; fill: white; }
+}
+
+.gloss-search input {
+  padding: 10px 12px 10px 54px;
+  width: 100%;
+  color: white;
+  box-sizing: border-box;
+  transition: background .2s;
+  background: rgba(white, 24%);
+  &:hover, &:focus { background: rgba(white, 32%); }
+  &::placeholder { color: rgba(white, 70%); }
+}
+
+.gloss-list {
+  flex: 1 1;
+  @include overflow-scroll();
+  border-bottom-left-radius: 12px;
+  margin-top: -1px;
+}
+
+.gloss-item {
+  cursor: pointer;
+  line-height: 1.3;
+  padding: 8px 12px 8px 24px;
+  font-weight: 600;
+  @include dividers(calc(100% - 36px));
+}
+
+.gloss-body {
+  flex: 1 1;
+  @include overflow-scroll();
+  padding: 64px 32px 32px;
+}
+
+
+// -----------------------------------------------------------------------------
+// Mobile and Print Styles
+
+@media screen and (max-width: $browser-medium) {
+  body > .body { padding: 0 40px; }
+  .page-background { left: 0; }
+  h1 { margin: 80px 0 54px; }
+  .course-title { display: block; }
+
+  .sidebar { will-change: transform; left: -280px; transition: transform .3s, box-shadow .3s; box-shadow: none; }
+  .sidebar-toggle { display: block; }
+  .sidebar.open { transform: translateX(280px); box-shadow: 10px 0 60px rgba(black, 50%); }
+  .sidebar.open + .sidebar-shadow { display: block; }
+  .reveal-banner { left: 0; }
+}
+
+@media screen and (max-width: $browser-small) {
+  body > .body { padding: 0 24px; }
+  .overflow-wrap { margin-left: -24px; margin-right: -24px; padding: 0 24px; }
+}
+
+@media print {
+  header, footer, .sidebar, x-tutor, .page-background { display: none !important; }
+  body > .body { padding: 0 20px !important; margin: 0 !important; }
+  article { max-width: none !important; }
+}

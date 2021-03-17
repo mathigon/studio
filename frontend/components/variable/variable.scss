@@ -1,0 +1,99 @@
+// =============================================================================
+// Inline Variable Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+p .var {
+  color: $variable-color;
+  strong { color: $variable-color; }
+}
+
+.pill, .circled {
+  .var, &.var { color: white; }
+}
+
+x-var {
+  @include inline-block($variable-color);
+  color: rgba(white, 80%);
+  cursor: pointer;
+  position: relative;
+  padding: 0 18px;
+  touch-action: none;
+  transition: color .2s, box-shadow .2s;
+
+  .left, .right {
+    position: absolute;
+    top: 0;
+    padding: 7px 1px;
+    opacity: 0.6;
+    transition: opacity .2s;
+    svg { display: block; fill: white; }
+  }
+  .left { left: 0 /* rtl:ignore */; padding-right: 4px /* rtl:ignore */; }
+  .right { right: 0 /* rtl:ignore */; padding-left: 4px /* rtl:ignore */; }
+
+  .bubble {
+    position: absolute;
+    width: 120px;
+    bottom: 28px;
+    left: 50%;
+    margin-left: -60px;
+    padding-bottom: 6px;
+    z-index: 500;
+    opacity: 0;
+    pointer-events: none;
+    transform-origin: bottom center;
+    transform: scale(0.5);
+    transition: transform .2s, opacity .2s;
+  }
+
+  .bubble-box {
+    background: $variable-color;
+    height: 10px;
+    position: relative;
+    border-radius: 6px;
+    display: block;
+    box-shadow:  0 0 15px rgba(black, 15%);
+  }
+
+  .bubble-arrow {
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-left: -6px;
+    display: block;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid $variable-color;
+  }
+
+  .progress {
+    background: white;
+    border-radius: 6px;
+    display: block;
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 2px /* rtl:ignore */;
+  }
+
+  &.on, &:hover {
+    color: white;
+    box-shadow: $shadow-2;
+    .left, .right { opacity: 1; }
+    .bubble { opacity: 1; transform: none; }
+  }
+}
+
+.var-overlay {
+  // Used to cover up other interactive elements, while sliding.
+  @include fillParent();
+  position: fixed;
+  z-index: 999;
+  display: none;
+}

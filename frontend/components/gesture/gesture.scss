@@ -1,0 +1,19 @@
+// =============================================================================
+// Gesture Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "../../styles/variables";
+
+
+x-gesture {
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  @include theme(fill, rgba(black, 50%), rgba(white, 50%));
+  @include theme(stroke, rgba(white, 50%), rgba($dark-mode, 50%));
+  stroke-width: 1px;
+  transform-origin: 15px 10px;
+  pointer-events: none;
+}

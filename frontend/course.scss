@@ -1,0 +1,166 @@
+// =============================================================================
+// Course Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "./main";
+
+@import "./components/blank/blank";
+@import "./components/free-text/free-text";
+@import "./components/gallery/gallery";
+@import "./components/gesture/gesture";
+@import "./components/gloss/gloss";
+@import "./components/image/image";
+@import "./components/picker/picker";
+@import "./components/progress/progress";
+@import "./components/share/share";
+@import "./components/sidebar/sidebar";
+@import "./components/slider/slider";
+@import "./components/slideshow/slideshow";
+@import "./components/sortable/sortable";
+@import "./components/step/step";
+@import "./components/target/target";
+@import "./components/tutor/tutor";
+@import "./components/variable/variable";
+@import "./components/video/video";
+@import "./components/tabbox/tabbox";  // Needs to come after `step`!
+
+
+html, body {
+  user-select: none;
+  text-size-adjust: none;
+  touch-action: pan-y;
+}
+
+main { padding: 44px 40px 0 320px; }
+x-course { display: block; }
+article { user-select: text; max-width: 760px; margin: 0 auto; }
+h1 { font-weight: 600; margin: 112px 0 64px; @include theme(color, black, white); }
+.course-title { display: none; font-size: 24px; opacity: 0.3; }
+
+// Ensure the next-step banner is always aligned to the bottom of the screen.
+.steps { min-height: calc(100vh - 664px); }
+
+.page-background {
+  position: fixed;
+  top: 44px; left: 280px; bottom: 0; right: 0;
+  z-index: -1;
+  article.dark & { background: black; }
+}
+
+.reveal-banner {
+  z-index: 100;
+  position: fixed;
+  top: 60px;
+  left: 280px;
+  font-size: 13px;
+  background: rgba(mix($medium-grey, white, 40%), 95%);
+  // backdrop-filter: blur(4px);
+  color: white;
+  border-radius: 0 24px 24px 0;
+  padding: 4px 18px 4px 16px;
+  line-height: 17px;
+  transition: transform .4s, opacity .4s;
+
+  svg { display: inline-block; margin: 0 0 -2px 3px; }
+  path { stroke: white; fill: none; stroke-width: 1.5px; stroke-linecap: round; }
+
+  .complete { cursor: pointer; width: fit-content; display: block; }
+  .complete:hover { text-decoration: underline; }
+  &.off { transform: translateX(-100%); opacity: 0; }
+}
+
+.section-dev {
+  text-align: center;
+  color: $text-medium;
+  svg { width: 120px; margin: 0 auto 6px; fill: $text-medium; }
+  h2 { margin: 0 0 12px 0; }
+}
+
+
+// -----------------------------------------------------------------------------
+// Course Footer
+
+footer { height: 320px; position: relative; padding-top: 80px; }
+
+.next-section {
+  display: none;
+  margin: 0 auto;
+  border-radius: 6px;
+  position: relative;
+  width: max-content;  // Firefox doesn't support fit-content...
+  height: 74px;
+  line-height: 1.4;
+  padding: 8px 36px 0 18px;
+  box-sizing: border-box;
+  max-width: 100%;
+  user-select: none;
+  color: white;
+  transition: background .2s, transform .2s, filter .2s;
+
+  mask: inline-svg('<path d="M718.8,34.2,705.2,2.8A4.9,4.9,0,0,0,701,0H0V74H701a4.9,4.9,0,0,0,4.2-2.8l13.6-31.4A7.7,7.7,0,0,0,718.8,34.2Z"/>', 720, 74);
+  mask-size: 720px 74px;
+  mask-position: right top;
+
+  .small { font-size: 16px; color: rgba(white, 60%); }
+  .title { @include ellipsis; font-size: 26px; font-weight: 600; }
+
+  .next-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-right: 2px solid white;
+    border-radius: 6px 0 0 6px;
+    width: 74px;
+    height: 74px;
+    background-position: center;
+    background-size: cover;
+    & + .small, & + .small + .title { padding-left: 74px; }
+  }
+
+  // TODO Add shadow on hover
+  &:hover, &:focus { transform: scale(1.05); }
+}
+
+.skip-step {
+  text-align: center;
+  @include theme(color, #888, white);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  font-size: 14px;
+  line-height: 20px;
+  display: none;
+  padding: 0 40px 24px;
+  box-sizing: border-box;
+  margin: 0;
+
+  a { white-space: nowrap; }
+  x-course.ready & { display: block; }
+  @media (max-width: 650px) { br { display: none; } }
+  svg { display: block; margin: 8px auto 0; }
+}
+
+
+// -----------------------------------------------------------------------------
+// Mobile and Print Styles
+
+@media screen and (max-width: $browser-medium) {
+  main { padding: 44px 40px 0; }
+  .page-background { left: 0; }
+  h1 { margin: 80px 0 54px; }
+  .course-title { display: block; }
+  .reveal-banner { left: 0; }
+}
+
+@media screen and (max-width: $browser-small) {
+  main { padding: 44px 24px 0; }
+  .overflow-wrap { margin-left: -24px; margin-right: -24px; padding: 0 24px; }
+}
+
+@media print {
+  header, footer, x-course-sidebar, x-tutor, .page-background { display: none !important; }
+  main { padding: 0 20px !important; margin: 0 !important; }
+  article { max-width: none !important; }
+}
