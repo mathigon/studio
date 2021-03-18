@@ -7,7 +7,7 @@ Welcome to Mathigon Studio – an award-winning platform for creating interactiv
 This repository is not intended to be used standalone. You will need to create a parent repository
 containing the content, settings, and any customisations for this course. You can see a sample
 repository at [docs/example](docs/example). Then install Mathigon Studio as a dependency using
-`npm install @mathigon/coursekit`.
+`npm install @mathigon/studio`.
 
 For more details on how to set up a server, customise its settings, and create interactive
 courses, take a look at our documentation:
