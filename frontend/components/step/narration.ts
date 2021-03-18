@@ -108,7 +108,7 @@ export class Paragraph extends EventTarget {
     this.sentences = $p.$$('.sentence[data-timings]')
         .map($s => new Sentence($s, audio));
 
-    this.$button = $N('button', {class: 'playback-btn', title: 'Play Narration'});});
+    this.$button = $N('button', {class: 'playback-btn', title: 'Play Narration'});
     this.$button.on('click', () => {
       this.playing ? this.audio.pause() : this.play();
       continuePlaying = !continuePlaying;
