@@ -120,6 +120,8 @@ export class ImageView extends CustomElementView {
     const $img = $wrap.$('img')!;
     $img.setAttr('src', src);
     $img.setAttr('alt', this.attr('alt') || '');
+    $img.setAttr('width', width);
+    $img.setAttr('height', height);
 
     // GIFs replay on click
     if (src.endsWith('.gif')) {
