@@ -22,8 +22,6 @@ import './components/gesture/gesture';
 import './components/gloss/gloss';
 import './components/image/image';
 import './components/picker/picker';
-import './components/progress/progress';
-import './components/popup/popup';
 import './components/share/share';
 import './components/slider/slider';
 import './components/slideshow/slideshow';

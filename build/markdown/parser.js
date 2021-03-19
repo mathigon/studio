@@ -91,8 +91,8 @@ async function parseStep(content, index, courseId, locale = 'en') {
   parsed = await fillTexPlaceholders(parsed);
 
   // Parse the HTML string as DOM
-  const doc = (new JSDom('<x-step>' + parsed + '</x-step>')).window.document;
-  const body = doc.body.children[0];
+  const window = new JSDom('<x-step>' + parsed + '</x-step>').window;
+  const body = window.document.body.children[0];
 
   // Parse custom element attributes like {.class}
   // TODO Parse attributes for <ul> and <table>
@@ -153,7 +153,7 @@ async function parseStep(content, index, courseId, locale = 'en') {
   }
 
   // Create sentence elements for audio narrations
-  if (CONFIG.courses.audio) addNarrationTags(doc, courseId, locale);
+  if (CONFIG.courses.audio) addNarrationTags(window.document, courseId, locale);
 
   // Every step has a list of "goals": things that students need to achieve
   // before moving on. You can provide a list of custom goals in the metadata
@@ -187,6 +187,8 @@ async function parseStep(content, index, courseId, locale = 'en') {
 
   // Generate the Step HTML
   metadata.html = htmlMinify(body.outerHTML, MINIFY_CONFIG);
+
+  window.close();
   return metadata;
 }
 
