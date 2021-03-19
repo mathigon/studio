@@ -17,7 +17,7 @@ import './components/progress/progress';
 
 // strip-start:public,webview
 // See https://github.com/googleanalytics/autotrack
-import '../node_modules/autotrack/lib/plugins/page-visibility-tracker';
+import 'autotrack/lib/plugins/page-visibility-tracker';
 // strip-end
 
 bindAccessibilityEvents();
