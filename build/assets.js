@@ -17,8 +17,7 @@ const cssnano = require('cssnano');
 const rtlcss = require('rtlcss');
 
 const {error, readFile, success, writeFile, CONFIG, STUDIO_ASSETS, PROJECT_ASSETS, CONTENT, COURSES, OUTPUT, watchFiles} = require('./utilities');
-const {parseCourse, COURSE_URLS} = require('./markdown');
-const {writeTexCache} = require('./markdown/mathjax');
+const {parseCourse, COURSE_URLS, writeCache} = require('./markdown');
 
 
 // -----------------------------------------------------------------------------
@@ -135,7 +134,7 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, n
   if (watch) {
     const cwd = process.cwd();
     const files = Object.keys(result.metafile.inputs).filter(f => !f.startsWith('node_modules')).map(f => path.join(cwd, f));
-    watchFiles(files, () => bundleScripts(srcPath, destPath, minify, watch, name));
+    watchFiles(files, () => bundleScripts(srcPath, destPath, minify, false, name));
     // TODO Update watched files when output.includedFiles changes
   }
 
@@ -153,16 +152,15 @@ async function bundleMarkdown(id, locale, watch = false) {
   const data = await parseCourse(path.join(CONTENT, id), locale);
   if (!data) return;
 
-  const dest = path.join(OUTPUT, 'content', id, `data_${locale}.json`);
-  await writeFile(dest, JSON.stringify(data.course));
-  await writeTexCache();
-
-  if (watch) {
-    watchFiles([data.srcFile], () => bundleMarkdown(id, locale));
-    // TODO Also watch markdown dependencies (e.g. SVG, PUG or YAML files)
+  if (data.course) {
+    const dest = path.join(OUTPUT, 'content', id, `data_${locale}.json`);
+    await writeFile(dest, JSON.stringify(data.course));
+    writeCache();
+    success(`course ${id} [${locale}]`, Date.now() - start);
   }
 
-  success(`course ${id} [${locale}]`, Date.now() - start);
+  // TODO Also watch markdown dependencies (e.g. SVG, PUG or YAML files)
+  if (watch) watchFiles([data.srcFile], () => bundleMarkdown(id, locale));
 }
 
 
@@ -211,20 +209,31 @@ async function createSitemap() {
 // -----------------------------------------------------------------------------
 // Tools
 
+/** Get the basename of a path, but resolve /a/b/c/index.js to c.js. */
+function basename(p) {
+  const name = path.basename(p);
+  const ext = path.extname(p);
+  if (name.startsWith('index.')) return path.dirname(p).split(path.sep).pop() + ext;
+  return name;
+}
+
 /**
  * Select all files in the project or the core frontend/ directory. Note that
  * the project may overwrite files with the same name.
  */
 function getAssetFiles(pattern, extension = path.extname(pattern)) {
+  // Match abc.js as well as abc/index.js
+  pattern = pattern.replace('*', '{*,*/index}');
+
   const projectFiles = glob.sync(pattern, {cwd: PROJECT_ASSETS}).map(c => path.join(PROJECT_ASSETS, c));
-  const projectFileNames = projectFiles.map(p => path.basename(p));
+  const projectFileNames = projectFiles.map(p => basename(p));
 
   // Don't include any core files that are overwritten by the project.
   const studioFiles = glob.sync(pattern, {cwd: STUDIO_ASSETS}).map(c => path.join(STUDIO_ASSETS, c))
-      .filter(p => !projectFileNames.includes(path.basename(p)));
+      .filter(p => !projectFileNames.includes(basename(p)));
 
   return [...studioFiles, ...projectFiles].map(src => {
-    const dest = path.join(OUTPUT, path.basename(src).split('.')[0] + extension);
+    const dest = path.join(OUTPUT, basename(src).split('.')[0] + extension);
     return {src, dest};
   });
 }
@@ -255,22 +264,30 @@ async function buildAssets(minify = false, watch = false) {
     promises.push(bundleStyles(src, dest, minify, watch).catch(error(src)));
   }
 
+  // TODO Running all course scripts in parallel might be faster, but can lead
+  // to memory issues with large repositories...
+  await Promise.all(promises);
+
   // Individual Courses
   for (const id of COURSES) {
     for (const {src, dest} of getCourseFiles(id, '*.ts', '.js')) {
-      promises.push(bundleScripts(src, dest, minify, watch, 'StepFunctions').catch(error(src)));
+      await bundleScripts(src, dest, minify, watch, 'StepFunctions').catch(error(src));
     }
     for (const {src, dest} of getCourseFiles(id, '*.scss', '.css')) {
-      promises.push(bundleStyles(src, dest, minify, watch).catch(error(src)));
+      await bundleStyles(src, dest, minify, watch).catch(error(src));
     }
     for (const locale of CONFIG.locales) {
-      promises.push(bundleMarkdown(id, locale, watch).catch(error(`course ${id} [${locale}]`)));
+      await bundleMarkdown(id, locale, watch).catch(error(`course ${id} [${locale}]`));
     }
   }
 
   // Generate the sitemap after all other assets have been compiled
-  await Promise.all(promises);
   await createSitemap().catch(error('sitemap.xml'));
 }
+
+
+module.exports.bundleStyles = bundleStyles;
+module.exports.bundleScripts = bundleScripts;
+module.exports.bundleMarkdown = bundleMarkdown;
 
 module.exports.buildAssets = buildAssets;

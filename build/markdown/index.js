@@ -6,11 +6,17 @@
 
 const fs = require('fs');
 const path = require('path');
-const {toTitleCase, last, words} = require('@mathigon/core');
-const {readFile, warning, loadYAML, CONFIG, COURSES, CONTENT} = require('../utilities');
+const crypto = require('crypto');
+
+const {toTitleCase, last, words, throttle} = require('@mathigon/core');
+const {readFile, warning, loadYAML, CONFIG, COURSES, CONTENT, OUTPUT, writeFile} = require('../utilities');
+const {writeTexCache} = require('./mathjax');
 const {parseStep, parseSimple} = require('./parser');
 
 const COURSE_URLS = new Set();  // Used for Sitemap generation
+
+const CACHE_FILE = OUTPUT + '/cache.json';
+const CACHE = JSON.parse(readFile(CACHE_FILE, '{}'));
 
 
 // -----------------------------------------------------------------------------
@@ -78,9 +84,11 @@ async function parseCourse(srcDir, locale) {
   const courseId = path.basename(srcDir);
   const srcFile = resolvePath(courseId, 'content.md', locale);
   const content = readFile(srcFile);
-  if (!content) return undefined;
+  if (!content) return;
 
-  // TODO Caching for files that haven't changed.
+  // Generate hash, to avoid re-compiling courses that didn't change.
+  const hash = crypto.createHash('md5').update(content).digest('hex');
+  if (CACHE[courseId + '-' + locale] === hash) return {srcFile};
 
   // Keep track of all glossary and biography keys used within this course.
   const gloss = new Set();
@@ -101,7 +109,7 @@ async function parseCourse(srcDir, locale) {
     trailer: parsed[0].trailer || undefined,
     author: parsed[0].author || undefined,
     level: parsed[0].level || undefined,
-    icon: parsed[0].icon ? path.join(srcDir, parsed[0].icon) : undefined,
+    icon: parsed[0].icon ? path.join(`/content/${courseId}`, parsed[0].icon) : fs.existsSync(srcDir + '/icon.png') ? `/content/${courseId}/icon.png` : undefined,
     hero: path.join('/content', courseId, parsed[0].hero || 'hero.jpg'),
     goals: 0, sections: [], steps: {}
   };
@@ -158,9 +166,16 @@ async function parseCourse(srcDir, locale) {
   course.glossJSON = JSON.stringify(await bundleYAML('glossary.yaml', courseId, locale, gloss));
   course.hintsJSON = JSON.stringify(await bundleYAML('hints.yaml', courseId, locale));
 
+  CACHE[courseId + '-' + locale] = hash;
   return {course, srcFile};
 }
 
+function writeCache() {
+  writeFile(CACHE_FILE, JSON.stringify(CACHE));
+  writeTexCache();
+}
+
+module.exports.writeCache = throttle(writeCache, 1000);
 module.exports.parseCourse = parseCourse;
 module.exports.parseYAML = parseYAML;
 module.exports.COURSE_URLS = COURSE_URLS;
