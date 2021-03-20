@@ -7,7 +7,7 @@ mixin course(id, progress)
       if course.locale !== locale.id
         img(src="images/flags/gb.png" width=20 height=20)
     for section in course.sections
-      if section.locked
+      if section.locked && !config.courses.showLocked
         .course-section.locked(title=__('This chapter is still under construction.'))
           x-icon(name="construction" size=20)
           | #{section.title}

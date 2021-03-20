@@ -111,6 +111,7 @@ export interface Config {
   header: {
     logo: string;
     title: string;
+    titleString: string;
     links: {
       title: string;
       icon: string;
@@ -150,6 +151,7 @@ export interface Config {
     revealAll: boolean;
     biosPath?: string;
     feedback?: boolean;
+    showLocked?: boolean;
     // TODO More options
   }
   tutor: {

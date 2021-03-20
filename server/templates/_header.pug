@@ -3,8 +3,11 @@ include _mixins
 header
   block logo
     a#logo(href="/" title=config.siteName)
-      != include('images/logo.svg')
-      != include('images/title.svg')
+      != include(config.header.logo)
+      if config.header.titleString
+        span= config.header.titleString
+      else
+        != include(config.header.title)
 
   //- Accessibility Button
   button#skip-nav= __("Skip Navigation")
@@ -55,6 +58,7 @@ if availableLocales.length > 1
     h2.text-center #[x-icon(name="language" size=32)] #{__('Change Language')}
     .locale-list
       for l in availableLocales
+        // TODO Use /hl=de rather than subdomains when running on localhost!
         a.locale-link(href=`https://${l.id === 'en' ? '' : l.id + '.'}${config.domain}${req.path}`)
           img(src=`/images/flags/${l.flag}.png` width=36 height=36 alt="")
           | #{l.name}

@@ -57,9 +57,7 @@ x-course-sidebar {
     font-size: 16px;
     margin-top: 6px;
     width: fit-content;
-    opacity: 0.8;
-    transition: opacity .2s;
-    &:hover, &:focus { opacity: 1; }
+    opacity: 0.7;
   }
 
   .sidebar-body {
@@ -124,6 +122,16 @@ x-course-sidebar {
 
     x-icon { display: block; fill: rgba(white, 70%); transition: fill .2s }
     &:hover x-icon, &:focus x-icon { fill: rgba(white, 90%); }
+  }
+
+  .sidebar-banner {
+    flex-shrink: 0;
+    margin: 0 18px;
+    text-align: center;
+    font-size: 14px;
+    padding: 4px 0 6px;
+    border-top: 1px solid rgba(white, 40%);
+    color: rgba(white, 60%)
   }
 }
 

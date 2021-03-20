@@ -51,7 +51,7 @@ block main
           | #{__('Reveal all steps')}
           svg(width=8 height=12): path(d="M 2 2 L 6 6 L 2 10")
 
-      if section.locked && !('preview' in req.query)
+      if section.locked && !config.courses.showLocked && !('preview' in req.query)
         .section-dev
           include ./svgs/tools.svg
           h2= __('Under Construction')
@@ -80,10 +80,10 @@ block main
 
     if config.tutor.enabled && !section.locked
       x-tutor(api=`/course/${course.id}/ask`)
-        div(slot="icon")!= include('images/archie.svg')
+        div(slot="icon")!= include(config.tutor.icon)
         div(slot="header")
-          != include('images/archie.svg')
-          | Archie
+          != include(config.tutor.icon)
+          | #{config.tutor.name}
 
     script(type="application/json")#glossary!= course.glossJSON
     script(type="application/json")#bios!= course.biosJSON

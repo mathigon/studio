@@ -19,7 +19,7 @@ x-course-sidebar(style=`background-color: ${course.color}`)
           .course-icon(style=`background-color: ${course.color}; background-image: url(${course.icon});`)
         | #{course.title}
         if course.author
-          a.sidebar-author by #{course.author}
+          .sidebar-author by #{course.author}
 
   .sidebar-body
     if course.trailer
@@ -31,15 +31,16 @@ x-course-sidebar(style=`background-color: ${course.color}`)
       - var isCurrent = section.id === s.id;
       +linkBlock(isCurrent, 'sidebar-row', s.url)
         x-progress(r=10 p=0)
-        if s.locked
+        if s.locked && !config.courses.showLocked
           x-icon.right(name="construction")
         | #{s.title}
         .connection
 
   .sidebar-footer
-    button.footer-link(data-modal="share")
-      x-icon(name="share")
-      .tooltip= __('Share')
+    if config.social
+      button.footer-link(data-modal="share")
+        x-icon(name="share")
+        .tooltip= __('Share')
     if config.courses.feedback
       button.footer-link(data-modal="feedback")
         x-icon(name="feedback")
@@ -51,6 +52,8 @@ x-course-sidebar(style=`background-color: ${course.color}`)
       button.footer-link(data-modal="reset")
         x-icon(name="reset")
         .tooltip=__('Reset Progress')
+  if config.siteName !== 'Mathigon'
+    a.sidebar-banner(href="https://mathigon.org" target="_blank")= __('Powered by Mathigon')
 
 .sidebar-shadow
 .sidebar-toggle: x-icon(name="progress")
@@ -61,9 +64,10 @@ if course.trailer
     .video-wrap
       iframe(width="560" height="315" data-src=`https://www.youtube.com/embed/${course.trailer}?autoplay=1&rel=0` frameborder="0" allow="autoplay; encrypted-media" allowfullscreen)
 
-+modal('share')
-  h2 #[x-icon(name="share" size=32)] #{__('Share')}
-  x-share(url=`https://${config.domain}${section.url}` title=encodeURIComponent(section.title + ' – ' + course.title) body=course.description img=section.thumbnail)
+if config.social
+  +modal('share')
+    h2 #[x-icon(name="share" size=32)] #{__('Share')}
+    x-share(url=`https://${config.domain}${section.url}` title=encodeURIComponent(section.title + ' – ' + course.title) body=course.description img=section.thumbnail)
 
 if config.courses.feedback
   x-modal#feedback
