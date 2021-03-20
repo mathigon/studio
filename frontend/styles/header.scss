@@ -31,7 +31,7 @@ header {
     padding: 4px 4px 4px 16px;
     margin-right: -12px;
     box-sizing: border-box;
-    svg, img { height: 36px; float: left; }
+    svg, img { height: 36px; width: auto; float: left; }
     span { line-height: 36px; display: inline-block; float: left; margin: 0 8px; }
   }
 

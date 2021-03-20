@@ -215,30 +215,9 @@ x-modal#share { width: 400px; }
   padding: 64px 32px 32px;
 }
 
-
-// -----------------------------------------------------------------------------
-// Mobile and Print Styles
-
 @media screen and (max-width: $browser-medium) {
-  body > .body { padding: 0 40px; }
-  .page-background { left: 0; }
-  h1 { margin: 80px 0 54px; }
-  .course-title { display: block; }
-
-  .sidebar { will-change: transform; left: -280px; transition: transform .3s, box-shadow .3s; box-shadow: none; }
+  x-course-sidebar { will-change: transform; left: -280px; transition: transform .3s, box-shadow .3s; box-shadow: none; }
   .sidebar-toggle { display: block; }
-  .sidebar.open { transform: translateX(280px); box-shadow: 10px 0 60px rgba(black, 50%); }
-  .sidebar.open + .sidebar-shadow { display: block; }
-  .reveal-banner { left: 0; }
-}
-
-@media screen and (max-width: $browser-small) {
-  body > .body { padding: 0 24px; }
-  .overflow-wrap { margin-left: -24px; margin-right: -24px; padding: 0 24px; }
-}
-
-@media print {
-  header, footer, .sidebar, x-tutor, .page-background { display: none !important; }
-  body > .body { padding: 0 20px !important; margin: 0 !important; }
-  article { max-width: none !important; }
+  x-course-sidebar.open { transform: translateX(280px); box-shadow: 10px 0 60px rgba(black, 50%); }
+  x-course-sidebar.open + .sidebar-shadow { display: block; }
 }

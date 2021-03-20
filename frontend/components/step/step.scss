@@ -267,6 +267,7 @@ figure > x-img, figure > img, figure > svg { display: block; margin: 0 auto .3em
   padding: .6em 1em;
   border-left: 6px solid;
   border-radius: 3px 6px 6px 3px;
+  border-color: $red;
   @include theme(background, rgba($red, 25%), rgba($red, 40%));
 
   @each $name, $color in $colors {

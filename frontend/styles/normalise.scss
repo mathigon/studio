@@ -56,6 +56,7 @@ sub { bottom: -0.25em; }
 
 .text-center  { text-align: center; }
 .break { word-break: break-all; hyphens: auto; }
+.nowrap { white-space: nowrap; }  // before punctuation
 
 ul, ol { margin: 0 0 1em 1.5em; padding: 0; text-align: left; }
 ul ul, ul ol, ol ol, ol ul { margin: 0.5em 0 0 1.5em; }

@@ -30,7 +30,7 @@ x-var {
     padding: 7px 1px;
     opacity: 0.6;
     transition: opacity .2s;
-    svg { display: block; fill: white; }
+    x-icon, svg { display: block; color: white; }
   }
   .left { left: 0 /* rtl:ignore */; padding-right: 4px /* rtl:ignore */; }
   .right { right: 0 /* rtl:ignore */; padding-left: 4px /* rtl:ignore */; }

@@ -26,6 +26,13 @@ export class Slider extends CustomElementView implements StepComponent {
     const $bar = this.$('.bar')!;
     const $knob = this.$('.knob')!;
 
+    const $play = this.$('.play')!;
+    if (this.hasAttr('no-play')) {
+      $play.remove();
+    } else {
+      $play.on('click', () => this.play());
+    }
+
     const continuous = this.hasAttr('continuous');
     const snap = this.hasAttr('snap') ? $bar.width / this.steps : 0.001;
 
@@ -45,13 +52,6 @@ export class Slider extends CustomElementView implements StepComponent {
     });
 
     this.drag.on('end', () => this.trigger('slide-end'));
-
-    const $play = this.$('.play')!;
-    if (this.hasAttr('no-play')) {
-      $play.remove();
-    } else {
-      $play.on('click', () => this.play());
-    }
   }
 
   setup($step: Step, goal: string) {

@@ -38,8 +38,8 @@ x-picker {
     transition: transform .5s $bounce;
   }
 
-  .item.correct:after { background: $success icon('check', 'white'); transform: scale(1); }
-  .item.incorrect:after { background: $error icon('cross', 'white'); transform: scale(1); }
+  .item.correct:after { background: $success icon('check', 'white') 2px 2px no-repeat; transform: scale(1); }
+  .item.incorrect:after { background: $error icon('cross', 'white') 2px 2px no-repeat; transform: scale(1); }
 
   &.solved .item { border-color: transparent; cursor: default; }
   &.solved .item:after { background-color: #ccc; }

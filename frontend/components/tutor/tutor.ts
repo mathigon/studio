@@ -106,7 +106,7 @@ export class Tutor extends CustomElementView {
     });
 
     // Restore previous messages for user
-    if (this.$course && this.$course.userData.messages) {
+    if (this.$course && this.$course.userData?.messages) {
       for (const m of this.$course.userData.messages) {
         this.$chatBody.append(
             createMsgElement(m.content, m.kind || 'hint', {visible: true}));

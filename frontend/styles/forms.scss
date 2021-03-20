@@ -247,3 +247,13 @@ form.form-large { max-width: 600px; margin: 0 auto }
   &:hover { box-shadow: inset 0 0 0 1px #aaa, 0 4px 12px rgba(black, 25%); }
   html.is-tabbing &:focus { box-shadow: inset 0 0 0 1px #aaa, 0 0 0 2px white, 0 0 0 4px $medium-grey; }
 }
+
+.icon-btn {
+  @extend .btn;
+  display: block;
+  padding: 0;
+  min-width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  x-icon { display: block; margin: 8px; }
+}

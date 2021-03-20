@@ -79,7 +79,7 @@ export class Gloss extends CustomElementView {
     if (!data) return console.warn('missing gloss:', this.xid);
 
     let body = data.text;
-    if (data.image) body += `<img class="gloss-img" alt="" src="/resources/shared/glossary/${data.image}"/>`;
+    if (data.image) body += `<img class="gloss-img" alt="" src="/content/shared/glossary/${data.image}"/>`;
 
     if (data.link && ENV === 'WEB') {
       const samePage = (location.pathname === data.link.split('#')[0]);
