@@ -76,6 +76,7 @@ export function translate(locale: string, str: string, args: string[] = []) {
     const isExample = process.cwd() === path.join(__dirname, '../docs/example');
     const file = (isExample ? STUDIO_DIR : PROJECT_DIR) + '/translations/strings.yaml';
     const replacer = isExample ? undefined : (k: string, v: any) => (!k || !(k in STUDIO_STRINGS) ? v : undefined);
+    if (!fs.existsSync(path.dirname(file))) fs.mkdirSync(path.dirname(file), {recursive: true});
     fs.writeFileSync(file, yaml.dump(STRINGS, {sortKeys: true, replacer}));
   }
 

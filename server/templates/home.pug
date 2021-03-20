@@ -1,0 +1,11 @@
+extends /_layout
+
+block vars
+  - var title = 'Mathigon';
+
+block main
+  .container.narrow
+    h1 #{config.siteName} Development Server
+    for c in courses || []
+      +course(c)
+    include /_footer
