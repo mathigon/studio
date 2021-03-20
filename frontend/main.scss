@@ -55,7 +55,7 @@ main {
 // Fix display for MathJax SVG elements
 svg.mathjax {
   display: inline-block;
-  g, use, path { transform-origin: 0 0; transform-box: border-box; }
+  g, use, path { transform-origin: 0 0; transform-box: initial; }
 }
 
 

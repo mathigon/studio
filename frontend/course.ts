@@ -42,7 +42,7 @@ export class Course extends CustomElementView {
   $steps!: Step[];
   $activeStep?: Step;
 
-  userData!: any;
+  userData?: any;
   $tutor?: Tutor;
   audio?: AudioSegment;
 
