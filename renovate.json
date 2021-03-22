@@ -7,11 +7,11 @@
     "schedule": ["at any time"],
     "automerge": true
   }, {
-    "packagePatterns": ["typescript", "tslib"],
+    "packagePatterns": ["typescript", "tslib", "ts-node"],
     "groupName": "TypeScript",
     "automerge": true
   }, {
-    "packagePatterns": ["@typescript-eslint", "^eslint", "tape", "puppeteer"],
+    "packagePatterns": ["^@typescript-eslint", "^eslint", "tape", "puppeteer"],
     "groupName": "Tests",
     "automerge": true
   }, {
@@ -30,6 +30,5 @@
     "updateTypes": ["patch", "pin", "digest"],
     "groupName": "Versioning",
     "automerge": true
-  }],
-  "ignoreDeps": []
+  }]
 }
