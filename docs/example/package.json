@@ -9,7 +9,7 @@
     "start-dev": "nodemon --watch 'server/**/*.ts' --exec 'ts-node' -s server/app.ts",
     "watch": "mgon-build --assets --watch",
     "build": "mgon-build --assets --minify --search",
-    "clean": "rm -rf node_modules/@mathigon/studio/.output",
+    "clean": "rm -rf node_modules/@mathigon/studio/public",
     "dev": "npm-run-all --parallel watch start-dev",
     "thumbnails": "mgon-build --thumbnails",
     "translate": "mgon-build --translate --key ../../google-service-account.json",

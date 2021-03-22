@@ -17,6 +17,7 @@
     "lint": "eslint . --ext .ts,.js",
     "lint-fix": "eslint . --ext .ts,.js --fix",
     "test": "node tests/markdown/test.js",
+    "example": "cd docs/example && npm run dev",
     "translate": "node build/index.js --translate --all --key google-service-account.json"
   },
   "dependencies": {

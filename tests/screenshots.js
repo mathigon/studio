@@ -4,6 +4,12 @@
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
+const yargs = require('yargs-parser');
+
+const argv = yargs(process.argv.slice(2));
+const port = (+argv.port) || 8080;
+const dir = path.join(process.cwd(), argv.output || 'screenshots');  // Output director for PNGs
+if (!fs.existsSync(dir)) fs.mkdirSync(dir, {recursive: true});
 
 
 // Hide dynamic elements for better diffing.
@@ -11,16 +17,11 @@ const CUSTOM_CSS = `iframe, video[controls], g.pulses, x-gesture, svg.graph { di
 * { text-rendering: optimizeSpeed !important; -webkit-font-smoothing: antialiased !important; }`;
 
 // Load all URLs to screenshot from the sitemap file.
-const sitemap = fs.readFileSync(path.join(__dirname, '../.output/sitemap.xml'), 'utf8');
-const urls = (sitemap.match(/<loc>[\w+/:.]+<\/loc>/g) || [])
+const sitemap = fs.readFileSync(path.join(process.cwd(), 'public/sitemap.xml'), 'utf8');
+const urls = (sitemap.match(/<loc>[\w+/:.-]+<\/loc>/g) || [])
     .map(l => new URL(l.slice(5, l.length - 6)).pathname);
 
-// Output director for screenshot PNGs.
-const i = process.argv.indexOf('--output');
-const outDir = i ? process.argv[i + 1] : 'screenshots';
-const dir = path.join(process.cwd(), outDir);
-if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-
+if (argv.urls) urls.push(...argv.urls.split(','));
 
 (async () => {
   const browser = await puppeteer.launch();
@@ -35,11 +36,10 @@ if (!fs.existsSync(dir)) fs.mkdirSync(dir);
   });
 
   for (const url of urls) {
-    // TODO Make the localhost port configurable!
-    await page.goto(`http://localhost:8080${url}#full`);
+    await page.goto(`http://localhost:${port}${url}#full`);
     await page.addStyleTag({content: CUSTOM_CSS});
-    const file = `${dir}/${(url.slice(1) || 'home').replace(/\//g, '-')}.png`;
-    await page.screenshot({path: file, fullPage: true});
+    const file = (url.slice(1) || 'home').replace(/\//g, '-');
+    await page.screenshot({path: `${dir}/${file}.png`, fullPage: true});
   }
 
   await browser.close();

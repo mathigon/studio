@@ -8,7 +8,7 @@ module.exports = {
   env: {
     node: true
   },
-  ignorePatterns: ['node_modules/**', '**/.*', '**/assets/**'],
+  ignorePatterns: ['node_modules/**', '**/.*', '**/assets/**', '**/public/**'],
   plugins: ['@typescript-eslint'],
   extends: [
     'eslint:recommended',

@@ -24,10 +24,10 @@ deepExtend(CONFIG, PROJECT_CONFIG, (a, b) => b);
 const STUDIO_ASSETS = path.join(__dirname, '../frontend');
 const PROJECT_ASSETS = path.join(process.cwd(), 'frontend');
 const CONTENT = path.join(process.cwd(), CONFIG.contentDir);
-const OUTPUT = path.join(__dirname, '../.output');
 
 // All Course directories
 const COURSES = glob.sync('*', {cwd: CONTENT}).filter(id => id !== 'shared' && !id.startsWith('_') && !path.extname(id));
+const OUTPUT = path.join(process.cwd(), 'public');
 
 
 // -----------------------------------------------------------------------------

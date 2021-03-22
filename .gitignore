@@ -32,7 +32,7 @@ node_modules/
 .eslintcache
 
 # Build and Test Outputs
-.output
+public
 screenshots
 
 # Private Keys

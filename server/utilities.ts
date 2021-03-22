@@ -16,7 +16,7 @@ import {Config, Course, Section} from './interfaces';
 
 export const STUDIO_DIR = path.join(__dirname, '../');
 export const PROJECT_DIR = process.cwd();
-export const OUT_DIR = STUDIO_DIR + '/.output';
+export const OUT_DIR = PROJECT_DIR + '/public';
 
 export const ENV = process.env.NODE_ENV || 'development';
 export const IS_PROD = ENV === 'production';
@@ -133,7 +133,7 @@ export function cacheBust(file: string) {
   if (FILE_NAME_CACHE.has(file)) return FILE_NAME_CACHE.get(file)!;
   if (file.startsWith('http')) return file;
 
-  const fileName = path.join(__dirname, '../.output', file);
+  const fileName = path.join(__dirname, '../public', file);
   if (!fs.existsSync(fileName)) return file;
 
   const content = fs.readFileSync(fileName);

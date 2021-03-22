@@ -24,7 +24,7 @@ Here is a breakdown of all the components included in this repository:
 * [__docs/__](docs): Documentation and a sample implementation
 * [__frontend/__](frontend): Client-side [TypeScript](https://www.typescriptlang.org/) code and
   [SCSS](https://sass-lang.com/) styles. Ever top-level `.ts` or `.scss` file in this directory will
-  get bundled into a separate `.js` or `.css` file in the `.output` directory.
+  get bundled into a separate `.js` or `.css` file in the `public` directory.
 * [__server/__](server): A NodeJS Express application for serving the course website.
 * [__tests/__](tests): Markdown compiler tests and screenshot generation.
 * [__translations/__](translations): Translations for all built-in strings.
