@@ -7,9 +7,10 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const glob = require('glob');
 
 const {toTitleCase, last, words, throttle} = require('@mathigon/core');
-const {readFile, warning, loadYAML, CONFIG, COURSES, CONTENT, OUTPUT, writeFile} = require('../utilities');
+const {readFile, warning, loadYAML, OUTPUT, writeFile} = require('../utilities');
 const {writeTexCache} = require('./mathjax');
 const {parseStep, parseSimple} = require('./parser');
 
@@ -25,15 +26,16 @@ const CACHE = JSON.parse(readFile(CACHE_FILE, '{}'));
 const YAML_CACHE = new Map();
 
 /** Resolve locale-based filenames. */
-function resolvePath(courseId, file, locale = 'en') {
-  if (locale === 'en') return path.join(CONTENT, courseId, file);
-  return path.join(CONTENT, '../translations', locale, courseId, file);
+function resolvePath(directory, file, locale = 'en') {
+  if (locale === 'en') return path.join(directory, file);
+  const courseId = path.basename(directory);
+  return path.join(directory, '../../translations', locale, courseId, file);
 }
 
 /** Some YAML files contain markdown that needs to be parsed separately. */
-async function parseYAML(courseId, file, locale, markdownField) {
-  const src = resolvePath(courseId, file, locale);
-  if (YAML_CACHE.has(src)) return YAML_CACHE.get(src);
+async function parseYAML(directory, file, locale, markdownField, cache = true) {
+  const src = resolvePath(directory, file, locale);
+  if (cache && YAML_CACHE.has(src)) return YAML_CACHE.get(src);
 
   let data = await loadYAML(src);
 
@@ -41,7 +43,7 @@ async function parseYAML(courseId, file, locale, markdownField) {
     if (markdownField === '*') {
       // Top-level keys (in hints.yaml)
       data[key] = await (Array.isArray(value) ? Promise.all(value.map(v => parseSimple(v))) : parseSimple(value));
-    } else {
+    } else if (markdownField) {
       // Nested objects (in bios.yaml and gloss.yaml)
       value[markdownField] = await parseSimple(value[markdownField] || '');
     }
@@ -49,19 +51,19 @@ async function parseYAML(courseId, file, locale, markdownField) {
 
   // Fallback for non-english languages
   if (locale !== 'en') {
-    const fallback = parseYAML(courseId, file, 'en', markdownField);
+    const fallback = await parseYAML(directory, file, 'en', markdownField, cache);
     data = Object.assign({}, fallback, data);
   }
 
-  YAML_CACHE.set(src, data);
+  if (cache) YAML_CACHE.set(src, data);
   return data;
 }
 
 /** Merge and filter the YAML files for a course. */
-async function bundleYAML(file, courseID, locale, filterKeys) {
+async function bundleYAML(file, directory, locale, filterKeys) {
   const mdField = file === 'glossary.yaml' ? 'text' : file === 'bios.yaml' ? 'bio' : '*';
-  const course = await parseYAML(courseID, file, locale, mdField);
-  const shared = await parseYAML('shared', file, locale, mdField);
+  const course = await parseYAML(directory, file, locale, mdField);
+  const shared = await parseYAML(path.join(directory, '../shared'), file, locale, mdField);
 
   const result = {};
   if (!filterKeys) return Object.assign(result, shared, course);
@@ -72,17 +74,25 @@ async function bundleYAML(file, courseID, locale, filterKeys) {
     if (!result[key]) missing.push(key);
   }
 
+  const courseID = path.basename(directory);
   if (locale === 'en' && missing.length) warning(`Missing ${file.split('.')[0]} keys in ${courseID}: ${missing.join(', ')}`);
   return result;
+}
+
+function getNextCourse(directory) {
+  // Find the next course alphabetically.
+  const courseId = path.basename(directory);
+  const allCourses = glob.sync('!(shared|_*|*.*)', {cwd: path.join(directory, '../')});
+  return allCourses[(allCourses.indexOf(courseId) + 1) % allCourses.length];
 }
 
 
 // -----------------------------------------------------------------------------
 // Bundle Course Markdown
 
-async function parseCourse(srcDir, locale) {
-  const courseId = path.basename(srcDir);
-  const srcFile = resolvePath(courseId, 'content.md', locale);
+async function parseCourse(directory, locale, allLocales) {
+  const courseId = path.basename(directory);
+  const srcFile = resolvePath(directory, 'content.md', locale);
   const content = readFile(srcFile);
   if (!content) return;
 
@@ -95,21 +105,18 @@ async function parseCourse(srcDir, locale) {
   const bios = new Set();
 
   const steps = content.split(/\n---+\n/);
-  const parsed = await Promise.all(steps.map((s, i) => parseStep(s, i, courseId, locale)));
-
-  // By default, set the next course alphabetically as nextCourse.
-  const nextCourse = COURSES[(COURSES.indexOf(courseId) + 1) % COURSES.length];
+  const parsed = await Promise.all(steps.map((s, i) => parseStep(s, i, directory, courseId, locale)));
 
   const course = {
     id: courseId, locale,
-    nextCourse: parsed[0].nextCourse || nextCourse,
+    nextCourse: parsed[0].next || getNextCourse(directory),
     title: parsed[0].courseTitle || 'Untitled Course',
     description: parsed[0].description || '',
     color: parsed[0].color || '#2274e8',
     trailer: parsed[0].trailer || undefined,
     author: parsed[0].author || undefined,
     level: parsed[0].level || undefined,
-    icon: parsed[0].icon ? path.join(`/content/${courseId}`, parsed[0].icon) : fs.existsSync(srcDir + '/icon.png') ? `/content/${courseId}/icon.png` : undefined,
+    icon: parsed[0].icon ? path.join(`/content/${courseId}`, parsed[0].icon) : fs.existsSync(directory + '/icon.png') ? `/content/${courseId}/icon.png` : undefined,
     hero: path.join('/content', courseId, parsed[0].hero || 'hero.jpg'),
     goals: 0, sections: [], steps: {}
   };
@@ -136,7 +143,6 @@ async function parseCourse(srcDir, locale) {
         autoTranslated: (step.translated === 'auto') || undefined,
         url, steps: [], goals: 0, duration: 0
       });
-      if (locale === 'en') COURSE_URLS.add(url);
     }
 
     // Update section-level data
@@ -160,11 +166,15 @@ async function parseCourse(srcDir, locale) {
   if (!course.description) course.description = course.sections.map(s => s.title).join(', ');
 
   // Find all locales that this course has been translated into.
-  course.availableLocales = CONFIG.locales.filter(l => fs.existsSync(resolvePath(courseId, 'content.md', l)));
+  course.availableLocales = allLocales.filter(l => fs.existsSync(resolvePath(directory, 'content.md', l)));
 
-  course.biosJSON = JSON.stringify(await bundleYAML('bios.yaml', courseId, locale, bios));
-  course.glossJSON = JSON.stringify(await bundleYAML('glossary.yaml', courseId, locale, gloss));
-  course.hintsJSON = JSON.stringify(await bundleYAML('hints.yaml', courseId, locale));
+  course.biosJSON = JSON.stringify(await bundleYAML('bios.yaml', directory, locale, bios));
+  course.glossJSON = JSON.stringify(await bundleYAML('glossary.yaml', directory, locale, gloss));
+  course.hintsJSON = JSON.stringify(await bundleYAML('hints.yaml', directory, locale));
+
+  for (const s of course.sections) {
+    if (locale === 'en' && !s.locked) COURSE_URLS.add(s.url);
+  }
 
   CACHE[courseId + '-' + locale] = hash;
   return {course, srcFile};
@@ -177,5 +187,6 @@ function writeCache() {
 
 module.exports.writeCache = throttle(writeCache, 1000);
 module.exports.parseCourse = parseCourse;
+module.exports.parseSimple = parseSimple;
 module.exports.parseYAML = parseYAML;
 module.exports.COURSE_URLS = COURSE_URLS;

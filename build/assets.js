@@ -16,7 +16,7 @@ const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const rtlcss = require('rtlcss');
 
-const {error, readFile, success, writeFile, CONFIG, STUDIO_ASSETS, PROJECT_ASSETS, CONTENT, COURSES, OUTPUT, watchFiles} = require('./utilities');
+const {error, readFile, success, writeFile, CONFIG, STUDIO_ASSETS, PROJECT_ASSETS, CONTENT, OUTPUT, watchFiles, findFiles} = require('./utilities');
 const {parseCourse, COURSE_URLS, writeCache} = require('./markdown');
 
 
@@ -58,6 +58,8 @@ const safeAreaCSS = {
 };
 
 async function bundleStyles(srcPath, destPath, minify = false, watch = false) {
+  if (destPath.endsWith('.scss')) destPath = destPath.replace('.scss', '.css');
+
   const start = Date.now();
   const rtl = false;  // TODO Generate rtl files
 
@@ -106,7 +108,19 @@ const pugPlugin = {
   }
 };
 
-async function bundleScripts(srcPath, destPath, minify = false, watch = false, name) {
+const externalPlugin = {
+  name: 'external',
+  setup(build) {
+    // TODO Make the list of external dependencies configurable. Maybe we don't
+    // need this at all: Rollup has a .global configuration option?
+    build.onResolve({filter: /^(vue|THREE)$/}, args => ({path: args.path, external: true}));
+  }
+};
+
+async function bundleScripts(srcPath, destPath, minify = false, watch = false, name = undefined) {
+  if (destPath.endsWith('.ts')) destPath = destPath.replace('.ts', '.js');
+  if (srcPath.endsWith('.d.ts')) return;  // Skip declaration files
+
   const start = Date.now();
 
   const result = await esbuild.build({
@@ -117,7 +131,8 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, n
     globalName: name,
     platform: 'browser',
     format: 'iife',
-    plugins: [pugPlugin],
+    plugins: [pugPlugin, externalPlugin],
+    external: ['vue'],
     target: ['es2016'],
     metafile: watch,
     write: false,
@@ -126,6 +141,7 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, n
 
   for (const file of result.outputFiles) {
     const text = file.text.replace(/\/\*![\s\S]*?\*\//g, '')
+        .replace(/require\(['"]vue['"]\)/g, 'window.Vue')
         .replace(/\/icons\.svg/, iconsPath)  // Cache busting for icons
         .trim();
     await writeFile(destPath, text);
@@ -146,10 +162,10 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, n
 // -----------------------------------------------------------------------------
 // Markdown Courses
 
-async function bundleMarkdown(id, locale, watch = false) {
+async function bundleMarkdown(id, locale, allLocales, watch = false, base = CONTENT) {
   const start = Date.now();
 
-  const data = await parseCourse(path.join(CONTENT, id), locale);
+  const data = await parseCourse(path.join(base, id), locale, allLocales);
   if (!data) return;
 
   if (data.course) {
@@ -195,11 +211,11 @@ async function createPolyfill() {
   await writeFile(path.join(OUTPUT, 'polyfill.js'), polyfill);
 }
 
-async function createSitemap() {
+async function createSitemap(URLs = []) {
   // TODO Generate sitemaps for locale subdomains
   // TODO Automatically generate the sitemap from Express router, rather than manually adding paths to config.yaml
   const options = '<changefreq>weekly</changefreq><priority>1.0</priority>';
-  const urls = ['/', ...Array.from(COURSE_URLS), ...CONFIG.sitemap]
+  const urls = ['/', ...Array.from(COURSE_URLS), ...CONFIG.sitemap, ...URLs]
       .map(url => `<url><loc>https://${CONFIG.domain}${url}</loc>${options}</url>`);
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.join('')}</urlset>`;
   await writeFile(path.join(OUTPUT, 'sitemap.xml'), sitemap);
@@ -221,7 +237,7 @@ function basename(p) {
  * Select all files in the project or the core frontend/ directory. Note that
  * the project may overwrite files with the same name.
  */
-function getAssetFiles(pattern, extension = path.extname(pattern)) {
+function getAssetFiles(pattern) {
   // Match abc.js as well as abc/index.js
   pattern = pattern.replace('*', '{*,*/index}');
 
@@ -233,51 +249,47 @@ function getAssetFiles(pattern, extension = path.extname(pattern)) {
       .filter(p => !projectFileNames.includes(basename(p)));
 
   return [...studioFiles, ...projectFiles].map(src => {
-    const dest = path.join(OUTPUT, basename(src).split('.')[0] + extension);
+    const dest = path.join(OUTPUT, basename(src));
     return {src, dest};
   });
 }
 
-function getCourseFiles(id, pattern, extension) {
-  const srcDir = path.join(CONTENT, id);
-  return glob.sync(pattern, {cwd: srcDir}).map(file => {
-    const dest = path.join(OUTPUT, 'content', id, file.split('.')[0] + extension);
-    return {src: path.join(srcDir, file), dest};
-  });
-}
-
-async function buildAssets(minify = false, watch = false) {
+async function buildAssets(minify = false, watch = false, locales = ['en']) {
   const promises = [];
 
   // SVG Icons need to be built BEFORE TS files, so that iconsPath is set.
   await bundleIcons().catch(error('icons.svg'));
 
   // Top-level TypeScript files
-  for (const {src, dest} of getAssetFiles('*.ts', '.js')) {
+  for (const {src, dest} of getAssetFiles('*.ts')) {
     if (src.endsWith('.d.ts')) continue;
     promises.push(bundleScripts(src, dest, minify, watch).catch(error(src)));
   }
   promises.push(await createPolyfill().catch(error('polyfill.js')));
 
   // Top-level SCSS files
-  for (const {src, dest} of getAssetFiles('*.scss', '.css')) {
+  for (const {src, dest} of getAssetFiles('*.scss')) {
     promises.push(bundleStyles(src, dest, minify, watch).catch(error(src)));
   }
 
-  // TODO Running all course scripts in parallel might be faster, but can lead
-  // to memory issues with large repositories...
+  // Course TypeScript Files
+  for (const {src, dest} of findFiles('!(shared|_*)/*.ts', CONTENT, OUTPUT + '/content')) {
+    promises.push(bundleScripts(src, dest, minify, watch, 'StepFunctions').catch(error(src)));
+  }
+
+  // Course SCSS Files
+  for (const {src, dest} of findFiles('!(shared|_*)/*.scss', CONTENT, OUTPUT + '/content')) {
+    promises.push(bundleStyles(src, dest, minify, watch).catch(error(src)));
+  }
+
   await Promise.all(promises);
 
-  // Individual Courses
-  for (const id of COURSES) {
-    for (const {src, dest} of getCourseFiles(id, '*.ts', '.js')) {
-      await bundleScripts(src, dest, minify, watch, 'StepFunctions').catch(error(src));
-    }
-    for (const {src, dest} of getCourseFiles(id, '*.scss', '.css')) {
-      await bundleStyles(src, dest, minify, watch).catch(error(src));
-    }
-    for (const locale of CONFIG.locales) {
-      await bundleMarkdown(id, locale, watch).catch(error(`course ${id} [${locale}]`));
+  // Course Markdown and YAML files
+  // We run all course scripts in series, to avoid memory issues with large repositories.
+  const courses = glob.sync('!(shared|_*|*.*)', {cwd: CONTENT});
+  for (const id of courses) {
+    for (const locale of locales) {
+      await bundleMarkdown(id, locale, locales, watch).catch(error(`course ${id} [${locale}]`));
     }
   }
 
@@ -289,5 +301,8 @@ async function buildAssets(minify = false, watch = false) {
 module.exports.bundleStyles = bundleStyles;
 module.exports.bundleScripts = bundleScripts;
 module.exports.bundleMarkdown = bundleMarkdown;
+module.exports.bundleIcons = bundleIcons;
+module.exports.createSitemap = createSitemap;
+module.exports.createPolyfill = createPolyfill;
 
 module.exports.buildAssets = buildAssets;

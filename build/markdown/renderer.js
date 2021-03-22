@@ -11,7 +11,7 @@ const entities = require('html-entities');
 
 const {Expression} = require('@mathigon/hilbert');
 const {makeTexPlaceholder} = require('./mathjax');
-const {warning, CONTENT} = require('../utilities');
+const {warning} = require('../utilities');
 
 
 // -----------------------------------------------------------------------------
@@ -30,8 +30,8 @@ const customMathML = {
     return `<span class="pill step-target ${color.val.s}" data-to="${target.val.s}" tabindex="0">${expr}</span>`;
   },
   reveal: (expr, when) => `<mrow class="reveal" data-when="${when.val.s}">${expr}</mrow>`,
-  input: (value, placeholder) => `<x-blank-input solution="${value.val.n}" placeholder="${placeholder ? placeholder.val.s : '???'}"></x-blank-input>`,
-  blank: (...values) => `<x-blank>${values.map(v => `<button class="choice">${v}</button>`).join('')}</x-blank>`,
+  input: (value, placeholder) => `<x-blank solution="${value.val.n}" placeholder="${placeholder ? placeholder.val.s : '???'}"></x-blank>`,
+  blank: (...values) => `<x-blank-mc>${values.map(v => `<button class="choice">${v}</button>`).join('')}</x-blank-mc>`,
   arc: (value) => `<mover>${value}<mo value="⌒">⌒</mo></mover>`,
   var: (value) => `<span class="var">\${${value.val.s}}</span>`,
   class: (expr, name) => `<mrow class="${name.val.s}">${expr}</mrow>`
@@ -54,7 +54,7 @@ const customVoice = {
 // -----------------------------------------------------------------------------
 // Create Markdown Renderer
 
-module.exports.getRenderer = function(metadata, courseId, locale='en') {
+module.exports.getRenderer = function(metadata, directory, locale='en') {
   const renderer = new marked.Renderer();
   let originalP = '';  // Caching of unparsed paragraphs (for blockquotes)
 
@@ -153,7 +153,7 @@ module.exports.getRenderer = function(metadata, courseId, locale='en') {
     }
   };
 
-  const pugFile = `${CONTENT}/${courseId}/content.pug`;
+  const pugFile = `${directory}/content.pug`;
   renderer.code = (code, name) => {
     if (name === 'latex') {
       const eqn = '\\begin{align*}' + entities.decode(code) + '\\end{align*}';

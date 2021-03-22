@@ -24,9 +24,6 @@ deepExtend(CONFIG, PROJECT_CONFIG, (a, b) => b);
 const STUDIO_ASSETS = path.join(__dirname, '../frontend');
 const PROJECT_ASSETS = path.join(process.cwd(), 'frontend');
 const CONTENT = path.join(process.cwd(), CONFIG.contentDir);
-
-// All Course directories
-const COURSES = glob.sync('*', {cwd: CONTENT}).filter(id => id !== 'shared' && !id.startsWith('_') && !path.extname(id));
 const OUTPUT = path.join(process.cwd(), 'public');
 
 
@@ -44,6 +41,12 @@ async function writeFile(file, content) {
   return fs.promises.writeFile(file, content);
 }
 
+async function copyFile(src, dest) {
+  const dir = path.dirname(dest);
+  if (!fs.existsSync(dir)) await fs.mkdirSync(dir, {recursive: true});
+  return fs.promises.copyFile(src, dest);
+}
+
 function loadYAML(file) {
   // TODO Support both .yaml and .yml extensions
   return yaml.load(readFile(file, '{}')) || {};
@@ -54,6 +57,13 @@ function watchFiles(dependencies, callback) {
   watcher.on('change', async () => {
     console.log('\x1b[33m  Updating...\x1b[0m');
     await callback();
+  });
+}
+
+function findFiles(pattern, srcDir, destDir, flat = false) {
+  return glob.sync(pattern, {cwd: srcDir}).map(file => {
+    const outFile = flat ? path.basename(file) : file;
+    return {src: path.join(srcDir, file), dest: path.join(destDir, outFile)};
   });
 }
 
@@ -86,10 +96,11 @@ module.exports.STUDIO_ASSETS = STUDIO_ASSETS;
 module.exports.PROJECT_ASSETS = PROJECT_ASSETS;
 module.exports.CONTENT = CONTENT;
 module.exports.OUTPUT = OUTPUT;
-module.exports.COURSES = COURSES;
 
 module.exports.readFile = readFile;
 module.exports.writeFile = writeFile;
+module.exports.copyFile = copyFile;
+module.exports.findFiles = findFiles;
 module.exports.loadYAML = loadYAML;
 module.exports.watchFiles = watchFiles;
 

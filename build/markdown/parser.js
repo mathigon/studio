@@ -27,8 +27,8 @@ const MINIFY_CONFIG = {
   removeComments: true
 };
 
-// TODO Make this list of goals configurable. For now, you can manually add
-// [goal] attributes to other, custom elements.
+// TODO Make this list of goals configurable, and remove non-public components.
+// For now, you can manually add [goal] attributes to other, custom elements.
 const COMPONENTS = [
   {query: 'x-blank, x-blank-mc', goal: 'blank-$'},
   {query: 'x-var', goal: 'var-$'},
@@ -36,10 +36,16 @@ const COMPONENTS = [
   {query: 'x-sortable', goal: 'sortable-$'},
   {query: 'x-free-text', goal: 'free-text-$'},
   {query: '.next-step', goal: 'next-$', noAttr: true},
+  {query: 'x-equation, x-equation-system', goal: 'eqn-$', exclude: 'x-equation-system x-equation'}, // Exclude equation *inside* system.
 
   // These components have multiple goals each, based on their children.
+  {query: 'x-algebra-flow', goal: 'algebra-flow', goals: (e) => $$(e, 'ul li').slice(1).map((c, i) => 'algebra-flow-' + i)},
   {query: 'x-picker', goal: 'picker', goals: (e) => $$(e, '.item').map((c, i) => c.hasAttribute('data-error') ? '' : 'picker-' + i).filter(g => g)},
-  {query: 'x-slideshow', goal: 'slide', goals: (e) => $$(e, ':scope > *:not([slot="stage"])').slice(1).map((c, i) => 'slide-' + i)}
+  {query: 'x-slideshow', goal: 'slide', goals: (e) => $$(e, ':scope > *:not([slot="stage"])').slice(1).map((c, i) => 'slide-' + i)},
+
+  // For backwards-compatibility the components dont' have a -0 in their goal.
+  {query: 'x-quill', goal: 'quill'},
+  {query: 'x-gameplay', goal: 'gameplay'}
 ];
 
 const NOWRAP_QUERY = 'code, x-blank, x-blank-mc, x-var, svg.mathjax, x-gloss, x-bio, span.step-target, span.pill, x-target, span.math';
@@ -48,7 +54,7 @@ const NOWRAP_QUERY = 'code, x-blank, x-blank-mc, x-var, svg.mathjax, x-gloss, x-
 // -----------------------------------------------------------------------------
 // Markdown Parsers
 
-async function parseStep(content, index, courseId, locale = 'en') {
+async function parseStep(content, index, directory, courseId, locale = 'en') {
   // Custom HTML blocks using :::
   content = blockIndentation(content);
 
@@ -80,15 +86,12 @@ async function parseStep(content, index, courseId, locale = 'en') {
   const tokens = lexer.lex(content);
 
   const metadata = {gloss: new Set(), bios: new Set()};
-  const renderer = getRenderer(metadata, courseId, locale);
-  let parsed = marked.Parser.parse(tokens, {renderer});
+  const renderer = getRenderer(metadata, directory, locale);
+  const parsed = marked.Parser.parse(tokens, {renderer});
 
   // Check step and section IDs
   metadata.id = checkId(metadata.id, 'step') || 'step-' + index;
   metadata.section = checkId(metadata.section, 'section');
-
-  // Asynchronously replace all LaTeX Equation placeholders.
-  parsed = await fillTexPlaceholders(parsed);
 
   // Parse the HTML string as DOM
   const window = new JSDom('<x-step>' + parsed + '</x-step>').window;
@@ -186,20 +189,23 @@ async function parseStep(content, index, courseId, locale = 'en') {
   if (metadata.class) body.setAttribute('class', metadata.class);
 
   // Generate the Step HTML
-  metadata.html = htmlMinify(body.outerHTML, MINIFY_CONFIG);
-
+  const html = htmlMinify(body.outerHTML, MINIFY_CONFIG);
   window.close();
+
+  // Asynchronously replace all LaTeX Equation placeholders.
+  metadata.html = await fillTexPlaceholders(html);
   return metadata;
 }
 
 async function parseSimple(text, locale = 'en') {
   const renderer = getRenderer({}, '', locale);
-  let result = marked(blockIndentation(text), {renderer});
-  result = await fillTexPlaceholders(result);
-  const doc = (new JSDom(result)).window.document.body;
-  for (const n of nodes(doc)) blockAttributes(n);
-  addNoWraps(doc);
-  return htmlMinify(doc.innerHTML, MINIFY_CONFIG);
+  const result = marked(blockIndentation(text), {renderer});
+  const window = (new JSDom(result)).window;
+  for (const n of nodes(window.document.body)) blockAttributes(n);
+  addNoWraps(window.document.body);
+  const html = htmlMinify(window.document.body.innerHTML, MINIFY_CONFIG);
+  window.close();
+  return await fillTexPlaceholders(html);
 }
 
 module.exports.parseStep = cache(parseStep);

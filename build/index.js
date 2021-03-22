@@ -14,7 +14,10 @@ const {getLicenses} = require('./tools/licenses');
 
 (async () => {
   // Build assets using `mgon-build --assets [--minify] [--watch]`
-  if (argv.assets) await buildAssets(argv.minify || false, argv.watch || false);
+  if (argv.assets) {
+    const locales = argv.locales ? argv.locales.split(',') : CONFIG.locales;
+    await buildAssets(argv.minify || false, argv.watch || false, locales);
+  }
 
   // Build the search index
   if (argv.search && CONFIG.search.enabled) await buildSearch();
