@@ -35,7 +35,7 @@
     margin: -5px 0 -11px;
     color: $text-light;
     transition: color .2s;
-    svg { display: block; }
+    x-icon { display: block; }
     &:hover { @include theme(color, $text-dark, white); }
   }
 

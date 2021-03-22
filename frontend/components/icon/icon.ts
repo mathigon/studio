@@ -11,6 +11,10 @@ import {$N, CustomElementView, register} from '@mathigon/boost';
 export class IconView extends CustomElementView {
 
   ready() {
+    // The element already has an SVG child, or is being copied at runtime by
+    // a library like Vue.js.
+    if (this.children.length) return;
+
     const size = +this.attr('size') || 24;
     this.css({width: size + 'px', height: size + 'px'});
 

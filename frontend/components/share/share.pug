@@ -13,4 +13,4 @@ if config.social.reddit
     x-icon(name="reddit" size=36)
 button.btn(title=__("Copy to Clipboard") :show="canCopy" @click="copy()"): x-icon(name="link" size=36)
 
-x-alert.success(key="clipboard") #[x-icon(name="check-white" size=24)] #{__('URL copied to clipboard!')}
+x-alert.success(key="clipboard") #[x-icon(name="check" size=24)] #{__('URL copied to clipboard!')}

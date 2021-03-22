@@ -56,7 +56,7 @@ export class Step extends CustomElementView {
 
   ready() {
     this.$course = this.parents('x-course')[0] as Course|undefined;
-    this.$blanks = this.$$('x-blank, x-blank-input') as (BlankMC|Blank)[];
+    this.$blanks = this.$$('x-blank, x-blank-mc') as (BlankMC|Blank)[];
     this.$components = this.$$('[goal]') as (ElementView&StepComponent)[];
 
     this.userData = this.$course?.userData?.steps?.[this.id];

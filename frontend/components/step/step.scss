@@ -332,7 +332,7 @@ x-step p a {
     transition: background .2s, box-shadow .2s;
     @include coloured-btn(rgba($medium-grey, 60%), $medium-grey);
     @each $name, $color in $colors {
-      &.#{$name}:hover { @include coloured-btn(rgba($color, 60%), $color); }
+      &.#{$name} { @include coloured-btn(rgba($color, 60%), $color); }
     }
   }
 }

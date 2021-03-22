@@ -20,7 +20,7 @@ x-play-btn {
     opacity: 0.9;
     transition: transform .2s, opacity .2s, background .2s;
     padding: 2px;
-    .icon { fill: white; }
+    x-icon { fill: white; }
   }
 
   x-video & .play-btn-box {

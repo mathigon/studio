@@ -87,10 +87,15 @@ footer { height: 320px; position: relative; padding-top: 80px; }
 
 .next-section {
   display: none;
+  width: max-content; // Firefox doesn't support fit-content...
   margin: 0 auto;
+  transition: transform .2s, filter .2s;
+  &:hover, &:focus { transform: scale(1.05); filter: drop-shadow(0 4px 12px rgba(black, 25%)); }
+}
+
+.next-arrow {
   border-radius: 6px;
   position: relative;
-  width: max-content;  // Firefox doesn't support fit-content...
   height: 74px;
   line-height: 1.4;
   padding: 8px 36px 0 18px;
@@ -98,7 +103,7 @@ footer { height: 320px; position: relative; padding-top: 80px; }
   max-width: 100%;
   user-select: none;
   color: white;
-  transition: background .2s, transform .2s, filter .2s;
+  transition: background .2s;
 
   mask: inline-svg('<path d="M718.8,34.2,705.2,2.8A4.9,4.9,0,0,0,701,0H0V74H701a4.9,4.9,0,0,0,4.2-2.8l13.6-31.4A7.7,7.7,0,0,0,718.8,34.2Z"/>', 720, 74);
   mask-size: 720px 74px;
@@ -119,9 +124,6 @@ footer { height: 320px; position: relative; padding-top: 80px; }
     background-size: cover;
     & + .small, & + .small + .title { padding-left: 74px; }
   }
-
-  // TODO Add shadow on hover. This would currently be clipped by mask().
-  &:hover, &:focus { transform: scale(1.05); }
 }
 
 .skip-step {

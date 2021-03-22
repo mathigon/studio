@@ -45,7 +45,7 @@ x-tutor {
     padding: 0 12px;
     font-size: 20px;
     font-weight: 600;
-    div > svg { width: 32px; height: 32px; display: inline-block; margin: 0 8px -9px 0; }
+    x-icon[name="fox"] { margin: 0 8px -9px 0; }
     @media (max-height: 450px) { border-radius: 0; }
   }
 
@@ -113,7 +113,7 @@ x-tutor {
   .msg.question { color: $blue; background: white; border-radius: 16px 16px 16px 3px; align-self: flex-start;  }
 
   .msg.archie { background: $blue; border-radius: 28px 28px 3px 28px; padding: 10px 6px 6px 10px; transition: background .2s; }
-  .msg.archie svg { display: block; width: 40px; height: 40px; }
+  .msg.archie x-icon { display: block; }
 
   .msg.correct { background: darken($success, 5%); }
   .msg.incorrect { background: darken($error, 5%); }

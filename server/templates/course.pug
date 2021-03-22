@@ -71,8 +71,8 @@ block main
           svg(width=72 height=10): path(d="M1 1L36 9L71 1" fill="none" stroke="#aaa" stroke-width=2)
 
         block course-next-up
-          style!= `.next-section{background:${(nextUp.course || course).color}}.next-section:hover,.next-section:focus{background:${lighten((nextUp.course || course).color)}}`
-          a.next-section(href=nextUp.section.url title=(nextUp.course ? nextUp.course.title : nextUp.section.title))
+          style!= `.next-arrow{background:${(nextUp.course || course).color}}.next-section:hover .next-arrow,.next-section:focus .next-arrow{background:${lighten((nextUp.course || course).color)}}`
+          a.next-section(href=nextUp.section.url title=(nextUp.course ? nextUp.course.title : nextUp.section.title)): .next-arrow
             if nextUp.course
               .next-icon(style=`background-image: url(${nextUp.course.icon || nextUp.course.hero});`)
             .small= __('Next up:')

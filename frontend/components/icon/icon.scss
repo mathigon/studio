@@ -4,11 +4,14 @@
 // =============================================================================
 
 
+@import "../../styles/variables";
+
 x-icon {
   display: inline-block;
   width: 24px;
   height: 24px;
   fill: currentColor;
+  &[name="warning"] { fill: $red; }
 }
 
 .button x-icon { margin: -10px 3px -10px -8px; }

@@ -10,7 +10,7 @@ import template from './slideshow.pug';
 
 
 function blanksSolvePromise($slide: ElementView) {
-  const $blanks = $slide.$$('x-blank, x-blank-input');
+  const $blanks = $slide.$$('x-blank, x-blank-mc');
   if (!$blanks.length) return Promise.resolve();
 
   let solved = 0;
