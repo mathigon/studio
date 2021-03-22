@@ -21,6 +21,8 @@ header:
   title: images/title.svg
   links: []
 
+social: {}
+
 footer:
   rows: []
   copyright: © Mathigon, 2021

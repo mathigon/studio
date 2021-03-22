@@ -71,6 +71,8 @@ svg.mathjax {
 .l-hide  { @media screen and (min-width: 641px) { display: none !important; } }
 .xl-hide { @media screen and (min-width: 801px) { display: none !important; } }
 
+.invert { @include theme(filter, none, invert(1)); }
+
 
 // -----------------------------------------------------------------------------
 // Grids

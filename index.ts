@@ -27,6 +27,7 @@ export type {Tabbox} from './frontend/components/tabbox/tabbox';
 export type {Target} from './frontend/components/target/target';
 export type {Tutor} from './frontend/components/tutor/tutor';
 export type {Variable} from './frontend/components/variable/variable';
+export type {PlayBtn, PlayToggle} from './frontend/components/video/play-btn';
 export type {Video} from './frontend/components/video/video';
 
 export {confetti} from './frontend/components/confetti/confetti';

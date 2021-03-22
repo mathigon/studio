@@ -10,7 +10,7 @@ if config.social.pinterest
   a.btn.pinterest(title="Pinterest" href="https://pinterest.com/pin/create/bookmarklet/?media=${img}&url=${url}&description=${title}" target="_blank" rel="noopener"): x-icon(name="pinterest" size=36)
 if config.social.reddit
   a.btn.reddit(title="Reddit" href="https://reddit.com/submit?url=${url}&title=${title}" target="_blank" rel="noopener")
-  x-icon(name="reddit" size=36)
+    x-icon(name="reddit" size=36)
 button.btn(title=__("Copy to Clipboard") :show="canCopy" @click="copy()"): x-icon(name="link" size=36)
 
 x-alert.success(key="clipboard") #[x-icon(name="check-white" size=24)] #{__('URL copied to clipboard!')}

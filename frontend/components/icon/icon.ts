@@ -20,8 +20,7 @@ export class IconView extends CustomElementView {
     const $use = $N('use', {}, $svg);
     this.onAttr('name', (n) => $use.setAttr('href', `/icons.svg#${n}`));
 
-    // TODO ARIA attributes
+    // TODO ARIA attributes / alt text
     // TODO Maybe polyfill if <use> is not supported
-    // TODO Cache busting if icons.svg changes
   }
 }

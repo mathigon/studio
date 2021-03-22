@@ -32,6 +32,7 @@ import './components/tabbox/tabbox';
 import './components/target/target';
 import './components/tutor/tutor';
 import './components/variable/variable';
+import './components/video/play-btn';
 import './components/video/video';
 
 

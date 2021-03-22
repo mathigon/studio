@@ -8,13 +8,14 @@
 
 // Rainbow
 $red:    #cd0e66 !default;
+$blue:   #0f82f2 !default;
 $green:  #22ab24 !default;
 $yellow: #fd8c00 !default;
-$blue:   #0f82f2 !default;
-$orange: #f54b42 !default;
-$purple: #7a0fe0 !default;
-$teal:   #00a7c9 !default;
-$lime:   #9ed415 !default;
+
+$orange: #eb4726 !default;
+$purple: #6d3bbf !default;
+$teal:   #009ea6 !default;
+$lime:   #bfc212 !default;
 
 // Theme Colours
 $primary: #cd0e66 !default;
@@ -263,8 +264,8 @@ $icons: (
     content: "";
     display: block;
     position: absolute;
-    $a: 100%;
-    $b: 50%;
+    #{$a}: 100%;
+    #{$b}: 50%;
     margin-#{$b}: -$size;
     border-#{$a}: $height $color solid;
     border-#{$b}: $size transparent solid;

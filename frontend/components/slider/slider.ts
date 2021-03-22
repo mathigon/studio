@@ -26,6 +26,7 @@ export class Slider extends CustomElementView implements StepComponent {
     const $bar = this.$('.bar')!;
     const $knob = this.$('.knob')!;
 
+    // TODO Make the play button a toggle, that can also pause the animation.
     const $play = this.$('.play')!;
     if (this.hasAttr('no-play')) {
       $play.remove();
