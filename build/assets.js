@@ -6,7 +6,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 const glob = require('glob');
 const esbuild = require('esbuild');
 const pug = require('pug');
@@ -16,7 +15,7 @@ const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const rtlcss = require('rtlcss');
 
-const {error, readFile, success, writeFile, CONFIG, STUDIO_ASSETS, PROJECT_ASSETS, CONTENT, OUTPUT, watchFiles, findFiles} = require('./utilities');
+const {error, readFile, success, writeFile, CONFIG, STUDIO_ASSETS, PROJECT_ASSETS, CONTENT, OUTPUT, watchFiles, findFiles, textHash} = require('./utilities');
 const {parseCourse, COURSE_URLS, writeCache} = require('./markdown');
 
 
@@ -195,7 +194,7 @@ async function bundleIcons() {
 
   const symbols = `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">${icons.join('')}</svg>`;
 
-  const hash = crypto.createHash('md5').update(symbols).digest('hex').slice(0, 8);
+  const hash = textHash(symbols).slice(0, 8);
   iconsPath = `/icons.${hash}.svg`;  // Add cache bust
 
   await writeFile(path.join(OUTPUT, 'icons.svg'), symbols);

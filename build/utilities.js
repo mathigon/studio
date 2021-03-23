@@ -6,6 +6,7 @@
 
 const fs = require('fs');
 const path = require( 'path');
+const crypto = require('crypto');
 const glob = require( 'glob');
 const yaml = require('js-yaml');
 const chokidar = require('chokidar');
@@ -88,6 +89,9 @@ function error(file) {
   return (error) => console.log(`\x1b[31m  ✖ [ERROR] Building ${shortFile}:\x1b[0m\n`, error);
 }
 
+function textHash(text) {
+  return crypto.createHash('md5').update(text).digest('hex');
+}
 
 // -----------------------------------------------------------------------------
 
@@ -107,3 +111,5 @@ module.exports.watchFiles = watchFiles;
 module.exports.success = success;
 module.exports.warning = warning;
 module.exports.error = error;
+
+module.exports.textHash = textHash;

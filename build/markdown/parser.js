@@ -156,7 +156,7 @@ async function parseStep(content, index, directory, courseId, locale = 'en') {
   }
 
   // Create sentence elements for audio narrations
-  if (CONFIG.courses.audio) addNarrationTags(window.document, courseId, locale);
+  if (CONFIG.courses.audio) addNarrationTags(window.document, directory, locale);
 
   // Every step has a list of "goals": things that students need to achieve
   // before moving on. You can provide a list of custom goals in the metadata

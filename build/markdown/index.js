@@ -6,11 +6,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 const glob = require('glob');
 
 const {toTitleCase, last, words, throttle} = require('@mathigon/core');
-const {readFile, warning, loadYAML, OUTPUT, writeFile} = require('../utilities');
+const {readFile, warning, loadYAML, OUTPUT, writeFile, textHash} = require('../utilities');
 const {writeTexCache} = require('./mathjax');
 const {parseStep, parseSimple} = require('./parser');
 
@@ -97,7 +96,7 @@ async function parseCourse(directory, locale, allLocales) {
   if (!content) return;
 
   // Generate hash, to avoid re-compiling courses that didn't change.
-  const hash = crypto.createHash('md5').update(content).digest('hex');
+  const hash = textHash(content);
   if (CACHE[courseId + '-' + locale] === hash) return {srcFile};
 
   // Keep track of all glossary and biography keys used within this course.

@@ -4,7 +4,7 @@
 // =============================================================================
 
 
-const {textHash, CONTENT, loadYAML} = require('../utilities');
+const {textHash, loadYAML} = require('../utilities');
 
 
 /** Generate the audio narration text for a DOM element. */
@@ -119,11 +119,11 @@ function splitIntoSentences(doc, paragraph, timings, nested = false) {
   }
 }
 
-function addNarrationTags(doc, courseId, locale) {
+function addNarrationTags(doc, directory, locale) {
   // TODO Support narrations for other languages.
   if (locale !== 'en') return;
 
-  const timings = loadYAML(`${CONTENT}/${courseId}/audio/timings_${locale}.yaml`);
+  const timings = loadYAML(`${directory}/audio/timings_${locale}.yaml`);
   const el = doc.querySelectorAll('p:not(.caption):not(.todo):not(.no-voice), li:not(.no-voice), .voice');
   const paragraphs = Array.from(el).filter(p => p.textContent.trim());
   for (const p of paragraphs) splitIntoSentences(doc, p, timings);
