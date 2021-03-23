@@ -19,5 +19,5 @@ declare interface Window {
   progressData?: any;
 
   // This global variable may be inlined in the template.
-  user?: {name: string};
+  user?: {name: string, shortName: string, email: string};
 }

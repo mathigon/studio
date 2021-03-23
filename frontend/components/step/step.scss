@@ -71,7 +71,7 @@ p.voice {
   li.voice & { margin-left: -56px; }
 
   border: 10px solid transparent;
-  background: $light-grey icon('play', white, 14);
+  background: $light-grey icon('play', white, 14) 2px 2px no-repeat;
   background-clip: content-box;
   border-radius: 30px;
 
@@ -84,7 +84,7 @@ p.voice {
   .voice:hover > &, &:focus, &.active { opacity: 1; transform: scale(1); pointer-events: all; }
   .voice:hover > &:hover { transform: scale(1.3); }
   &:hover, &:focus { background-color: $medium-grey; }
-  &.active { background: $yellow icon('pause', white, 14); background-clip: content-box; }
+  &.active { background: $yellow icon('pause', white, 14) 2px 2px no-repeat; background-clip: content-box; }
 }
 
 

@@ -124,7 +124,7 @@ export class Tutor extends CustomElementView {
       const time = (t < 12) ? 'Morning' : (t < 18) ? 'Afternoon' : 'Evening';
 
       if (user) {
-        setTimeout(() => this.showHint(`welcome${time}Named`, {variables: {name: user.name}}), 3000);
+        setTimeout(() => this.showHint(`welcome${time}Named`, {variables: {name: user.shortName}}), 3000);
       } else if (Browser.getCookie('welcome')) {
         setTimeout(() => this.showHint(`welcome${time}`), 3000);
         if (ENV === 'WEB') setTimeout(() => this.queue(this.hints.account as string), 4500);

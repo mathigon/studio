@@ -4,7 +4,7 @@
 // =============================================================================
 
 
-import {cumulative, sortBy, total} from '@mathigon/core';
+import {cumulative, last, sortBy, total} from '@mathigon/core';
 import {Browser, CustomElementView, Draggable, register} from '@mathigon/boost';
 import {Step, StepComponent, UserData} from '../step/step';
 
@@ -19,6 +19,7 @@ function position(items: Item[], except?: Item) {
   const cumHeights = cumulative(items.map(s => s.h + 10));
   for (const [i, item] of items.entries()) {
     // TODO Animate this
+    item.drag.height = last(cumHeights);
     if (item !== except) item.drag.setPosition(0, cumHeights[i - 1] || 0);
   }
 }
