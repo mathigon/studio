@@ -67,7 +67,7 @@ if course.trailer
 if config.social
   +modal('share')
     h2 #[x-icon(name="share" size=32)] #{__('Share')}
-    x-share(url=`https://${config.domain}${section.url}` title=encodeURIComponent(section.title + ' – ' + course.title) body=course.description img=section.thumbnail)
+    x-share(url=`https://${config.domain}${section.url}` title=(section.title + ' – ' + course.title) body=course.description img=section.thumbnail)
 
 if config.courses.feedback
   x-modal#feedback

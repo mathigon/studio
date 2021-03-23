@@ -4,7 +4,7 @@ if config.social.twitter
   a.btn.twitter(title="Twitter" href=("https://twitter.com/intent/tweet?url=${url}&text=${title}&via="+config.social.twitter.handle) target="_blank" rel="noopener")
     x-icon(name="twitter" size=36)
 if config.social.facebook
-  a.btn.facebook(title="Facebook" href=('https://www.facebook.com/dialog/share?app_id='+config.social.facebook.page+'&display=page&href=${url}') target="_blank" rel="noopener")
+  a.btn.facebook(title="Facebook" href=('https://www.facebook.com/dialog/share?app_id='+config.social.facebook.appId+'&display=page&href=${url}') target="_blank" rel="noopener")
     x-icon(name="facebook" size=36)
 if config.social.pinterest
   a.btn.pinterest(title="Pinterest" href="https://pinterest.com/pin/create/bookmarklet/?media=${img}&url=${url}&description=${title}" target="_blank" rel="noopener"): x-icon(name="pinterest" size=36)

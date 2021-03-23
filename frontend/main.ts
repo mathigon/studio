@@ -15,10 +15,8 @@ import './components/alert/alert';
 import './components/icon/icon';
 import './components/progress/progress';
 
-// strip-start:public,webview
 // See https://github.com/googleanalytics/autotrack
 import 'autotrack/lib/plugins/page-visibility-tracker';
-// strip-end
 
 bindAccessibilityEvents();
 
@@ -42,7 +40,6 @@ window.addEventListener('mousedown', () => {
 // -----------------------------------------------------------------------------
 // Cookies and Privacy
 
-// strip-start:public,webview
 const $cookies = $('.cookie-warning');
 if ($cookies) {
   $('#yes-to-cookies')!.on('click', function() {

@@ -42,7 +42,7 @@ export class ShareRow extends CustomElementView {
     await window.navigator.clipboard.writeText(url);
 
     if ((navigator as any).canShare) {
-      navigator.share({title: `Polypad – ${this.attr('title')}`, url});  // async
+      navigator.share({title: this.attr('title'), url});  // async
     }
 
     showAlert('clipboard');
