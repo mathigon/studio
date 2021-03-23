@@ -30,7 +30,7 @@ x-course-sidebar(style=`background-color: ${course.color}`)
     for s in course.sections
       - var isCurrent = section.id === s.id;
       +linkBlock(isCurrent, 'sidebar-row', s.url)
-        x-progress(r=10 p=0)
+        x-progress(r=10 p=(progressData ? progressData.getSectionProgress(s) : 0))
         if s.locked && !config.courses.showLocked
           x-icon.right(name="construction")
         | #{s.title}

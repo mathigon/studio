@@ -24,6 +24,7 @@ function parseInput(str: string) {
 export class Blank extends CustomElementView implements StepComponent {
   private $input!: InputView;
   private $target!: ElementView;
+  private $step?: Step;
 
   private solution = '';  // Orignal version of the solution
   private solutionNum = NaN;  // Numeric version of the solution
@@ -100,6 +101,7 @@ export class Blank extends CustomElementView implements StepComponent {
 
   setup($step: Step, goal: string, userData?: UserData) {
     this.goal = goal;
+    this.$step = $step;
     if (userData?.scores?.includes(goal)) this.solve(true);
 
     this.one('valid', () => {
@@ -150,11 +152,10 @@ export class Blank extends CustomElementView implements StepComponent {
   moveCursor() {
     // Move the cursor to the next BlankInput element in the same step, as long
     // as it is visible and there is no Blank element in between.
-    const $step = this.getParentModel().$step as Step|undefined;
-    if (!$step) return;
+    if (!this.$step) return;
 
-    const $next = $step.$blanks[$step.$blanks.indexOf(this) + 1];
-    if (!$next || $next.done || $next.tagName === 'X-BLANK') return;
+    const $next = this.$step.$blanks[this.$step.$blanks.indexOf(this) + 1];
+    if (!$next || $next.done || $next.tagName === 'X-BLANK-MC') return;
     if ($next.css('visibility') === 'hidden' || !$next.bounds.width) return;
 
     ($next as Blank).focus();

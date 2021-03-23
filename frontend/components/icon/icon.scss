@@ -11,6 +11,7 @@ x-icon {
   width: 24px;
   height: 24px;
   fill: currentColor;
+  svg { display: block; }
   &[name="warning"] { fill: $red; }
 }
 
