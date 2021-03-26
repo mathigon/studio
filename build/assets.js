@@ -175,7 +175,7 @@ async function bundleMarkdown(id, locale, allLocales, watch = false, base = CONT
   }
 
   // TODO Also watch markdown dependencies (e.g. SVG, PUG or YAML files)
-  if (watch) watchFiles([data.srcFile], () => bundleMarkdown(id, locale));
+  if (watch) watchFiles([data.srcFile], () => bundleMarkdown(id, locale, allLocales, false, base));
 }
 
 

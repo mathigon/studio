@@ -89,7 +89,7 @@ function getNextCourse(directory) {
 // -----------------------------------------------------------------------------
 // Bundle Course Markdown
 
-async function parseCourse(directory, locale, allLocales) {
+async function parseCourse(directory, locale, allLocales = ['en']) {
   const courseId = path.basename(directory);
   const srcFile = resolvePath(directory, 'content.md', locale);
   const content = readFile(srcFile);
