@@ -124,6 +124,7 @@ img.emoji { width: auto; }
   transform: translateX(-50%);
   font-size: 14px;
   background: $dark-grey;
+  backdrop-filter: blur(4px);
   opacity: 0;
   border-radius: 16px;
   pointer-events: none;

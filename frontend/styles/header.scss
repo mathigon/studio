@@ -33,6 +33,7 @@ header {
     box-sizing: border-box;
     svg, img { height: 36px; width: auto; float: left; }
     span { line-height: 36px; display: inline-block; float: left; margin: 0 8px; }
+    @media (max-width: 420px) { svg:last-child, img:last-child { display: none; } }
   }
 
   #skip-nav {
@@ -110,7 +111,6 @@ header {
     .nav-item > .nav-link x-icon { display: block; margin: 0 auto; width: 24px; height: 24px; }
     .nav-text { display: block; line-height: 12px; font-size: 10px; text-align: center; }
   }
-  @media (max-width: 415px) { nav { display: none; } }
 }
 
 
