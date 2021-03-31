@@ -33,7 +33,7 @@ html {
 
 html:not(.ready) * { transition: none !important; animation: none !important; }
 html:not(.is-tabbing) *:focus { outline: none !important; }
-html.grabbing { cursor: grabbing !important; }
+html.grabbing, html.grabbing * { cursor: grabbing !important; }
 
 body { @include theme(color, $text-dark, rgba(white, 90%)); }
 
