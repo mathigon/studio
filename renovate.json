@@ -30,5 +30,6 @@
     "updateTypes": ["patch", "pin", "digest"],
     "groupName": "Versioning",
     "automerge": true
-  }]
+  }],
+  "ignoreDeps": ["esbuild"]
 }
