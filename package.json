@@ -64,12 +64,12 @@
     "yargs-parser": "20.2.7"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.17.0",
-    "@typescript-eslint/parser": "^4.17.0",
-    "eslint": "^7.21.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-plugin-import": "^2.22.1",
-    "tape": "^5.2.2"
+    "@typescript-eslint/eslint-plugin": "4.17.0",
+    "@typescript-eslint/parser": "4.17.0",
+    "eslint": "7.21.0",
+    "eslint-config-google": "0.14.0",
+    "eslint-plugin-import": "2.22.1",
+    "tape": "5.2.2"
   },
   "optionalDependencies": {
     "@google-cloud/text-to-speech": "3.1.3",
