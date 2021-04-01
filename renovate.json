@@ -23,7 +23,7 @@
     "groupName": "Google Cloud Tools",
     "automerge": true
   }, {
-    "packagePatterns": ["^@types"],
+    "packagePatterns": ["^@types/"],
     "groupName": "Types",
     "automerge": true
   }, {
