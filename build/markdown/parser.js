@@ -87,11 +87,14 @@ async function parseStep(content, index, directory, courseId, locale = 'en') {
 
   const metadata = {gloss: new Set(), bios: new Set()};
   const renderer = getRenderer(metadata, directory, locale);
-  const parsed = marked.Parser.parse(tokens, {renderer});
+  let parsed = marked.Parser.parse(tokens, {renderer});
 
   // Check step and section IDs
   metadata.id = checkId(metadata.id, 'step') || 'step-' + index;
   metadata.section = checkId(metadata.section, 'section');
+
+  // Asynchronously replace all LaTeX Equation placeholders.
+  parsed = await fillTexPlaceholders(parsed);
 
   // Parse the HTML string as DOM
   const window = new JSDom('<x-step>' + parsed + '</x-step>').window;
@@ -189,11 +192,9 @@ async function parseStep(content, index, directory, courseId, locale = 'en') {
   if (metadata.class) body.setAttribute('class', metadata.class);
 
   // Generate the Step HTML
-  const html = htmlMinify(body.outerHTML, MINIFY_CONFIG);
+  metadata.html = htmlMinify(body.outerHTML, MINIFY_CONFIG);
   window.close();
 
-  // Asynchronously replace all LaTeX Equation placeholders.
-  metadata.html = await fillTexPlaceholders(html);
   return metadata;
 }
 
