@@ -45,7 +45,8 @@
     line-height: 1.2;
     padding: 7px 8px 7px 34px;
     page-break-inside: avoid;
-    &.locked { color: $text-light; }
+    &.locked { color: $text-light; position: relative; }
+    &.locked .tooltip { top: 7px; right: 0; left: auto; transform: none; background: $medium-grey; padding: 1px 10px; }
   }
 
   a.course-section {

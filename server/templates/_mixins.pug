@@ -10,9 +10,10 @@ mixin course(id, progress)
         img(src="images/flags/gb.png" width=20 height=20)
     for section in course.sections
       if section.locked && !config.courses.showLocked
-        .course-section.locked(title=__('This chapter is still under construction.'))
+        .course-section.locked
           x-icon(name="construction" size=20)
           | #{section.title}
+          .tooltip= __('Under construction')
       else
         a.course-section(href=section.url)
           x-progress(r=10 p=(progress ? progress.getSectionProgress(section) : 0) style=`color: ${course.color}`)
