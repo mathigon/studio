@@ -16,11 +16,13 @@ async function loadFromGoogle(api, string, locale) {
   return str.replace(/\$ 0/g, '$0');
 }
 
-async function translate(key, allLocales = false) {
+async function translate(key, allLocales = false, customKeys = []) {
   const api = new Translate({keyFilename: path.join(process.cwd(), key)});
   const locales = loadYAML(path.join(__dirname, `../../server/data/locales.yaml`));
   const strings = Object.keys(loadYAML(process.cwd() + '/translations/strings.yaml'));
   const available = CONFIG.locales || ['en'];
+
+  for (const c of customKeys) strings[c] = '';
 
   for (const [locale, options] of Object.entries(locales)) {
     if (locale === 'en') continue;

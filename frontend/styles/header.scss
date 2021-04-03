@@ -132,6 +132,7 @@ x-modal#language { width: 540px; user-select: none; }
   transition: background .2s;
   margin: 2px 0;
   -webkit-column-break-inside: avoid;
+  @include ellipsis;
   &:hover { @include theme(background, mix($light-grey, white), rgba(white, 20%)); }
   img { margin-right: 8px; }
 }
