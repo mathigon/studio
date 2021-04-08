@@ -4,7 +4,8 @@
 // =============================================================================
 
 
-import {$N, Browser, CustomElementView, Draggable, MediaView, register} from '@mathigon/boost';
+import {$N, Browser, CustomElementView, MediaView, register} from '@mathigon/boost';
+import {Draggable} from '../draggable/draggable';
 import template from './video.pug';
 
 
@@ -48,8 +49,7 @@ export class Video extends CustomElementView {
     const $bufferBar = this.$('.buffer')!;
     const $timecode = this.$('.timecode')!;
 
-    const drag = new Draggable(this.$('.handle')!, $timelineBar,
-        {moveY: false});
+    const drag = new Draggable(this.$('.handle')!, {$parent: $timelineBar, moveY: false});
     const video = this.video = $video._el;
 
     let timelineWidth = this.width - 110;
@@ -99,7 +99,7 @@ export class Video extends CustomElementView {
       this.$('.controls')!.show();
       this.$('.play-pause-btn')!.on('click', togglePlayPause);
       drag.on('start', () => this.pause());
-      drag.on('drag', (p) => setPosition(p.x));
+      drag.on('drag', ({posn}) => setPosition(posn.x));
       $timelineBar.on('click', (e: MouseEvent) => setPosition(e.offsetX));
     }
   }

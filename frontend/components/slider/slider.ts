@@ -5,7 +5,8 @@
 
 
 import {nearlyEquals} from '@mathigon/fermat';
-import {animate, AnimationResponse, CustomElementView, Draggable, ease, Observable, register} from '@mathigon/boost';
+import {animate, AnimationResponse, CustomElementView, ease, Observable, register} from '@mathigon/boost';
+import {Draggable} from '../draggable/draggable';
 import {Step, StepComponent} from '../step/step';
 import template from './slider.pug';
 
@@ -37,15 +38,15 @@ export class Slider extends CustomElementView implements StepComponent {
     const continuous = this.hasAttr('continuous');
     const snap = this.hasAttr('snap') ? $bar.width / this.steps : 0.001;
 
-    this.drag = new Draggable($knob, $bar, {moveY: false, snap});
+    this.drag = new Draggable($knob, {moveY: false, snap});
 
     this.drag.on('start', () => {
       if (this.animation) this.animation.cancel();
       this.animation = undefined;
     });
 
-    this.drag.on('move', e => {
-      let n = e.x / this.drag.width * this.steps;
+    this.drag.on('move', ({posn}) => {
+      let n = posn.x / this.drag.bounds!.dx * this.steps;
       if (!continuous) n = Math.round(n);
       if (nearlyEquals(n, this.current)) return;
       this.current = n;
@@ -62,7 +63,7 @@ export class Slider extends CustomElementView implements StepComponent {
 
   set(x: number) {
     if (nearlyEquals(x, this.current)) return;
-    this.drag.setPosition(x * this.drag.width / this.steps, 0);
+    this.drag.setPosition(x * this.drag.bounds!.dx / this.steps, 0);
   }
 
   async play() {

@@ -1,9 +1,19 @@
+// =============================================================================
+// Draggable Component
+// (c) Mathigon
+// =============================================================================
+
+
 import {$html, animate, Browser, ElementView, slide, SVGParentView} from '@mathigon/boost';
 import {applyDefaults, EventTarget} from '@mathigon/core';
 import {Bounds, Point} from '@mathigon/euclid';
 
+
 interface DraggableOptions {
+  /** The container within which this element is being dragged. */
   $parent?: ElementView;
+  /** Whether to constrain the elements to within the bounds of $parent. */
+  withinBounds?: boolean;
   /** Whether it is draggable along the x-axis. */
   moveX?: boolean;
   /** Whether it is draggable along the y-axis. */
@@ -16,185 +26,120 @@ interface DraggableOptions {
   margin?: number;
   /** Custom rounding function. */
   round?: ((p: Point) => Point);
-  /** Override `$parent` width. */
-  width?: number;
-  /** Override `$parent` height. */
-  height?: number;
+  /** Custom bounds within which the element is draggable. */
+  bounds?: Bounds;
   /** Whether to reset position when dropped outside of a target */
   resetOnMiss?: boolean;
   /** Elements that the Draggable instance can be dropped onto */
   $targets?: ElementView[];
 }
 
+
 /**
  * A draggable and droppable HTML element.
- * @emits Draggable#start - when the user starts dragging this element.
- * @emits Draggable#drag {elemPos: Point, pointerPos: Point} - while the user is dragging this element.
- * @emits Draggable#click - when the user clicks on this element.
- * @emits Draggable#end - after the user stops dragging this element.
- * @emits Draggable#move {newPos: Point} - When the position of this element changes.
- * @emits Draggable#enter-target {$el: ElementView} - Fires when the pointer has entered the bounds of a 'target' element while dragging
- * @emits Draggable#exit-target {$el: ElementView} - Fires when the pointer has exited the bounds of a 'target' element while dragging
- * @emits Draggable#dropped-target {$el: ElementView, index: number} - Fires when the user releases the pointer while over a 'target' element
- * @emits Draggable#dropped-non-target - Fires when the user releases the pointer while not over a 'target' element
+ * @emits Draggable#click - Fired when the user clicks on this element.
+ * @emits Draggable#start - Fired when the user starts dragging.
+ * @emits Draggable#drag {posn: Point, pointerPosn: Point} - Fired while the user is dragging.
+ * @emits Draggable#move {posn: Point} - Fired when the position of this element changes.
+ * @emits Draggable#end {$target?: ElementView} - Fired after the user stops dragging this element, including the current `$target` which may be undefined.
+ * @emits Draggable#enter-target {$target: ElementView} - Fired when the pointer enters the bounds of a `$target` element while dragging
+ * @emits Draggable#exit-target {$target: ElementView} - Fired when the pointer exists the bounds of a `$target` element while dragging
  */
 export class Draggable extends EventTarget {
   protected options: DraggableOptions;
-  protected areaBounds?: Bounds;
-  protected over?: ElementView;
-  protected startPos = new Point(0, 0);
-  protected targets: {$el: ElementView, index: number}[] | undefined;
+  private startPos = new Point(0, 0);
+  private $over?: ElementView;
   position = new Point(0, 0);
   disabled = false;
-  width = 0;
-  height = 0;
+  bounds?: Bounds;
 
   constructor(readonly $el: ElementView, options: DraggableOptions = {}) {
     super();
 
-    this.options = applyDefaults(options, {moveX: true, moveY: true});
-    this.targets = this.options.$targets?.map(($targetEl, index) => ({$el: $targetEl, index}));
-    if (options.$parent) this.setDimensions(options.$parent);
+    this.options = applyDefaults(options, {moveX: true, moveY: true, withinBounds: true});
+    Browser.onResize(() => this.updateBounds());
 
     slide($el, {
       start: () => {
         if (this.disabled) return;
         this.startPos = this.position;
-        /**
-         * Fires when the user starts dragging this element.
-         *
-         * @event Draggable#start
-         */
         this.trigger('start');
         $html.addClass('grabbing');
       },
       move: (posn, start) => {
         if (this.disabled) return;
-        this.setPosition(this.startPos.x + posn.x - start.x,
-            this.startPos.y + posn.y - start.y);
-        /**
-         * Fires while the user is dragging this element.
-         *
-         * @event Draggable#drag
-         * @type {elemPos: Point, pointerPos: Point} positionData - The positions of the Draggable and the pointer
-         */
-        this.trigger('drag', {elemPos: this.position, pointerPos: posn});
-
-        let overTarget = false;
-        const prevTarget = this.over;
-        if (this.targets) {
-          for (const target of this.targets) {
-            if (target.$el.boundsRect.contains(posn)) {
-              overTarget = true;
-              if (prevTarget !== target.$el) {
-                /**
-                 * Fires when the pointer has entered the bounds of a 'target' element while dragging
-                 *
-                 * @event Draggable#enter-target
-                 * @type {$el: ElementView} - The element whose bounds the pointer has entered
-                 */
-                this.trigger('enter-target', {$el: target.$el});
-                this.over = target.$el;
-              }
-              break;
-            }
-          }
-
-          if (!overTarget) this.over = undefined;
-          const currentTarget = this.over;
-          /**
-           * Fires when the pointer has exited the bounds of a 'target' element while dragging
-           *
-           * @event Draggable#exit-target
-           * @type {$el: ElementView} - The element whose bounds the pointer has exited
-           */
-          if (prevTarget && prevTarget !== currentTarget) this.trigger('exit-target', {$el: prevTarget});
-        }
+        this.setPosition(this.startPos.x + posn.x - start.x, this.startPos.y + posn.y - start.y);
+        this.trigger('drag', {posn: this.position, pointerPosn: posn});
+        this.checkTarget(posn);
       },
       end: (last, start) => {
         if (this.disabled) return;
-        /**
-         * Fires when the user clicks on this element.
-         *
-         * @event Draggable#click
-         */
-        if (last.equals(start)) this.trigger('click');
-        /**
-         * Fires after the user stops dragging this element.
-         *
-         * @event Draggable#end
-         */
-        else this.trigger('end');
-
+        this.trigger(last.equals(start) ? 'click' : 'end', {$target: this.$over});
+        if (this.options.$targets && !this.$over && this.options.resetOnMiss) this.resetPosition();
+        this.$over = undefined;
         $html.removeClass('grabbing');
-
-        let droppedOn: ElementView | undefined;
-
-        if (this.targets) {
-          for (const target of this.targets) {
-            if (target.$el.boundsRect.contains(last)) {
-              /**
-               * Fires when the user releases the pointer while over a 'target' element
-               *
-               * @event Draggable#dropped-target
-               * @type {$el: ElementView} - The element the pointer was released over
-               */
-              this.trigger('dropped-target', {$el: target});
-              droppedOn = target.$el;
-              break;
-            }
-          }
-        }
-
-        if (droppedOn === undefined) {
-          /**
-           * Fires when the user releases the pointer while not over a 'target' element
-           *
-           * @event Draggable#dropped-non-target
-           */
-          this.trigger('dropped-non-target');
-          if (this.options.resetOnMiss === true) this.resetPosition();
-        }
       },
+      click: () => this.trigger('click'),
       accessible: true
-    });
-
-    Browser.onResize(() => {
-      const oldWidth = this.width;
-      const oldHeight = this.height;
-      if (options.$parent) this.setDimensions(options.$parent);
-      this.setPosition(this.position.x * this.width / oldWidth || 0,
-          this.position.y * this.height / oldHeight || 0);
     });
   }
 
-  private setDimensions($parent: ElementView) {
-    if ($parent.type === 'svg') {
-      this.width = this.options.width || ($parent as SVGParentView).svgWidth;
-      this.height = this.options.height || ($parent as SVGParentView).svgHeight;
-    } else {
-      this.width = this.options.width || $parent.width;
-      this.height = this.options.height || $parent.height;
+
+  // ---------------------------------------------------------------------------
+  // Target drag-n-drop
+
+  addTarget($target: ElementView) {
+    if (!this.options.$targets) this.options.$targets = [];
+    this.options.$targets?.push($target);
+  }
+
+  removeTarget($target: ElementView) {
+    this.options.$targets = this.options.$targets?.filter($el => $el != $target);
+    if (!this.options.$targets?.length) this.options.$targets = undefined;
+  }
+
+  private checkTarget(posn: Point) {
+    if (!this.options.$targets) return;
+
+    const $target = this.options.$targets.find($t => $t.boundsRect.contains(posn));
+    if ($target === this.$over) return;
+
+    if (this.$over) this.trigger('exit-target', {$target: this.$over});
+    if ($target) this.trigger('enter-target', {$target});
+
+    this.$over = $target;
+  }
+
+
+  // ---------------------------------------------------------------------------
+  // Resizing and positioning
+
+  private updateBounds() {
+    if (!this.options.withinBounds) return this.bounds = undefined;
+    if (this.options.bounds) return this.bounds = this.options.bounds;
+
+    const oldBounds = this.bounds;
+    const $parent = this.options.$parent || this.$el.parent!;
+
+    const width = ($parent.type === 'svg') ? ($parent as SVGParentView).svgWidth : $parent.width;
+    const height = ($parent.type === 'svg') ? ($parent as SVGParentView).svgHeight : $parent.height;
+    this.bounds = new Bounds(0, width, 0, height);
+
+    // Fallback in case the element is not yet visible...
+    if (!width && !height) setTimeout(() => this.updateBounds());
+
+    if (oldBounds) {
+      // Proportionally reposition the draggable element
+      this.setPosition(this.position.x * this.bounds.dx / oldBounds.dx || 0,
+          this.position.y * this.bounds.dy / oldBounds.dy || 0);
     }
-    const topLeft = new Point($parent.bounds.x - this.$el.bounds.x, $parent.bounds.y - this.$el.bounds.y);
-    const bottomRight = new Point(topLeft.x + this.width, topLeft.y + this.height);
-    this.areaBounds =
-      new Bounds(
-          topLeft.x, bottomRight.x,
-          topLeft.y, bottomRight.y
-      );
   }
 
   /** Sets the position of the element. */
   setPosition(x: number, y: number) {
-    const m = this.options.margin ?? 0;
-
     let p = new Point(this.options.moveX ? x : 0, this.options.moveY ? y : 0);
-
-    if (this.areaBounds) p = p.clamp(this.areaBounds, m);
-
-    p = p.round(this.options.snap ?? 1);
-
+    if (this.bounds) p = p.clamp(this.bounds, this.options.margin ?? 0);
+    p = p.round(this.options.snap || 1);
     if (this.options.round) p = this.options.round(p);
 
     if (p.equals(this.position)) return;
@@ -207,26 +152,15 @@ export class Draggable extends EventTarget {
       if (this.options.moveY) this.$el.css('top', p.y + 'px');
     }
 
-    /**
-     * Fires when the position of this element changes.
-     *
-     * @event Draggable#move
-     * @type {newPos: Point} - The position of this element
-     */
-    this.trigger('move', {newPos: p});
+    this.trigger('move', {posn: p});
   }
 
   resetPosition() {
-    const droppedPosition = this.position;
+    const initial = this.position;
     this.$el.css({'pointer-events': 'none'});
     animate((p: number) => {
-      const currentPos = Point.interpolate(droppedPosition, this.startPos, p);
+      const currentPos = Point.interpolate(initial, this.startPos, p);
       this.setPosition(currentPos.x, currentPos.y);
-    }, 800)
-        .promise.then(() => this.$el.css({'pointer-events': 'initial'}));
-  }
-
-  removeTarget($target: ElementView) {
-    this.targets = this.targets?.filter(t => t.$el != $target);
+    }, 800).promise.then(() => this.$el.css({'pointer-events': 'initial'}));
   }
 }
