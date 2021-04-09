@@ -88,6 +88,7 @@ footer { height: 320px; position: relative; padding-top: 80px; }
 .next-section {
   display: none;
   width: max-content; // Firefox doesn't support fit-content...
+  max-width: 100%;
   margin: 0 auto;
   transition: transform .2s, filter .2s;
   &:hover, &:focus { transform: scale(1.05); filter: drop-shadow(0 4px 12px rgba(black, 25%)); }

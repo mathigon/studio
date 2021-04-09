@@ -48,10 +48,9 @@ x-course-sidebar(style=`background-color: ${course.color}`)
     button.footer-link.s-hide(data-modal="glossary-search")
       x-icon(name="glossary")
       .tooltip= __('Glossary')
-    if req.user
-      button.footer-link(data-modal="reset")
-        x-icon(name="reset")
-        .tooltip=__('Reset Progress')
+    button.footer-link(data-modal="reset")
+      x-icon(name="reset")
+      .tooltip=__('Reset Progress')
   if config.siteName !== 'Mathigon'
     a.sidebar-banner(href="https://mathigon.org" target="_blank")= __('Powered by Mathigon')
 
@@ -95,15 +94,14 @@ if config.courses.feedback
       x-icon(name="form-check" size=120)
       h2.m-blue= __('Thanks for your feedback!')
 
-if req.user
-  x-modal#reset
-    button.close: x-icon(name="close" size=24)
-    .modal-body
-      h2 #[x-icon(name="reset" size=32)] #{__('Reset Progress')}
-      p(style="margin: 0")= __('This will delete your progress and chat data for all chapters in this course, and cannot be undone!')
-      form(action=`/course/${course.id}/reset` method="POST")
-        input(type='hidden' name='_csrf' value=_csrf)
-        p.btn-row: button.btn.btn-red(type='submit')= __('Reset Now')
+x-modal#reset
+  button.close: x-icon(name="close" size=24)
+  .modal-body
+    h2 #[x-icon(name="reset" size=32)] #{__('Reset Progress')}
+    p(style="margin: 0")= __('This will delete your progress and chat data for all chapters in this course, and cannot be undone!')
+    form(action=`/course/${course.id}/reset` method="POST")
+      input(type='hidden' name='_csrf' value=_csrf)
+      p.btn-row: button.btn.btn-red(type='submit')= __('Reset Now')
 
 x-modal#glossary-search(data-display="flex")
   button.close: x-icon(name="close" size=24)
