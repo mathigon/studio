@@ -31,3 +31,4 @@ export type {PlayBtn, PlayToggle} from './frontend/components/video/play-btn';
 export type {Video} from './frontend/components/video/video';
 
 export {confetti} from './frontend/components/confetti/confetti';
+export {Draggable} from './frontend/components/draggable/draggable';

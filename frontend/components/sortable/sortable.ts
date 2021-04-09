@@ -5,7 +5,9 @@
 
 
 import {cumulative, last, sortBy, total} from '@mathigon/core';
-import {Browser, CustomElementView, Draggable, register} from '@mathigon/boost';
+import {Browser, CustomElementView, register} from '@mathigon/boost';
+import {Bounds} from '@mathigon/euclid';
+import {Draggable} from '../draggable/draggable';
 import {Step, StepComponent, UserData} from '../step/step';
 
 
@@ -19,7 +21,7 @@ function position(items: Item[], except?: Item) {
   const cumHeights = cumulative(items.map(s => s.h + 10));
   for (const [i, item] of items.entries()) {
     // TODO Animate this
-    item.drag.height = last(cumHeights);
+    item.drag.bounds = new Bounds(0, 0, 0, last(cumHeights));
     if (item !== except) item.drag.setPosition(0, cumHeights[i - 1] || 0);
   }
 }
@@ -36,7 +38,7 @@ export class Sortable extends CustomElementView implements StepComponent {
 
   ready() {
     this.items = this.children.map($i => ({
-      drag: new Draggable($i, this, {moveX: false, useTransform: true}),
+      drag: new Draggable($i, {moveX: false, useTransform: true}),
       index: +$i.data.index!,
       h: 0
     }));
