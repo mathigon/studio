@@ -138,7 +138,7 @@ export class Draggable extends EventTarget {
   /** Sets the position of the element. */
   setPosition(x: number, y: number) {
     let p = new Point(this.options.moveX ? x : 0, this.options.moveY ? y : 0);
-    if (this.bounds) p = p.clamp(this.bounds, this.options.margin ?? 0);
+    if (this.bounds && this.options.withinBounds) p = p.clamp(this.bounds, this.options.margin ?? 0);
     p = p.round(this.options.snap || 1);
     if (this.options.round) p = this.options.round(p);
 
