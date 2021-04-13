@@ -155,12 +155,13 @@ export class Draggable extends EventTarget {
     this.trigger('move', {posn: p});
   }
 
-  resetPosition() {
+  async resetPosition(duration = 250) {
     const initial = this.position;
     this.$el.css({'pointer-events': 'none'});
-    animate((p: number) => {
+    await animate((p: number) => {
       const currentPos = Point.interpolate(initial, this.startPos, p);
       this.setPosition(currentPos.x, currentPos.y);
-    }, 800).promise.then(() => this.$el.css({'pointer-events': 'initial'}));
+    }, duration).promise;
+    this.$el.css({'pointer-events': 'initial'});
   }
 }
