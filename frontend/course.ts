@@ -110,6 +110,7 @@ export class Course extends CustomElementView {
 
     this.$footer.$('.skip')!.on('click', () => this.nextStep());
     this.$footer.$('.show-all')!.on('click', () => this.complete());
+    this.$footer.show();  // We hide the footer initially, to prevent CLS.
 
     this.isReady = true;
     setTimeout(() => this.addClass('ready'));

@@ -83,7 +83,7 @@ h1 { font-weight: 600; margin: 112px 0 64px; @include theme(color, black, white)
 // -----------------------------------------------------------------------------
 // Course Footer
 
-footer { height: 320px; position: relative; padding-top: 80px; }
+footer { height: 320px; position: relative; padding-top: 80px; display: none; }
 
 .next-section {
   display: none;

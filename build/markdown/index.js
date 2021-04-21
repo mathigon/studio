@@ -103,7 +103,7 @@ async function parseCourse(directory, locale, allLocales = ['en']) {
   const gloss = new Set();
   const bios = new Set();
 
-  const steps = content.split(/\n---+\n/);
+  const steps = content.split(/\n---+\r?\n/);
   const parsed = await Promise.all(steps.map((s, i) => parseStep(s, i, directory, courseId, locale)));
 
   const course = {
