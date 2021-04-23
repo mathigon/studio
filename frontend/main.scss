@@ -141,6 +141,30 @@ img.emoji { width: auto; }
 // -----------------------------------------------------------------------------
 // Alerts and Warnings
 
+.alert {
+  padding: 12px 44px 12px 20px;
+  border-radius: 4px;
+  background: fade($yellow, 40%);
+  position: relative;
+  margin-bottom: 2em;
+
+  &.fail { background: fade($red, 40%); }
+  &.success { background: fade($green, 40%); }
+  p:last-child { margin: 0; }
+
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-weight: 700;
+    padding: 0 13px;
+    font-size: 30px;
+    cursor: pointer;
+    opacity: 0.6;
+    &:hover { opacity: 1;}
+  }
+}
+
 .warning {
   z-index: 900;
   display: block;
