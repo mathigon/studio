@@ -19,7 +19,7 @@ input, button, select, textarea {
 }
 
 input[type="email"], input[type="text"], input[type="password"], input[type="date"], textarea { cursor: text; }
-select { cursor: pointer; }
+select, button { cursor: pointer; }
 
 
 // -----------------------------------------------------------------------------
