@@ -15,8 +15,12 @@
     "groupName": "Tests",
     "automerge": true
   }, {
-    "packagePatterns": ["esbuild", "autoprefixer", "cssnano", "postcss", "sass", "rtlcss"],
-    "groupName": "Build Tools",
+    "packagePatterns": ["autoprefixer", "cssnano", "postcss", "sass", "rtlcss"],
+    "groupName": "CSS Build Tools",
+    "automerge": true
+  },{
+    "packagePatterns": ["jsdom", "marked"],
+    "groupName": "Markdown Parsing",
     "automerge": true
   }, {
     "packagePatterns": ["^@google-cloud"],
