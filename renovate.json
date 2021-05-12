@@ -35,5 +35,5 @@
     "groupName": "Versioning",
     "automerge": true
   }],
-  "ignoreDeps": ["esbuild"]
+  "ignoreDeps": ["esbuild", "mathjax"]
 }
