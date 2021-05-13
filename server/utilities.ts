@@ -50,16 +50,21 @@ export const getCourse = cacheIfProd((courseId: string, locale = 'en'): Course|u
   return course;
 });
 
+function resolve(file: string, base = 'frontend/assets') {
+  const p1 = path.join(PROJECT_DIR, base, file);
+  if (fs.existsSync(p1)) return fs.readFileSync(p1, 'utf-8');
+  const p2 = path.join(STUDIO_DIR, base, file);
+  if (fs.existsSync(p2)) return fs.readFileSync(p2, 'utf-8');
+}
+
 /**
  * On its own, PUG doesn't allow dynamic includes (e.g. for file paths provided
  * in a configuration file). Here, we manually load and insert an external file.
  */
 export const include = cache((file: string, base = 'frontend/assets') => {
-  const p1 = path.join(PROJECT_DIR, base, file);
-  if (fs.existsSync(p1)) return fs.readFileSync(p1, 'utf-8');
-  const p2 = path.join(STUDIO_DIR, base, file);
-  if (fs.existsSync(p2)) return fs.readFileSync(p2, 'utf-8');
-  throw new Error(`Can't find file "${file}" in "${base}".`);
+  const content = resolve(file, base);
+  if (!content) throw new Error(`Can't find file "${file}" in "${base}".`);
+  return content;
 });
 
 /** Merge two YAML files from the studio directory and the project directory. */
@@ -130,18 +135,16 @@ export function findNextSection(course: Course, section: Section) {
 const FILE_NAME_CACHE = new Map<string, string>();
 
 export function cacheBust(file: string) {
-  if (FILE_NAME_CACHE.has(file)) return FILE_NAME_CACHE.get(file)!;
+  // We only cache the result in production, to allow real-time updating.
+  if (IS_PROD && FILE_NAME_CACHE.has(file)) return FILE_NAME_CACHE.get(file)!;
   if (file.startsWith('http')) return file;
 
-  const fileName = path.join(__dirname, '../public', file);
-  if (!fs.existsSync(fileName)) return file;
+  const content = resolve(file, 'public');
+  if (!content) return file;
 
-  const content = fs.readFileSync(fileName);
   const token = crypto.createHash('md5').update(content).digest('hex').slice(0, 8);
   const newFile = file.replace(/\.(\w+)$/g, `.${token}.$1`);
-
-  // We only cache the result in production, to allow real-time updating.
-  if (IS_PROD) FILE_NAME_CACHE.set(file, newFile);
+  FILE_NAME_CACHE.set(file, newFile);
   return newFile;
 }
 
