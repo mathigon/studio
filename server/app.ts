@@ -49,7 +49,7 @@ export class MathigonStudioApp {
     const app = this.app = express();
     app.set('env', ENV);
     app.set('trust_proxy', true);
-    app.set('views', [__dirname + '/templates', PROJECT_DIR + '/server/templates']);
+    app.set('views', [PROJECT_DIR + '/server/templates', __dirname + '/templates']);
     app.set('view engine', 'pug');
     if (ENV === 'development') app.set('json spaces', 2);
     app.disable('x-powered-by');
