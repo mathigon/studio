@@ -144,12 +144,12 @@ img.emoji { width: auto; }
 .alert {
   padding: 12px 44px 12px 20px;
   border-radius: 4px;
-  background: fade($yellow, 40%);
+  background: rgba($yellow, 40%);
   position: relative;
   margin-bottom: 2em;
 
-  &.fail { background: fade($red, 40%); }
-  &.success { background: fade($green, 40%); }
+  &.fail { background: rgba($red, 40%); }
+  &.success { background: rgba($green, 40%); }
   p:last-child { margin: 0; }
 
   .close {
