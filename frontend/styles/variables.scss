@@ -5,6 +5,7 @@
 
 
 @use "sass:map";
+@use "sass:math";
 
 // Rainbow
 $red:    #cd0e66 !default;
@@ -110,7 +111,7 @@ $icons: (
   width: $size;
   height: $size;
   line-height: $size;
-  border-radius: $size/2;
+  border-radius: math.div($size, 2);
 }
 
 @mixin fillParent(){
