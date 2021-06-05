@@ -10,6 +10,7 @@ const courses = fs.readdirSync(CONTENT_DIR)
     .filter(id => id !== 'shared' && !id.includes('.') && !id.startsWith('_'));
 
 new MathigonStudioApp()
+    .secure()
     .setup({sessionSecret: 'hypatia'})
     .get('/', (req, res) => res.render('home.pug', {courses}))
     .course({})

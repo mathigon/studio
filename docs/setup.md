@@ -20,6 +20,7 @@ extensions or customisations required:
 import {MathigonStudioApp} from '@mathigon/studio/server/app';
 
 const studio = new MathigonStudioApp()
+    .secure()  // Redirect all HTTP requests to HTTPS
     .setup({sessionSecret: 'archimedes'})  // Setup Express App
     .get('/', (req, res) => res.render('home.pug'))  // Custom routes
     .get('/courses', (req, res) => res.render('courses.pug'))

@@ -152,6 +152,17 @@ export class MathigonStudioApp {
     return this;
   }
 
+  secure() {
+    this.app.use((req, res, next) => {
+      // See https://cloud.google.com/appengine/docs/flexible/nodejs/reference/request-headers
+      if (req.hostname !== 'localhost' && req.get('X-Forwarded-Proto') === 'http') {
+        return res.redirect(`https://${req.hostname}${req.url}`);
+      }
+      next();
+    });
+    return this;
+  }
+
 
   // ---------------------------------------------------------------------------
   // Helper Functions
