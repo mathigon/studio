@@ -36,6 +36,7 @@ Here is a breakdown of all the components included in this repository:
 [![npm](https://img.shields.io/npm/v/@mathigon/studio)](https://www.npmjs.com/package/@mathigon/studio)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mathigon/studio)
 ![GitHub issues](https://img.shields.io/github/issues-raw/mathigon/studio)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmathigon%2Fstudio.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmathigon%2Fstudio?ref=badge_shield)
 
 We welcome any contributions to Mathigon Studio: from bug fixes to writing more documentations,
 adding new translations, or developing entirely new features. If you find any bugs or errors,
@@ -52,3 +53,7 @@ If you want to work for Mathigon, visit our [careers page](https://mathigon.org/
 [![Twitter Follow](https://img.shields.io/twitter/follow/MathigonOrg?style=social)](https://twitter.com/intent/follow?screen_name=MathigonOrg)
 
 © Mathigon 2016–2021, All rights reserved
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmathigon%2Fstudio.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmathigon%2Fstudio?ref=badge_large)
