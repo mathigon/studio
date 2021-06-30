@@ -10,6 +10,8 @@ header {
   $hover-grey: mix($grey, $medium-grey, 60%);
 
   position: fixed;
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   top: 0;
   height: 44px;
@@ -27,13 +29,12 @@ header {
   }
 
   #logo {
-    float: left;
     padding: 4px 4px 4px 16px;
     margin-right: -12px;
     box-sizing: border-box;
     svg, img { height: 36px; width: auto; float: left; }
     span { line-height: 36px; display: inline-block; float: left; margin: 0 8px; }
-    @media (max-width: 420px) { svg:last-child, img:last-child { display: none; } }
+    @media (max-width: 480px) { svg:last-child, img:last-child { display: none; } }
   }
 
   #skip-nav {
@@ -45,10 +46,11 @@ header {
     background: $grey;
     border: 2px solid #181824;
     border-radius: 30px;
+    z-index: 9999;
     html.is-tabbing &:focus { left: 2px; }
   }
 
-  nav { float: right; display: flex; }
+  nav { display: flex; }
 
   .nav-link {
     padding: 0 16px;
@@ -101,12 +103,12 @@ header {
     .form-checkbox { float: right; margin: 8px 2px 0 12px; padding-left: 24px; }
   }
 
-  @media (max-width: 680px) {
+  @media (max-width: 840px) {
     .nav-link { padding: 0 12px; }
     .nav-link.narrow { padding: 0 10px; }
     .nav-link x-icon { margin-right: 6px; }
   }
-  @media (max-width: 620px) {
+  @media (max-width: 760px) {
     .nav-item > .nav-link {   padding: 4px 8px 4px; height: 36px; }
     .nav-item > .nav-link x-icon { display: block; margin: 0 auto; width: 24px; height: 24px; }
     .nav-text { display: block; line-height: 12px; font-size: 10px; text-align: center; }
