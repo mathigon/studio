@@ -111,4 +111,12 @@ and can be useful for screen-diffing any changes.
 
 ## Translations
 
-TODO: Write docs for translations
+You can serve translated versions you your courses using subdomains, e.g. `fr.domain.com`. These will need to be configuered manually in your DNS and your hosting provider. As a fallback or for local testing, you can also use the `?hl=fr` query parameter at the end of any URL. [Here is a list](../server/data/locales.yaml) of all supported locales.
+
+You need to specify a list of all locales you want to support in the `config.yaml` file for your project, using the `locales:` key.
+
+The [example repo](../docs/example) contains a German translation: it simply is a translated copy of all course markdown files in the `translations/de/course` directory. The directory naming is designed to work with [gitlocalize.com](https://gitlocalize.com), to make translations much easier or even generate them automatically.
+
+In pug templates, you can use the `__("hello")` function to translate strings that appear around the UI. If you run a local server, all strings defined like this will automatically be added to a `strings.yaml` file in your repo, which should be committed. You can also use parameters for dynamic data, e.g. `__("hello, $0", name)`.
+
+The `npm run mgon-build --translate --key service-account.json` script goes through all items in `strings.yaml` and auto-translates them using the Google Translate API. You need to provide a Google API Service Account file using the `--key` parameter. Of course, after autogenerating, the translated strings should be reviewed by a human translator. This repo already contains [translations](../translations) for all the built-in strings.
