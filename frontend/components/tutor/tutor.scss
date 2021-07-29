@@ -6,6 +6,10 @@
 
 @import "../../styles/variables";
 
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
 x-tutor {
   display: block;
   font-size: 16px;
@@ -78,7 +82,7 @@ x-tutor {
     display: block;
     float: right;
     margin: 8px 2px -28px 0;
-    animation: adjust-hue .7s infinite linear;
+    animation: spin .7s infinite linear;
   }
 
   .chat-footer {
