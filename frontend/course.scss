@@ -168,3 +168,40 @@ footer { height: 320px; position: relative; padding-top: 80px; display: none; }
   main { padding: 0 20px !important; margin: 0 !important; }
   article { max-width: none !important; }
 }
+
+
+// -----------------------------------------------------------------------------
+// Webview Styles
+
+@mixin paddingLeftRight($p){
+  padding: 0 calc(#{$p} + env(safe-area-inset-right)) 0 calc(#{$p} + env(safe-area-inset-left));
+}
+
+@mixin paddingBottom($top, $right, $bottom: $top, $left: $right){
+  padding: $top $right calc(#{$bottom} + env(safe-area-inset-bottom)) $left;
+}
+
+html.webview {
+  main { @include paddingLeftRight(40px); }
+  .page-background { left: 0; top: 0; }
+  .skip-step { @include paddingBottom(0px, 40px, 24px); }
+  .steps { min-height: calc(100vh - 620px); }
+
+  .reveal-banner {
+    left: 0;
+    top: 16px;
+    padding-left: calc(12px + env(safe-area-inset-left));
+  }
+
+  @media screen and (max-width: $browser-small) {
+    main { @include paddingLeftRight(24px); }
+
+    .skip-step {
+      @include theme(background, #eee, #444);
+      text-align: left;
+      margin: 0 calc(-24px - env(safe-area-inset-right)) -6px calc(-24px - env(safe-area-inset-left));
+      width: auto;
+      @include paddingBottom(14px, 90px, 14px, 24px);
+    }
+  }
+}

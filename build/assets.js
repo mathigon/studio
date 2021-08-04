@@ -116,7 +116,7 @@ const externalPlugin = {
   }
 };
 
-async function bundleScripts(srcPath, destPath, minify = false, watch = false, name = undefined) {
+async function bundleScripts(srcPath, destPath, minify = false, watch = false, name = undefined, env = 'WEB') {
   if (destPath.endsWith('.ts')) destPath = destPath.replace('.ts', '.js');
   if (srcPath.endsWith('.d.ts')) return;  // Skip declaration files
 
@@ -124,7 +124,7 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, n
 
   const result = await esbuild.build({
     entryPoints: [srcPath],
-    define: {ENV: '"WEB"'},  // could also be '"MOBILE"'
+    define: {ENV: `"${env}"`},  // could also be '"MOBILE"'
     bundle: true,
     minify,
     globalName: name,

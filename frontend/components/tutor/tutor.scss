@@ -37,7 +37,7 @@ x-tutor {
     flex-direction: column;
     z-index: 301;
     max-height: calc(100vh - 44px);
-    .webview & { max-height: 100vh; }
+    html.webview & { max-height: 100vh; }
   }
 
   .chat-header {
@@ -132,5 +132,16 @@ x-tutor {
     .source { font-size: 10px; margin-top: 2px; color: rgba(white, 50%); text-align: right; }
     a { transition: color .2s; }
     a:hover { color: white; }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  html.webview & {
+    // TODO What if there is an external keyboard?
+    .chat-footer:not(.focus) {
+      border-bottom: env(safe-area-inset-bottom) solid #d0d3da;
+      transition: border-bottom-width .3s;  // iOS Keyboard Animation Duration
+    }
+    .msg.archie { border-radius: 28px; padding: 8px; }
   }
 }
