@@ -34,7 +34,6 @@ header {
     box-sizing: border-box;
     svg, img { height: 36px; width: auto; float: left; }
     span { line-height: 36px; display: inline-block; float: left; margin: 0 8px; }
-    @media (max-width: 480px) { svg:last-child, img:last-child { display: none; } }
   }
 
   #skip-nav {
@@ -180,11 +179,12 @@ x-modal#language { width: 540px; user-select: none; }
   .search-img {
     width: 48px;
     height: 48px;
-    background: black;
+    background: black center;
     background-size: cover;
     border-radius: 4px;
     float: left;
     margin-right: 10px;
+    box-shadow: inset 0 0 0 1px rgba(black, 20%);
   }
 
   .search-subtitle { font-size: 14px; color: $text-light; margin-top: 4px; @include ellipsis; }
@@ -209,6 +209,6 @@ x-modal#language { width: 540px; user-select: none; }
     padding-right: 32px;
     color: $text-light;
     @media screen and (max-width: 420px) { padding: 0; }
-    svg { width: 80px; margin: 0 auto; fill: $text-light; }
+    x-icon { display: block; margin: 0 auto; fill: $text-light; }
   }
 }
