@@ -63,9 +63,9 @@ const STUDIO_STRINGS = IS_PROD ? {} : loadYAML(STUDIO_DIR + '/translations/strin
 
 // We load the files with all translated UI strings.
 const TRANSLATIONS: Record<string, Record<string, string>> = {};
-for (const locale of Object.keys(AVAILABLE_LOCALES)) {
-  if (locale === 'en') continue;
-  TRANSLATIONS[locale] = loadCombinedYAML(`translations/${locale}/messages.yaml`) as Record<string, string>;
+for (const locale of AVAILABLE_LOCALES) {
+  if (locale.id === 'en') continue;
+  TRANSLATIONS[locale.id] = loadCombinedYAML(`translations/${locale.id}/strings.yaml`) as Record<string, string>;
 }
 
 export function translate(locale: string, str: string, args: string[] = []) {
