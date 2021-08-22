@@ -131,7 +131,7 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, n
     platform: 'browser',
     format: 'iife',
     plugins: [pugPlugin, externalPlugin],
-    external: ['vue'],
+    external: ['vue', 'path', 'fs'],
     target: ['es2016'],
     metafile: watch,
     write: false,
