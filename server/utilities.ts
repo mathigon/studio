@@ -62,7 +62,7 @@ function resolve(file: string, base = 'frontend/assets') {
  * in a configuration file). Here, we manually load and insert an external file.
  */
 export const include = cache((file: string, base = 'frontend/assets') => {
-  const content = resolve(file, base);
+  const content = resolve(file, base as string);
   if (!content) throw new Error(`Can't find file "${file}" in "${base}".`);
   return content;
 });

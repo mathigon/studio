@@ -91,8 +91,8 @@ export class MathigonStudioApp {
     this.app.use(cookieParser(options.sessionSecret));
 
     const limit = options?.maxBodySize || '400kb';
-    this.app.use(bodyParser.json({limit}));
-    this.app.use(bodyParser.urlencoded({extended: false, limit}));
+    this.app.use(bodyParser.json({limit}) as express.RequestHandler);
+    this.app.use(bodyParser.urlencoded({extended: false, limit}) as express.RequestHandler);
 
     const SESSION_COOKIE = {
       domain: IS_PROD ? CONFIG.domain : undefined,
