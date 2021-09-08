@@ -50,7 +50,7 @@ export function isInEU(countryCode: string) {
  * @param fallback {string}
  */
 export function getLocale(req: express.Request, fallback = 'en'): Locale {
-  return LOCALES['' + req.query.hl] || LOCALES[req.subdomains[0]] || LOCALES[fallback];
+  return LOCALES['' + req.query.hl] || LOCALES[req.subdomains[req.subdomains.length - 1]] || LOCALES[fallback];
 }
 
 
