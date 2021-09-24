@@ -88,8 +88,8 @@ function getNextCourse(directory) {
 function getPrevCourse(directory) {
   // Find the previous course.
   const courseId = path.basename(directory);
-  const allCourses = glob.sync('!(shared|_*|*.*)', {cwd: path.join(directory, '../')})
-  const courseIndex = allCourses.indexOf(courseId)
+  const allCourses = glob.sync('!(shared|_*|*.*)', {cwd: path.join(directory, '../')});
+  const courseIndex = allCourses.indexOf(courseId);
   if (courseIndex > 0) {
     return allCourses[(courseIndex - 1) % allCourses.length];
   } else {
