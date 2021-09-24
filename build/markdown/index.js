@@ -85,6 +85,18 @@ function getNextCourse(directory) {
   return allCourses[(allCourses.indexOf(courseId) + 1) % allCourses.length];
 }
 
+function getPrevCourse(directory) {
+  // Find the previous course.
+  const courseId = path.basename(directory);
+  const allCourses = glob.sync('!(shared|_*|*.*)', {cwd: path.join(directory, '../')})
+  const courseIndex = allCourses.indexOf(courseId)
+  if (courseIndex > 0) {
+    return allCourses[(courseIndex - 1) % allCourses.length];
+  } else {
+    return allCourses[0];
+  }
+}
+
 
 // -----------------------------------------------------------------------------
 // Bundle Course Markdown
@@ -109,6 +121,7 @@ async function parseCourse(directory, locale, allLocales = ['en']) {
   const course = {
     id: courseId, locale,
     nextCourse: parsed[0].next || getNextCourse(directory),
+    prevCourse: getPrevCourse(directory),
     title: parsed[0].courseTitle || 'Untitled Course',
     description: parsed[0].description || '',
     color: parsed[0].color || '#2274e8',

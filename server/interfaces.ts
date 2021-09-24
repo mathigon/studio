@@ -37,6 +37,7 @@ export interface Course {
   description: string;
   color: string;
   nextCourse: string;
+  prevCourse: string;
 
   locale: string;
   availableLocales: string[];

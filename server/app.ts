@@ -15,7 +15,7 @@ import * as path from 'path';
 import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './i18n';
 import {search, SEARCH_DOCS} from './search';
 import {CourseRequestOptions, ServerOptions} from './interfaces';
-import {cacheBust, CONFIG, CONTENT_DIR, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities';
+import {cacheBust, CONFIG, CONTENT_DIR, ENV, findNextSection, findPrevSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities';
 
 
 declare global {
@@ -248,9 +248,10 @@ export class MathigonStudioApp {
       const response = await options.getProgressData?.(req, course, section);
       const progressJSON = JSON.stringify(response?.data || {});
       const nextUp = findNextSection(course, section);
+      const prevSection = findPrevSection(course, section)
 
       res.locals.availableLocales = course.availableLocales.map(l => LOCALES[l]);
-      res.render('course', {course, section, lighten, progressJSON, nextUp});
+      res.render('course', {course, section, lighten, progressJSON, nextUp, prevSection});
     });
 
     this.post('/course/:course/:section', async (req, res, next) => {
