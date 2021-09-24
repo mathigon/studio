@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node --script-mode
+#!/usr/bin/env -S ts-node --script-mode
 
 // A super really node server that can be used in development using mgon-serve.
 
