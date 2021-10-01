@@ -71,9 +71,9 @@
     "tape": "5.3.1"
   },
   "optionalDependencies": {
-    "@google-cloud/text-to-speech": "3.3.0",
-    "@google-cloud/secret-manager": "3.10.0",
-    "@google-cloud/translate": "6.2.7",
+    "@google-cloud/text-to-speech": "3.3.1",
+    "@google-cloud/secret-manager": "3.10.1",
+    "@google-cloud/translate": "6.3.0",
     "fluent-ffmpeg": "2.1.2",
     "license-checker": "25.0.1",
     "puppeteer": "10.2.0"
