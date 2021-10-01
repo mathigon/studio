@@ -49,7 +49,7 @@
     "js-yaml": "4.1.0",
     "jsdom": "17.0.0",
     "lusca": "1.7.0",
-    "marked": "3.0.2",
+    "marked": "3.0.4",
     "mathjax": "3.1.2",
     "postcss": "8.3.8",
     "postcss-inline-svg": "5.0.0",
