@@ -11,7 +11,7 @@ const entities = require('html-entities');
 
 const {Expression} = require('@mathigon/hilbert');
 const {makeTexPlaceholder} = require('./mathjax');
-const {warning} = require('../utilities');
+const {CONFIG, warning} = require('../utilities');
 
 
 // -----------------------------------------------------------------------------
@@ -115,6 +115,10 @@ module.exports.getRenderer = function(metadata, directory, locale='en') {
     if (href.startsWith('pill:')) {
       const colour = href.slice(5);
       return `<strong class="pill ${colour}">${text}</strong>`;
+    }
+
+    if (href.startsWith('#') || href.includes(CONFIG.domain)) {
+      return `<a href="${href}">${text}</a>`;
     }
 
     const href1 = entities.decode(href);
