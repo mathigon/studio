@@ -6,7 +6,7 @@
   "repository": "mathigon/studio",
   "bugs": "https://github.com/mathigon/studio/issues",
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "bin": {
     "mgon-build": "build/index.js",
