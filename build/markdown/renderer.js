@@ -117,16 +117,13 @@ module.exports.getRenderer = function(metadata, directory, locale='en') {
       return `<strong class="pill ${colour}">${text}</strong>`;
     }
 
-    if (href.startsWith('#') || href.includes(CONFIG.domain)) {
-      return `<a href="${href}">${text}</a>`;
-    }
-
     const href1 = entities.decode(href);
     if (href1.startsWith('->')) {
       return `<x-target class="step-target pill" to="${href1.slice(2).replace(/_/g, ' ')}">${text}</x-target>`;
     }
 
-    return `<a href="${href}" target="_blank">${text}</a>`;
+    const newWindow = !href.startsWith('#') && !href.includes(CONFIG.domain)
+    return `<a href="${href}"${newWindow ? ' target="_blank"' : ''}>${text}</a>`;
   };
 
   renderer.codespan = (code) => {
