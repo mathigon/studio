@@ -122,7 +122,7 @@ module.exports.getRenderer = function(metadata, directory, locale='en') {
       return `<x-target class="step-target pill" to="${href1.slice(2).replace(/_/g, ' ')}">${text}</x-target>`;
     }
 
-    const newWindow = !href.startsWith('#') && !href.includes(CONFIG.domain)
+    const newWindow = !href.startsWith('#') && !href.includes(CONFIG.domain);
     return `<a href="${href}"${newWindow ? ' target="_blank"' : ''}>${text}</a>`;
   };
 
