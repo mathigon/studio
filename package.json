@@ -47,7 +47,7 @@
     "html-entities": "2.3.2",
     "html-minifier": "4.0.0",
     "js-yaml": "4.1.0",
-    "jsdom": "17.0.0",
+    "jsdom": "18.0.1",
     "lusca": "1.7.0",
     "marked": "3.0.4",
     "mathjax": "3.1.2",
