@@ -4,6 +4,7 @@
 // =============================================================================
 
 
+import * as crypto from 'crypto';
 import * as express from 'express';
 import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
@@ -12,10 +13,12 @@ import * as lusca from 'lusca';
 import * as session from 'express-session';
 import * as path from 'path';
 
-import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './i18n';
+import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './utilities/i18n';
 import {search, SEARCH_DOCS} from './search';
 import {CourseRequestOptions, ServerOptions} from './interfaces';
-import {cacheBust, CONFIG, CONTENT_DIR, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities';
+import {cacheBust, CONFIG, CONTENT_DIR, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities/utilities';
+import {User, UserDocument} from './models/user';
+import setupAuthEndpoints from './accounts';
 
 
 declare global {
@@ -25,17 +28,28 @@ declare global {
       country: string;
       locale: Locale;
       __: (str: string) => string;
-      // user?: User;
-      // tmpUser: string;
-      // session?: {auth?: {user?: string}};
+      user?: UserDocument;
+      tmpUser: string;
     }
   }
 }
+
+declare module "express-session" {
+  interface SessionData {
+    auth?: {user?: string};
+  }
+}
+
 
 const STATUS_CODES: Record<string, string> = {
   401: 'You don’t have access to this page,',
   404: 'This page doesn’t exist.',
   default: 'Something went wrong.'
+};
+
+const SESSION_COOKIE = {
+  domain: IS_PROD ? CONFIG.domain : undefined,
+  maxAge: 1000 * 60 * 60 * 24 * 60  // Two months, in ms
 };
 
 
@@ -94,10 +108,6 @@ export class MathigonStudioApp {
     this.app.use(bodyParser.json({limit}) as express.RequestHandler);
     this.app.use(bodyParser.urlencoded({extended: false, limit}) as express.RequestHandler);
 
-    const SESSION_COOKIE = {
-      domain: IS_PROD ? CONFIG.domain : undefined,
-      maxAge: 1000 * 60 * 60 * 24 * 60  // Two months, in ms
-    };
 
     this.app.use(session({
       name: 'session',
@@ -223,6 +233,33 @@ export class MathigonStudioApp {
     });
 
     return this;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Setup Authentication and Dashboard Routes
+
+  accounts() {
+    this.app.use(async (req, res, next) => {
+      if (!req.session.auth) req.session.auth = {};
+
+      if (req.session.auth.user) {
+        req.user = await User.findById(req.session.auth.user) || undefined;
+      } else if (req.cookies.tmp_user) {
+        req.tmpUser = req.cookies.tmp_user;
+      } else {
+        req.tmpUser = crypto.randomBytes(16).toString('hex');
+        res.cookie('tmp_user', req.tmpUser, SESSION_COOKIE);
+      }
+
+      next();
+    });
+
+    setupAuthEndpoints(this);
+
+    this.get('/dashboard', async (req, res) => {
+      if (!req.user) return res.redirect('/login');
+
+    });
   }
 
 

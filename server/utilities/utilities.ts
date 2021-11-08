@@ -11,7 +11,7 @@ import * as crypto from 'crypto';
 import * as yaml from 'js-yaml';
 
 import {cache, Color, deepExtend} from '@mathigon/core';
-import {Config, Course, Section} from './interfaces';
+import {Config, Course, Section} from '../interfaces';
 
 
 export const STUDIO_DIR = path.join(__dirname, '../');
@@ -126,6 +126,44 @@ export function findNextSection(course: Course, section: Section) {
   if (nextSection) return {section: nextSection};
   const nextCourse = getCourse(course.nextCourse, course.locale)!;
   return {course: nextCourse, section: nextCourse.sections[0]};
+}
+
+/** Returns the last value in an arry for which a callback returns true. */
+export function findLastIndex<T>(array: T[], callback: (value: T, i: number) => boolean) {
+  for (let i = array.length - 1; i >= 0; i--) {
+    if (callback(array[i], i)) return i;
+  }
+  return -1;
+}
+
+export function age(birthDate: Date) {
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age = age - 1;
+  }
+  return age;
+}
+
+export function dateString(date: Date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return [year, month, day].join('-');
+}
+
+/** Returns the date a given (integer) number of days ago. */
+export function pastDate(daysBack: number) {
+  const date = new Date();
+  date.setDate(date.getDate() - daysBack);
+  return date;
+}
+
+export function host(req: express.Request) {
+  const host = req.headers.host || '';
+  const protocol = host.includes('localhost') ? 'http' : 'https';
+  return `${protocol}://${host}`;
 }
 
 

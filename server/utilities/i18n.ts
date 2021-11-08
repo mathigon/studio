@@ -22,7 +22,7 @@ const EU_COUNTRIES = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES',
   'RO', 'SI', 'SK', 'FI', 'SE', 'GB'];
 
 // TODO Filter only valid locales!
-export const AVAILABLE_LOCALES = CONFIG.locales.map(l => LOCALES[l]);
+export const AVAILABLE_LOCALES = CONFIG.locales.map((l: string) => LOCALES[l]);
 
 
 // -----------------------------------------------------------------------------

@@ -1,11 +1,11 @@
-extends /_layout
+extends _layout
 
 block vars
-  - var title = 'Mathigon';
+  - var title = config.siteName;
 
 block main
   .container.narrow
     h1 #{config.siteName} Development Server
     for c in courses || []
       +course(c)
-    include /_footer
+    include _footer

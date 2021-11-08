@@ -2,7 +2,7 @@ include _mixins
 
 header
   block logo
-    a#logo(href="/" title=config.siteName)
+    a#logo(href=(user ? '/dashboard' : '/') title=config.siteName)
       != include(config.header.logo)
       if config.header.titleString
         span= config.header.titleString
