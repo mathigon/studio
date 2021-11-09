@@ -43,7 +43,9 @@ ibm:
   name: IBM
   authorizeUrl: https://iam.cloud.ibm.com/identity/authorize
   accessUrl: https://iam.cloud.ibm.com/identity/token
+  profileUrl: https://user-management.cloud.ibm.com/v2/accounts/{account_id}/users/{iam_id}
   profileMethod: GET
+  scope: user-management.user.update
   profile:
     id: ${user_id}
     firstName: ${firstname}

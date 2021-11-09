@@ -351,7 +351,7 @@ export default function setupAuthEndpoints(app: MathigonStudioApp) {
     redirect(req, res, response, req.user ? '/settings' : '/login');
   });
 
-  app.post('/profile/privacy', async (req, res) => {
+  app.post('/profile/accept-policies', async (req, res) => {
     await acceptPolicies(req);
     res.send('ok');
   });

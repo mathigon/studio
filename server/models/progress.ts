@@ -49,7 +49,7 @@ export interface ProgressDocument extends ProgressBase, Document {
 }
 
 interface ProgressModel extends Model<ProgressDocument> {
-  lookup: (req: express.Request, courseId: string) => Promise<ProgressDocument|undefined>;
+  lookup: (req: express.Request, courseId: string, createNew?: boolean) => Promise<ProgressDocument|undefined>;
   delete: (req: express.Request, courseId: string) => Promise<boolean>;
   getUserData: (userId: string) => Promise<UserProgress>;
   getRecentCourses: (userId: string) => Promise<string>;
@@ -176,9 +176,11 @@ ProgressSchema.methods.getJSON = async function(sectionId?: string) {
   });
 };
 
-ProgressSchema.statics.lookup = function(req: express.Request, courseId: string) {
+ProgressSchema.statics.lookup = async function(req: express.Request, courseId: string, createNew = false) {
   const userId = req.user?.id || req.tmpUser || '';
-  return Progress.findOne({userId, courseId}).exec();
+  if (!userId) return undefined;
+  const progress = await Progress.findOne({userId, courseId}).exec();
+  return createNew ? progress || new Progress({userId, courseId}) : progress;
 };
 
 ProgressSchema.statics.delete = async function(req: express.Request, courseId: string) {

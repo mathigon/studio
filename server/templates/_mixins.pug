@@ -1,7 +1,7 @@
-mixin course(id, progress)
+mixin course(id)
   // progressData is a global variable that contains all student course progress
   - var course = getCourse(id, locale.id)
-  - var progress = progress || (progressData ? progressData[id] : undefined)
+  - var p = progress ? progress[id] : undefined
   .course(lang=(course.locale !== locale.id ? course.locale : undefined))
     .course-img(style=`background-color: ${course.color}; background-image: url(${course.icon || course.hero});`)
     h3
@@ -16,7 +16,7 @@ mixin course(id, progress)
           .tooltip= __('Under construction')
       else
         a.course-section(href=section.url)
-          x-progress(r=10 p=(progress ? progress.getSectionProgress(section) : 0) style=`color: ${course.color}`)
+          x-progress(r=10 p=(p ? p.getSectionProgress(section) : 0) style=`color: ${course.color}`)
           | #{section.title}
 
 mixin flash(messages)

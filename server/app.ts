@@ -18,6 +18,7 @@ import {search, SEARCH_DOCS} from './search';
 import {CourseRequestOptions, ServerOptions} from './interfaces';
 import setupAuthEndpoints from './accounts';
 import {getMongoStore} from './utilities/mongodb';
+import {OAUTHPROVIDERS} from './utilities/oauth';
 import {cacheBust, CONFIG, CONTENT_DIR, COURSES, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust, safeToJson} from './utilities/utilities';
 import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './utilities/i18n';
 import {User, UserDocument} from './models/user';
@@ -142,7 +143,8 @@ export class MathigonStudioApp {
         country: req.country, locale: req.locale, __: req.__, env: ENV, req,
         availableLocales: AVAILABLE_LOCALES, config: CONFIG, include,
         href: href.bind(undefined, req), basedir: __dirname + '/templates',
-        search: {docs: SEARCH_DOCS}, showCookieConsent, getCourse, cacheBust
+        search: {docs: SEARCH_DOCS}, showCookieConsent, getCourse, cacheBust,
+        oAuthProviders: OAUTHPROVIDERS
       });
 
       next();
@@ -306,6 +308,8 @@ export class MathigonStudioApp {
     });
 
     this.post('/course/:course/:section', async (req, res, next) => {
+      if (!CONFIG.accounts.enabled) return res.status(200).send('ok');
+
       const course = getCourse(req.params.course, req.locale.id);
       const section = course?.sections.find(s => s.id === req.params.section);
       if (!course || !section) return next();
@@ -313,16 +317,20 @@ export class MathigonStudioApp {
       const changes = safeToJson<ChangeData>(req.body.data || '');
       if (!changes) return res.status(400).send(STATUS_CODES[400]);
 
-      const progress = await Progress.lookup(req, course.id);
-      const newScoreCount = progress?.updateData(section.id, changes);
+      const progress = (await Progress.lookup(req, course.id, true))!;
+      const newScoreCount = progress.updateData(section.id, changes);
+      await progress.save();
 
       if (req.user) CourseAnalytics.track(req.user.id, newScoreCount);  // async
       res.status(200).send('ok');
     });
 
     this.post('/course/:course/reset', async (req, res, next) => {
+      if (!CONFIG.accounts.enabled) return res.status(200).send('ok');
+
       const course = getCourse(req.params.course, req.locale.id);
       if (!course) return next();
+
       const response = await Progress.delete(req, course.id);
       res.status(response ? 200 : 400).end();
     });

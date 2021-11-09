@@ -30,6 +30,7 @@ interface OAuthProfile {
 }
 
 interface OAuthConfig {
+  id: string;
   title: string;
   authorizeUrl: string;
   accessUrl: string;
@@ -42,8 +43,11 @@ interface OAuthConfig {
 }
 
 // Copy client secrets from secrets.yaml to oauth.yaml data file.
-const CONFIGS = loadYAML(path.join(__dirname, '../data/oauth')) as Record<Provider, OAuthConfig>;
-if (CONFIG.accounts.oAuth) Object.assign(CONFIGS, CONFIG.accounts.oAuth);
+const PROVIDERS = loadYAML(path.join(__dirname, '../data/oauth')) as Record<Provider, OAuthConfig>;
+for (const id of Object.keys(PROVIDERS)) PROVIDERS[id as Provider].id = id;
+if (CONFIG.accounts.oAuth) Object.assign(PROVIDERS, CONFIG.accounts.oAuth);
+
+export const OAUTHPROVIDERS = Object.keys(CONFIG.accounts.oAuth || {}).map(p => PROVIDERS[p as Provider]);
 
 
 // -----------------------------------------------------------------------------
@@ -53,7 +57,7 @@ function normalizeProfile(data: any, provider: Provider) {
   if (!data) return;
   const profile: OAuthProfile = {id: '', email: ''};
 
-  const config = CONFIGS[provider];
+  const config = PROVIDERS[provider];
   for (const key of ['id', 'email', 'firstName', 'lastName', 'picture'] as const) {
     const template = config.profile[key] || '';
     profile[key] = template.replace(/\${([^}]+)}/g, (_, key: string) => key.split('||').map(k => data[k.trim()]).find(t => t) || '');
@@ -126,7 +130,7 @@ async function findOrCreateUser(req: express.Request, provider: Provider, profil
 const host = (req: express.Request) => `${req.protocol}://${req.hostname}`;
 
 function login(req: express.Request, provider: Provider) {
-  const config = CONFIGS[provider];
+  const config = PROVIDERS[provider];
   const query = new URLSearchParams({
     client_id: config.clientId,
     response_type: 'code',
@@ -137,7 +141,7 @@ function login(req: express.Request, provider: Provider) {
 }
 
 async function getToken(req: express.Request, provider: Provider) {
-  const config = CONFIGS[provider];
+  const config = PROVIDERS[provider];
 
   const body = new URLSearchParams({
     grant_type: 'authorization_code',
@@ -153,7 +157,7 @@ async function getToken(req: express.Request, provider: Provider) {
 }
 
 async function getProfile(req: express.Request, provider: Provider, accessToken?: string) {
-  const config = CONFIGS[provider];
+  const config = PROVIDERS[provider];
   if (!accessToken) accessToken = await getToken(req, provider);
 
   const headers = {Authorization: `Bearer ${accessToken}`};
@@ -172,7 +176,7 @@ export async function oAuthLogin(req: express.Request) {
   const provider = req.params.provider as Provider;
 
   const redirect = login(req, provider);
-  return redirect ? {redirect} : {error: 'socialLoginError', params: [CONFIGS[provider].title]};
+  return redirect ? {redirect} : {error: 'socialLoginError', params: [PROVIDERS[provider].title]};
 }
 
 export async function oAuthCallback(req: express.Request) {
@@ -181,5 +185,5 @@ export async function oAuthCallback(req: express.Request) {
 
   const profile = await getProfile(req, provider);
   const user = profile ? await findOrCreateUser(req, provider, profile) : undefined;
-  return user ? {user} : {error: 'socialLoginError', params: [CONFIGS[provider].title]};
+  return user ? {user} : {error: 'socialLoginError', params: [PROVIDERS[provider].title]};
 }

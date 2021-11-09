@@ -45,10 +45,11 @@ else
       <![endif]-->
 
       include _header
+      include accounts/privacy-modal
 
       if showCookieConsent
         .cookie-warning
-          p #{__(`${config.siteName} uses cookies to personalise and improve this website.`)}
+          p #{__(`$0 uses cookies to personalise and improve this website.`, config.siteName)}
           .btn-row
             button#yes-to-cookies.btn.btn-white.btn-small #{__('Accept')}
             a.btn.btn-white.btn-small(href=config.privacyURL) #{__('Privacy Policy')}
