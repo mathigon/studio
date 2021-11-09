@@ -13,12 +13,14 @@ import * as lusca from 'lusca';
 import * as session from 'express-session';
 import * as path from 'path';
 
-import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './utilities/i18n';
 import {search, SEARCH_DOCS} from './search';
 import {CourseRequestOptions, ServerOptions} from './interfaces';
-import {cacheBust, CONFIG, CONTENT_DIR, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities/utilities';
-import {User, UserDocument} from './models/user';
 import setupAuthEndpoints from './accounts';
+import {cacheBust, CONFIG, CONTENT_DIR, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust, safeToJson} from './utilities/utilities';
+import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './utilities/i18n';
+import {User, UserDocument} from './models/user';
+import {CourseAnalytics, LoginAnalytics} from './models/analytics';
+import {ChangeData, Progress} from './models/progress';
 
 
 declare global {
@@ -251,6 +253,8 @@ export class MathigonStudioApp {
         res.cookie('tmp_user', req.tmpUser, SESSION_COOKIE);
       }
 
+      if (req.user) await LoginAnalytics.ping(req.user);
+
       next();
     });
 
@@ -259,6 +263,8 @@ export class MathigonStudioApp {
     this.get('/dashboard', async (req, res) => {
       if (!req.user) return res.redirect('/login');
 
+      const stats = await CourseAnalytics.getLastWeekStats(req.user.id);
+      const recent = await Progress.getRecentCourses(req.user.id).slice(0, 6);
     });
   }
 
@@ -282,12 +288,13 @@ export class MathigonStudioApp {
       const section = course?.sections.find(s => s.id === req.params.section);
       if (!course || !section) return next();
 
-      const response = await options.getProgressData?.(req, course, section);
-      const progressJSON = JSON.stringify(response?.data || {});
+      const progress = await Progress.lookup(req, course.id);
       const nextUp = findNextSection(course, section);
 
+      if (req.user) CourseAnalytics.track(req.user.id);  // async
+
       res.locals.availableLocales = course.availableLocales.map(l => LOCALES[l]);
-      res.render('course', {course, section, lighten, progressJSON, nextUp});
+      res.render('course', {course, section, lighten, progress, nextUp});
     });
 
     this.post('/course/:course/:section', async (req, res, next) => {
@@ -295,16 +302,21 @@ export class MathigonStudioApp {
       const section = course?.sections.find(s => s.id === req.params.section);
       if (!course || !section) return next();
 
-      const response = await options.setProgressData?.(req, course, section);
-      res.status(response?.status || 200).end();
+      const changes = safeToJson<ChangeData>(req.body.data || '');
+      if (!changes) return res.status(400).send(STATUS_CODES[400]);
+
+      const progress = await Progress.lookup(req, course.id);
+      const newScoreCount = progress?.updateData(section.id, changes);
+
+      if (req.user) CourseAnalytics.track(req.user.id, newScoreCount);  // async
+      res.status(200).send('ok');
     });
 
     this.post('/course/:course/reset', async (req, res, next) => {
       const course = getCourse(req.params.course, req.locale.id);
       if (!course) return next();
-
-      const response = await options.clearProgressData?.(req, course);
-      res.status(response?.status || 200).end();
+      const response = await Progress.delete(req, course.id);
+      res.status(response ? 200 : 400).end();
     });
 
     this.post('/course/:course/feedback', async (req, res, next) => {

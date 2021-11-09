@@ -131,8 +131,8 @@ export interface Config {
     minAge?: number;
     privacyPolicy?: string;
     termsOfUse?: string;
+    address?: string;
     supportEmail?: string;
-    sessionSecret?: string;
     cronNotificationsEmail?: string;
     sendgridKey?: string;
     mongoServer?: string;

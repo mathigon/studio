@@ -10,7 +10,7 @@ import * as path from 'path';
 import * as crypto from 'crypto';
 import * as yaml from 'js-yaml';
 
-import {cache, Color, deepExtend} from '@mathigon/core';
+import {cache, Color, deepExtend, total} from '@mathigon/core';
 import {Config, Course, Section} from '../interfaces';
 
 
@@ -160,10 +160,13 @@ export function pastDate(daysBack: number) {
   return date;
 }
 
-export function host(req: express.Request) {
-  const host = req.headers.host || '';
-  const protocol = host.includes('localhost') ? 'http' : 'https';
-  return `${protocol}://${host}`;
+/** Better handling for string query parameters. */
+export function q(req: express.Request, name: string) {
+  return req.query?.[name]?.toString() || '';
+}
+
+export function hash(str: string, n: number): number {
+  return total(str.split('').map(c => c.charCodeAt(0))) % n;
 }
 
 

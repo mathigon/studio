@@ -16,7 +16,7 @@ export function sanitizeString(str: string, maxLength = 40) {
 
 export function checkBirthday(birthdayString?: string|null) {
   const date = birthdayString ? validator.toDate(birthdayString) : undefined;
-  if (!date) return undefined;
+  if (!date) return;
   const now = Date.now();
   if (!isBetween(+date, now - 120 * ONE_YEAR, now - ONE_YEAR)) return;
   return date;
