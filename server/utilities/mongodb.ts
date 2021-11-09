@@ -5,6 +5,7 @@
 
 
 import {createConnection, Types} from 'mongoose';
+import MongoStore from 'connect-mongo';
 import {CONFIG, IS_PROD} from './utilities';
 
 
@@ -34,4 +35,9 @@ export async function connectMongo() {
     console.error('Failed to connect to MongoDB!');
     process.exit(1);
   }
+}
+
+export function getMongoStore() {
+  const clientPromise = connectMongo();  // async
+  return MongoStore.create({clientPromise, touchAfter: 12 * 3600});
 }

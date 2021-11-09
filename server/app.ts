@@ -4,19 +4,21 @@
 // =============================================================================
 
 
-import * as crypto from 'crypto';
-import * as express from 'express';
-import * as cookieParser from 'cookie-parser';
-import * as compression from 'compression';
-import * as bodyParser from 'body-parser';
-import * as lusca from 'lusca';
-import * as session from 'express-session';
-import * as path from 'path';
+import crypto from 'crypto';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import compression from 'compression';
+import bodyParser from 'body-parser';
+import lusca from 'lusca';
+import session from 'express-session';
+import path from 'path';
+import flash = require('express-flash');
 
 import {search, SEARCH_DOCS} from './search';
 import {CourseRequestOptions, ServerOptions} from './interfaces';
 import setupAuthEndpoints from './accounts';
-import {cacheBust, CONFIG, CONTENT_DIR, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust, safeToJson} from './utilities/utilities';
+import {getMongoStore} from './utilities/mongodb';
+import {cacheBust, CONFIG, CONTENT_DIR, COURSES, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust, safeToJson} from './utilities/utilities';
 import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './utilities/i18n';
 import {User, UserDocument} from './models/user';
 import {CourseAnalytics, LoginAnalytics} from './models/analytics';
@@ -29,14 +31,14 @@ declare global {
     interface Request {
       country: string;
       locale: Locale;
-      __: (str: string) => string;
+      __: (str: string, ...args: string[]) => string;
       user?: UserDocument;
       tmpUser: string;
     }
   }
 }
 
-declare module "express-session" {
+declare module 'express-session' {
   interface SessionData {
     auth?: {user?: string};
   }
@@ -105,19 +107,19 @@ export class MathigonStudioApp {
    */
   setup(options: ServerOptions) {
     this.app.use(cookieParser(options.sessionSecret));
+    this.app.use(flash());
 
     const limit = options?.maxBodySize || '400kb';
     this.app.use(bodyParser.json({limit}) as express.RequestHandler);
     this.app.use(bodyParser.urlencoded({extended: false, limit}) as express.RequestHandler);
-
 
     this.app.use(session({
       name: 'session',
       secret: options.sessionSecret,
       cookie: SESSION_COOKIE,
       resave: false,  // Don't save session if unmodified
-      saveUninitialized: false  // Don't create session until something stored
-      // store: MongoStore.create({clientPromise: mongoClient, touchAfter: 12 * 3600})
+      saveUninitialized: false,  // Don't create session until something stored
+      store: CONFIG.accounts.enabled ? getMongoStore() : undefined
     }));
 
     this.app.use(lusca({
@@ -254,7 +256,7 @@ export class MathigonStudioApp {
       }
 
       if (req.user) await LoginAnalytics.ping(req.user);
-
+      res.locals.user = req.user;
       next();
     });
 
@@ -263,8 +265,14 @@ export class MathigonStudioApp {
     this.get('/dashboard', async (req, res) => {
       if (!req.user) return res.redirect('/login');
 
+      const progress = await Progress.getUserData(req.user.id);
       const stats = await CourseAnalytics.getLastWeekStats(req.user.id);
-      const recent = await Progress.getRecentCourses(req.user.id).slice(0, 6);
+      const recent = (await Progress.getRecentCourses(req.user.id)).slice(0, 6);
+
+      const items = Math.min(4, 6 - recent.length);
+      const recommended = COURSES.filter(x => !progress.has(x)).slice(0, items);
+
+      res.render('dashboard', {progress, recent, recommended, stats});
     });
   }
 

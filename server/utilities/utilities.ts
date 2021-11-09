@@ -4,11 +4,11 @@
 // =============================================================================
 
 
-import * as express from 'express';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as crypto from 'crypto';
-import * as yaml from 'js-yaml';
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import yaml from 'js-yaml';
 
 import {cache, Color, deepExtend, total} from '@mathigon/core';
 import {Config, Course, Section} from '../interfaces';
@@ -78,6 +78,10 @@ export function loadCombinedYAML(file: string, deep = false) {
 // Configuration files
 export const CONFIG = loadCombinedYAML('config.yaml', true) as Config;
 export const CONTENT_DIR = path.join(PROJECT_DIR, CONFIG.contentDir);
+
+// List of all courses
+export const COURSES = fs.readdirSync(CONTENT_DIR)
+    .filter(id => id !== 'shared' && !id.includes('.') && !id.startsWith('_'));
 
 
 // -----------------------------------------------------------------------------

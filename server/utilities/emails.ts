@@ -4,9 +4,9 @@
 // =============================================================================
 
 
-import * as path from 'path';
+import path from 'path';
 import {compileFile} from 'pug';
-import * as Sendgrid from '@sendgrid/mail';
+import Sendgrid from '@sendgrid/mail';
 
 import {UserDocument} from '../models/user';
 import {CONFIG} from './utilities';

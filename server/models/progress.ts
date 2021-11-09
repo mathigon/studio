@@ -6,7 +6,7 @@
 
 import {FilterXSS} from 'xss';
 import {Document, Model, model, Schema} from 'mongoose';
-import * as express from 'express';
+import express from 'express';
 import {total} from '@mathigon/core';
 import {clamp} from '@mathigon/fermat';
 import {findLastIndex, getCourse, safeToJson} from '../utilities/utilities';

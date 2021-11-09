@@ -4,8 +4,8 @@
 // =============================================================================
 
 
-import * as express from 'express';
-import * as path from 'path';
+import express from 'express';
+import path from 'path';
 const crypto = require('crypto');
 
 import {MathigonStudioApp} from './app';
@@ -256,6 +256,10 @@ async function cleanupUsers() {
 type ResponseData = {params?: string[], errorCode?: number, error?: string, success?: string, redirect?: string};
 
 function redirect(req: express.Request, res: express.Response, data: ResponseData, url: string, errorUrl?: string) {
+  const params = data.params || [];
+  if (data.error) req.flash('errors', req.__(MESSAGES[data.error], ...params));
+  if (data.success) req.flash('success', req.__(MESSAGES[data.success], ...params));
+
   // TODO re-fill form fields
   if (data.errorCode) res.status(data.errorCode);
   if (errorUrl && (data.error || data.errorCode)) url = errorUrl;

@@ -41,3 +41,12 @@ microsoft:
 
 ibm:
   name: IBM
+  authorizeUrl: https://iam.cloud.ibm.com/identity/authorize
+  accessUrl: https://iam.cloud.ibm.com/identity/token
+  profileMethod: GET
+  profile:
+    id: ${user_id}
+    firstName: ${firstname}
+    lastName: ${lastname}
+    email: ${email}
+    picture: ${photo}

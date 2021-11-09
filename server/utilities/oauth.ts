@@ -4,13 +4,10 @@
 // =============================================================================
 
 
-import {toTitleCase} from '@mathigon/core';
-import * as crypto from 'crypto';
-import * as express from 'express';
-import * as path from 'path';
+import express from 'express';
+import path from 'path';
 import {URLSearchParams} from 'url';
 import fetch from 'node-fetch';
-import validator from 'validator';
 import {Progress} from '../models/progress';
 
 import {sendWelcomeEmail} from './emails';
@@ -33,6 +30,7 @@ interface OAuthProfile {
 }
 
 interface OAuthConfig {
+  title: string;
   authorizeUrl: string;
   accessUrl: string;
   clientId: string;
@@ -52,17 +50,20 @@ if (CONFIG.accounts.oAuth) Object.assign(CONFIGS, CONFIG.accounts.oAuth);
 // User Creation and Lookup
 
 function normalizeProfile(data: any, provider: Provider) {
-  const email = normalizeEmail(data?.email);
-  if (!data || !data.id || !email) return;
+  if (!data) return;
+  const profile: OAuthProfile = {id: '', email: ''};
 
   const config = CONFIGS[provider];
-  const profile: OAuthProfile = {email, id: data.id};
+  for (const key of ['id', 'email', 'firstName', 'lastName', 'picture'] as const) {
+    const template = config.profile[key] || '';
+    profile[key] = template.replace(/\${([^}]+)}/g, (_, key: string) => key.split('||').map(k => data[k.trim()]).find(t => t) || '');
+  }
 
-  return profile;
+  profile.email = normalizeEmail(profile.email) || '';
+  return (profile.email && profile.id) ? profile : undefined;
 }
 
-async function findOrCreateUser(req: express.Request, provider: Provider, profile?: OAuthProfile) {
-  if (!profile) return;
+async function findOrCreateUser(req: express.Request, provider: Provider, profile: OAuthProfile) {
   const token = `${provider}:${profile.id}`;
 
   const p1 = User.findOne({oAuthTokens: token});
@@ -167,7 +168,18 @@ async function getProfile(req: express.Request, provider: Provider, accessToken?
 // Server Endpoints
 
 export async function oAuthLogin(req: express.Request) {
+  if (!CONFIG.accounts.oAuth?.[req.params.provider]) return;
+  const provider = req.params.provider as Provider;
+
+  const redirect = login(req, provider);
+  return redirect ? {redirect} : {error: 'socialLoginError', params: [CONFIGS[provider].title]};
 }
 
 export async function oAuthCallback(req: express.Request) {
+  if (!CONFIG.accounts.oAuth?.[req.params.provider]) return;
+  const provider = req.params.provider as Provider;
+
+  const profile = await getProfile(req, provider);
+  const user = profile ? await findOrCreateUser(req, provider, profile) : undefined;
+  return user ? {user} : {error: 'socialLoginError', params: [CONFIGS[provider].title]};
 }

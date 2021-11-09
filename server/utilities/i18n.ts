@@ -4,10 +4,10 @@
 // =============================================================================
 
 
-import * as fs from 'fs';
-import * as path from 'path';
-import * as yaml from 'js-yaml';
-import * as express from 'express';
+import fs from 'fs';
+import path from 'path';
+import yaml from 'js-yaml';
+import express from 'express';
 import {CONFIG, IS_PROD, loadCombinedYAML, loadYAML, PROJECT_DIR, STUDIO_DIR} from './utilities';
 
 

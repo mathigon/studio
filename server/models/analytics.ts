@@ -4,7 +4,7 @@
 // =============================================================================
 
 
-import * as date from 'date-fns';
+import date from 'date-fns';
 import {Document, Model, model, Schema} from 'mongoose';
 import {total} from '@mathigon/core';
 import {UserDocument} from './user';
