@@ -38,7 +38,7 @@ header
           if config.accounts.enabled
             if user
               a.nav-link(href="/dashboard") #[x-icon(name='dashboard')] #{__('Dashboard')}
-              a.nav-link(href="/settings") #[x-icon(name='settings')] #{__('Account Settings')}
+              a.nav-link(href="/profile") #[x-icon(name='settings')] #{__('Account Settings')}
             else
               button.nav-link(data-modal="login") #[x-icon(name="login")] #{__('Sign in')}
               a.nav-link(href="/signup") #[x-icon(name='user')] #{__('Create New Account')}

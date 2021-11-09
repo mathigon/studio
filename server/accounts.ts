@@ -326,27 +326,27 @@ export default function setupAuthEndpoints(app: MathigonStudioApp) {
 
   app.post('/profile/details', async (req, res) => {
     const response = await updateProfile(req);
-    redirect(req, res, response, '/settings');
+    redirect(req, res, response, '/profile');
   });
 
   app.post('/profile/password', async (req, res) => {
     const response = await updatePassword(req);
-    redirect(req, res, response, '/settings');
+    redirect(req, res, response, '/profile');
   });
 
   app.get('/profile/delete', async (req, res) => {
     const response = await deleteAccount(req, true);
-    redirect(req, res, response, '/settings', '/settings');
+    redirect(req, res, response, '/profile', '/profile');
   });
 
   app.get('/profile/undelete', async (req, res) => {
     const response = await deleteAccount(req, false);
-    redirect(req, res, response, '/settings', '/settings');
+    redirect(req, res, response, '/profile', '/profile');
   });
 
   app.get('/profile/resend', async (req, res) => {
     const response = await resendVerificationEmail(req);
-    redirect(req, res, response, req.user ? '/settings' : '/login');
+    redirect(req, res, response, req.user ? '/profile' : '/login');
   });
 
   app.post('/profile/accept-policies', async (req, res) => {

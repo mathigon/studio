@@ -4,7 +4,7 @@
 // =============================================================================
 
 
-import {createConnection, Types} from 'mongoose';
+import {connect, connection, Types} from 'mongoose';
 import MongoStore from 'connect-mongo';
 import {CONFIG, IS_PROD} from './utilities';
 
@@ -18,16 +18,16 @@ export async function connectMongo() {
   try {
     try {
       const url = CONFIG.accounts.mongoServer || 'mongodb://localhost:27017/tmp';
-      const response = await createConnection(url, {}).asPromise();
-      return response.getClient();
+      await connect(url);
+      return connection.getClient();
     } catch {
       if (IS_PROD) throw new Error();
       console.log('Trying in-memory Mongo DB...');
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const {MongoMemoryReplSet} = require('mongodb-memory-server');
       const mongo = await MongoMemoryReplSet.create();
-      const response = await createConnection(mongo.getUri(), {}).asPromise();
-      return response.getClient();
+      await connect(mongo.getUri());
+      return connection.getClient();
     }
   } catch {
     console.error('Failed to connect to MongoDB!');

@@ -1,0 +1,49 @@
+// =============================================================================
+// Accounts Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "./main";
+@import "./styles/forms";
+
+
+h1 { text-align: center; margin-bottom: 1.5em; }
+h1 x-icon { margin: 0 8px -14px; }
+
+.form-min-height { min-height: 360px; }
+.m-red { color: $red; }
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border: 1px solid white;
+  border-radius:100%;
+  display: block;
+  margin: 0 auto 6px;
+}
+
+hr + h2 { margin-top: 1em; }
+
+x-password {
+  input { background-position: top 10px right 48px; padding-right: 44px; }
+  input:valid { background-image: none !important; }
+
+  // Don't show check
+  .Too.Short { color: $red; }
+  .Weak, &.OK { color: $yellow; }
+  .Strong { color: $green; }
+
+  .toggle {
+    position: absolute;
+    top: 22px;
+    right: 20px;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: opacity .2s;
+
+    &:hover, &:focus { opacity: 0.5; }
+    &.on { opacity: 1; }
+  }
+}

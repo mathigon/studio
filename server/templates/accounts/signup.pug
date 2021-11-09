@@ -21,15 +21,19 @@ block main
       input(type="hidden" name="_csrf" value=_csrf)
 
       .form-row
-        input(name="first" autocomplete="fname" placeholder=__("First Name"))
-        input(name="last" autocomplete="lname" placeholder=__("Last Name"))
+        label.form-field
+          input(type='text' name='first' required autocomplete="fname" placeholder=__("First Name"))
+          span.placeholder= __('First Name')
+        label.form-field
+          input(type='text' name='last' required autocomplete="lname" placeholder=__("Last Name"))
+          span.placeholder= __('Last Name')
 
       label.form-field
-        input(name="email" type="email" :bind="email" placeholder=__("Email Address") autocomplete="email")
-        .form-error(:if="emailError === 'duplicate'")!= __('There already exists an account with this email address. Please sign in instead.')
-        .form-error(:if="emailError === 'invalid'")= __('This email address is not valid.')
+        input(name="email" type="email" required placeholder=__("Email Address") autocomplete="email")
+        span.placeholder= __('Email Address')
 
-      x-password
+      label.form-field.password
+        x-password
 
       label.form-field
         select(name='country' required)
@@ -38,9 +42,8 @@ block main
         span.placeholder= __('Country')
 
       label.form-field
-        input(name="birthday" type="date" :bind="birthday" placeholder=__('Date of Birth') autocomplete="bday")
+        input(name="birthday" type="date" :bind="birthday" placeholder=__('Date of Birth') autocomplete="bday" required)
         span.placeholder= __('Date of Birth')
-        .form-error(:if="birthday && birthdayError")= __('This can’t be right…')
 
       label.form-checkbox!= __('I’ve read and accept the <a href="$0" target="_blank">Privacy Policy</a> and our <a href="$1" target="_blank">Terms of Service</a>.', config.accounts.privacyPolicy, config.accounts.termsOfUse)
         input(type="checkbox" name="policies" required)

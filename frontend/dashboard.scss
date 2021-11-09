@@ -1,0 +1,92 @@
+// =============================================================================
+// Dashboard Styles
+// (c) Mathigon
+// =============================================================================
+
+
+@import "./main";
+
+
+h1 { margin-bottom: 1.5em; }
+h1 .avatar {
+  width: 100px;
+  height: 100px;
+  float: left;
+  background: white;
+  border: 2px solid white;
+  border-radius:100%;
+  margin: -12px 24px -20px 0;
+}
+h1 .subtitle { display: block; font-size: 60%; }
+
+
+.dashboard-body { width: 640px; max-width: calc(100% - 48px); }
+.overflow-wrap { margin: -32px -24px; padding: 32px 24px; min-height: 240px; @include overflow-scroll; }
+h2:first-child { margin-top: 0; }
+
+.dashboard-sidebar {
+  width: 280px;
+  @media screen and (max-width: 1015px) { width: 440px; }
+  @media screen and (max-width: 640px) { flex-grow: 1; }
+}
+.sidebar-wrap { position: sticky; top: 68px; }
+
+.no-courses, .empty-dashboard {
+  text-align: center;
+  padding-top: 12px;
+  color: $text-light;
+  fill: $text-light;
+  x-icon { margin: 0 auto; }
+}
+.empty-dashboard { font-size: 24px; }
+.no-courses { border-top: 1px solid #c5c2cc; }
+.no-courses x-icon { display: inline-block; margin: 0 8px -14px; }
+
+form + p.caption { margin-top: 16px; }
+
+
+// -----------------------------------------------------------------------------
+// Sidebar Panels
+
+.sidebar-panel {
+  @include theme(background, mix(white, $light-grey), $medium-grey);
+  border-radius: 6px;
+  margin-bottom: 24px;
+  font-size: 16px;
+  @include clearfix;
+
+  h2 { font-size: 20px; margin: 16px 0; text-align: center; }
+  p { margin: 0 20px 1em; line-height: 1.35; }
+  .small { @include theme(color, mix($text-dark, $light-grey), #ccc); }
+  strong x-icon { margin: 0 -2px -3px 0; }
+}
+
+.stats-row {
+  display: flex;
+  margin: 0 20px 20px;
+  justify-content: space-between;
+  text-align: center;
+  line-height: 1;
+
+  .stats { width: 110px; }
+  h3 { font-size: 40px; margin-top: -65px; }
+  .small { font-size: 14px; margin-top: -10px; font-weight: 600; }
+
+  path {
+    fill: transparent;
+    stroke-width: 18px;
+    stroke-linecap: round;
+    stroke: rgba(black, 10%);
+    &.m-red { stroke: $red; }
+    &.m-blue { stroke: $blue; }
+  }
+}
+
+.connect .btn {
+  padding: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  margin: 0 6px 20px;
+  x-icon { margin: 8px; }
+}

@@ -9,6 +9,7 @@ import {Document, Model, model, Schema} from 'mongoose';
 import express from 'express';
 import {total} from '@mathigon/core';
 import {clamp} from '@mathigon/fermat';
+import {Section} from '../interfaces';
 import {findLastIndex, getCourse, safeToJson} from '../utilities/utilities';
 
 type StepData = Record<string, {scores?: string[], data?: unknown}>;
@@ -45,6 +46,7 @@ export interface ProgressDocument extends ProgressBase, Document {
   activeSection: string;
   getJSON: (sectionId?: string) => string;
   getSectionData: (sectionId: string) => Promise<SectionData>;
+  getSectionProgress: (section: Section) => number;
   updateData: (sectionId: string, changes: ChangeData) => number;
 }
 
@@ -118,6 +120,10 @@ ProgressSchema.methods.getSectionData = async function(sectionId: string) {
   return {completed: section?.completed, activeStep: section?.activeStep, messages, steps};
 };
 
+ProgressSchema.methods.getSectionProgress = function(section: Section) {
+  return (this.sections?.get(section.id)?.progress || 0) / 100;
+};
+
 ProgressSchema.methods.updateData = function(sectionId: string, changes: ChangeData) {
   const course = getCourse(this.courseId)!;
   const sectionData = this.sections?.get(sectionId) || {};
@@ -150,16 +156,16 @@ ProgressSchema.methods.updateData = function(sectionId: string, changes: ChangeD
 
   const section = course.sections.find(s => s.id === sectionId)!;
   const sectionGoals = total(section.steps.map(s => this.steps.get(s)?.scores.length || 0));
-  sectionData.progress = clamp(Math.round(sectionGoals / section.goals || 0) * 100, 0, 100);
+  sectionData.progress = clamp(Math.round(sectionGoals / section.goals * 100) || 0, 0, 100);
 
   const courseGoals = total(course.sections.map(s => this.sections.get(s.id)?.progress || 0));
-  this.progress = clamp(Math.round(courseGoals / course.goals || 0) * 100, 0, 100);
+  this.progress = clamp(Math.round(courseGoals / course.goals * 100) || 0, 0, 100);
 
   this.sections.set(sectionId, sectionData);  // Update Mongoose map
   return addedScores;
 };
 
-ProgressSchema.methods.getJSON = async function(sectionId?: string) {
+ProgressSchema.methods.getJSON = function(sectionId?: string) {
   // TODO Only return data for steps in the requested section.
   const steps: StepData = {};
   for (const [key, data] of this.steps.entries()) {

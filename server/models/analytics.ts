@@ -4,11 +4,10 @@
 // =============================================================================
 
 
-import date from 'date-fns';
+import * as date from 'date-fns';
 import {Document, Model, model, Schema} from 'mongoose';
 import {total} from '@mathigon/core';
 import {UserDocument} from './user';
-
 
 const TIMEOUT = 1000 * 60 * 3;  // 3 minutes
 const TRAILING_TIME = 40;  // 40 seconds
@@ -56,7 +55,7 @@ CourseAnalyticsSchema.statics.track = async function(userId: string, points = 0)
 };
 
 CourseAnalyticsSchema.statics.getLastWeekStats = async function(userId: string) {
-  CourseAnalytics.getStats(userId, date.subDays(new Date(), 7), new Date());
+  return CourseAnalytics.getStats(userId, date.subDays(new Date(), 7), new Date());
 };
 
 CourseAnalyticsSchema.statics.getStats = async function(user: string, start: Date, end: Date) {

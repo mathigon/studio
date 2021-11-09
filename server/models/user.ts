@@ -6,7 +6,7 @@
 
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
-import date from 'date-fns';
+import * as date from 'date-fns';
 import {Document, Model, model, Schema, Types} from 'mongoose';
 
 import {age, hash} from '../utilities/utilities';

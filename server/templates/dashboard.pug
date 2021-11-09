@@ -6,14 +6,13 @@ block vars
   - var scripts = ['/dashboard.js']
 
 block main
-  h1
-    img.avatar(src=user.avatar(200) width=100 height=100)
-    | #{user.fullName}
-    span.subtitle= __('Student Dashboard')
-
   .container
-    .row.padded
+    h1
+      img.avatar(src=user.avatar(200) width=100 height=100)
+      | #{user.fullName}
+      span.subtitle= __('Student Dashboard')
 
+    .row.padded
       .dashboard-body.grow
         block dashboard-body
           +flash(messages)
@@ -49,15 +48,15 @@ block main
           .connect.row
             if config.social.twitter
               a.btn.twitter(href=`https://twitter.com/${config.social.twitter.handle}` title="Twitter" target="_blank" rel="noopener")
-                x-icon(name="twitter" size=20)
+                x-icon(name="twitter" size=32)
             if config.social.facebook
               a.btn.facebook(href=`https://www.facebook.com/${config.social.facebook.page}/` title="Facebook" target="_blank" rel="noopener")
-                x-icon(name="facebook" size=20)
+                x-icon(name="facebook" size=32)
             if config.social.instagram
               a.btn.instagram(href=`https://www.instagram.com/${config.social.instagram.handle}/` title="Instagram" target="_blank" rel="noopener")
-                x-icon(name="instagram" size=20)
+                x-icon(name="instagram" size=32)
             if config.social.youtube
               a.btn.youtube(href=`https://www.youtube.com/c/${config.social.youtube.channel}` title="YouTube" target="_blank" rel="noopener")
-                x-icon(name="youtube" size=20)
+                x-icon(name="youtube" size=32)
 
     include _footer

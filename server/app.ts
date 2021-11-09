@@ -300,13 +300,13 @@ export class MathigonStudioApp {
       const section = course?.sections.find(s => s.id === req.params.section);
       if (!course || !section) return next();
 
-      const progress = await Progress.lookup(req, course.id);
+      const progressData = await Progress.lookup(req, course.id);
       const nextUp = findNextSection(course, section);
 
       if (req.user) CourseAnalytics.track(req.user.id);  // async
 
       res.locals.availableLocales = course.availableLocales.map(l => LOCALES[l]);
-      res.render('course', {course, section, lighten, progress, nextUp});
+      res.render('course', {course, section, lighten, progressData, nextUp});
     });
 
     this.post('/course/:course/:section', async (req, res, next) => {
@@ -328,13 +328,10 @@ export class MathigonStudioApp {
     });
 
     this.post('/course/:course/reset', async (req, res, next) => {
-      if (!CONFIG.accounts.enabled) return res.status(200).send('ok');
-
       const course = getCourse(req.params.course, req.locale.id);
       if (!course) return next();
-
-      const response = await Progress.delete(req, course.id);
-      res.status(response ? 200 : 400).end();
+      if (CONFIG.accounts.enabled) await Progress.delete(req, course.id);
+      res.redirect(`/course/${req.params.course}`);
     });
 
     this.post('/course/:course/feedback', async (req, res, next) => {
