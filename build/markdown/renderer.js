@@ -11,7 +11,7 @@ const entities = require('html-entities');
 
 const {Expression} = require('@mathigon/hilbert');
 const {makeTexPlaceholder} = require('./mathjax');
-const {warning} = require('../utilities');
+const {CONFIG, warning} = require('../utilities');
 
 
 // -----------------------------------------------------------------------------
@@ -122,7 +122,8 @@ module.exports.getRenderer = function(metadata, directory, locale='en') {
       return `<x-target class="step-target pill" to="${href1.slice(2).replace(/_/g, ' ')}">${text}</x-target>`;
     }
 
-    return `<a href="${href}" target="_blank">${text}</a>`;
+    const newWindow = !href.startsWith('#') && !href.includes(CONFIG.domain);
+    return `<a href="${href}"${newWindow ? ' target="_blank"' : ''}>${text}</a>`;
   };
 
   renderer.codespan = (code) => {
