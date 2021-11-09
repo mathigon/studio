@@ -56,8 +56,9 @@
     "lusca": "1.7.0",
     "marked": "3.0.8",
     "mathjax": "3.1.2",
+    "mongodb-memory-server": "8.0.2",
     "mongoose": "6.0.12",
-    "node-fetch": "3.1.0",
+    "node-fetch": "2.6.6",
     "postcss": "8.3.11",
     "postcss-inline-svg": "5.0.0",
     "pug": "3.0.2",
@@ -73,6 +74,7 @@
   "devDependencies": {
     "@types/bcryptjs": "2.4.2",
     "@types/express-flash": "0.0.2",
+    "@types/node-fetch": "^2.5.12",
     "@types/pug": "2.0.5",
     "@types/validator": "13.6.6",
     "@typescript-eslint/eslint-plugin": "5.3.0",

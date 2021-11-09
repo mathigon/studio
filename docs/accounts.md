@@ -38,6 +38,17 @@ accounts:
       secret: 12345
 ```
 
+You also need to bind the account URL routes. This should happen *before* any other routes you
+bind or create:
+
+```ts
+new MathigonStudioApp()
+    .setup({sessionSecret: 'hey!'})
+    .accounts()  // <==
+    .get('/', (req, res) => res.render('home.pug', {}))
+    .listen(8080);
+```
+
 ## Federated Login Providers
 
 Federated login allows users to sign in using existing account, and we currently support Google,

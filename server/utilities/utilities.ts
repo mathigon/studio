@@ -14,7 +14,7 @@ import {cache, Color, deepExtend, total} from '@mathigon/core';
 import {Config, Course, Section} from '../interfaces';
 
 
-export const STUDIO_DIR = path.join(__dirname, '../');
+export const STUDIO_DIR = path.join(__dirname, '../../');
 export const PROJECT_DIR = process.cwd();
 export const OUT_DIR = PROJECT_DIR + '/public';
 
@@ -42,6 +42,10 @@ export const loadJSON = cacheIfProd((file: string) => {
   if (!fs.existsSync(file)) return undefined;
   return JSON.parse(fs.readFileSync(file, 'utf8')) as unknown;
 });
+
+export const loadData = (file: string) => {
+  return loadYAML(path.join(__dirname, `../data/${file}.yaml`));
+};
 
 export const getCourse = cacheIfProd((courseId: string, locale = 'en'): Course|undefined => {
   const course = loadJSON(OUT_DIR + `/content/${courseId}/data_${locale}.json`) as Course;

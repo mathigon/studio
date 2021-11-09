@@ -12,7 +12,7 @@ import bodyParser from 'body-parser';
 import lusca from 'lusca';
 import session from 'express-session';
 import path from 'path';
-import flash = require('express-flash');
+import flash from 'express-flash';
 
 import {search, SEARCH_DOCS} from './search';
 import {CourseRequestOptions, ServerOptions} from './interfaces';
@@ -276,6 +276,8 @@ export class MathigonStudioApp {
 
       res.render('dashboard', {progress, recent, recommended, stats});
     });
+
+    return this;
   }
 
 

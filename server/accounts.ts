@@ -5,21 +5,19 @@
 
 
 import express from 'express';
-import path from 'path';
 const crypto = require('crypto');
 
 import {MathigonStudioApp} from './app';
 import {User, UserDocument} from './models/user';
 import {Progress} from './models/progress';
-import {CONFIG, loadYAML, pastDate} from './utilities/utilities';
+import {CONFIG, loadData, pastDate} from './utilities/utilities';
 import {sendChangeEmailConfirmation, sendEmail, sendPasswordChangedEmail, sendPasswordResetEmail, sendWelcomeEmail} from './utilities/emails';
 import {checkBirthday, normalizeEmail, sanitizeString} from './utilities/validate';
-const {oAuthCallback, oAuthLogin} = require('./oauth');
+import {oAuthCallback, oAuthLogin} from './utilities/oauth';
 
 
-const MESSAGES = loadYAML(path.join(__dirname, './data/messages')) as Record<string, string>;
-
-const COUNTRIES = loadYAML(path.join(__dirname, './data/countries')) as Record<string, string>;
+const MESSAGES = loadData('messages') as Record<string, string>;
+const COUNTRIES = loadData('countries') as Record<string, string>;
 const COUNTRY_CODES = Object.keys(COUNTRIES);
 const COUNTRY_LIST = COUNTRY_CODES.map(k => ({id: k, name: COUNTRIES[k]})).sort((a, b) => (a.name < b.name ? -1 : 1));
 
@@ -361,13 +359,15 @@ export default function setupAuthEndpoints(app: MathigonStudioApp) {
     res.json(await exportData(req.user));
   });
 
-  app.get('/auth/:provider', async (req, res) => {
+  app.get('/auth/:provider', async (req, res, next) => {
     const response = await oAuthLogin(req);
+    if (!response) return next();
     redirect(req, res, response, '/signup');
   });
 
-  app.get('/auth/:provider/callback', async (req, res) => {
+  app.get('/auth/:provider/callback', async (req, res, next) => {
     const response = await oAuthCallback(req);
+    if (!response) return next();
     if (response.user) req.session.auth!.user = response.user.id;
     redirect(req, res, response, '/dashboard', '/signup');
   });

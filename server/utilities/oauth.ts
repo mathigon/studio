@@ -5,15 +5,14 @@
 
 
 import express from 'express';
-import path from 'path';
 import {URLSearchParams} from 'url';
 import fetch from 'node-fetch';
-import {Progress} from '../models/progress';
 
-import {sendWelcomeEmail} from './emails';
-import {CONFIG, loadYAML, q} from './utilities';
-import {normalizeEmail} from './validate';
+import {Progress} from '../models/progress';
 import {User} from '../models/user';
+import {sendWelcomeEmail} from './emails';
+import {CONFIG, loadData, q} from './utilities';
+import {normalizeEmail} from './validate';
 
 
 // -----------------------------------------------------------------------------
@@ -43,7 +42,7 @@ interface OAuthConfig {
 }
 
 // Copy client secrets from secrets.yaml to oauth.yaml data file.
-const PROVIDERS = loadYAML(path.join(__dirname, '../data/oauth')) as Record<Provider, OAuthConfig>;
+const PROVIDERS = loadData('oauth') as Record<Provider, OAuthConfig>;
 for (const id of Object.keys(PROVIDERS)) PROVIDERS[id as Provider].id = id;
 if (CONFIG.accounts.oAuth) Object.assign(PROVIDERS, CONFIG.accounts.oAuth);
 
@@ -135,7 +134,7 @@ function login(req: express.Request, provider: Provider) {
     client_id: config.clientId,
     response_type: 'code',
     redirect_uri: `${host(req)}/auth/${provider}/callback`,
-    scope: config.scope
+    scope: config.scope || ''
   });
   return `${config.authorizeUrl}?${query.toString()}`;
 }

@@ -43,6 +43,24 @@ social:
   youtube:
     channel: Mathigon
 
+accounts:
+  enabled: true
+  minAge: 13
+  privacyPolicy: https://mathigon.org/policies
+  termsOfUse: https://mathigon.org/policies#terms
+  address: 7 Albert Buildings, 49 Queen Victoria Street, London, United Kingdom, EC4N 4SA
+  supportEmail: support@mathigon.org
+  cronNotificationsEmail: admin@mathigon.org
+  sendgridKey: SG.12345
+  mongoServer: mongodb://localhost:27017/mathigon1
+  oAuth:
+    google:
+      key: 1
+      secret: 1
+    facebook:
+      key: 1
+      secret: 1
+
 courses:
   revealAll: true  # Reveal all steps at once, even if they have not all been completed
   audio: false  # Generate audio narrations

@@ -25,13 +25,11 @@ export async function connectMongo() {
       console.log('Trying in-memory Mongo DB...');
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const {MongoMemoryReplSet} = require('mongodb-memory-server');
-      const memoryServer = new MongoMemoryReplSet();
-      await memoryServer.waitUntilRunning();
-      const mongoUri = await memoryServer.getUri();
-      const response = await createConnection(mongoUri, {}).asPromise();
+      const mongo = await MongoMemoryReplSet.create();
+      const response = await createConnection(mongo.getUri(), {}).asPromise();
       return response.getClient();
     }
-  } catch (e) {
+  } catch {
     console.error('Failed to connect to MongoDB!');
     process.exit(1);
   }
