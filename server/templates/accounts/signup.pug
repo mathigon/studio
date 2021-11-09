@@ -6,10 +6,9 @@ block vars
   - var styles = ['/accounts.css']
   - var scripts = ['/accounts.js']
 
-block content
-  h1 #[x-icon(name="user" size=54)] #{__('Create New Account')}
-
+block main
   .container.narrow
+    h1 #[x-icon(name="user" size=54)] #{__('Create New Account')}
     +flash(messages)
 
     if oAuthProviders.length
@@ -25,7 +24,8 @@ block content
         input(name="first" autocomplete="fname" placeholder=__("First Name"))
         input(name="last" autocomplete="lname" placeholder=__("Last Name"))
 
-      input(name="email" type="email" :bind="email" placeholder=__("Email Address") autocomplete="email")
+      label.form-field
+        input(name="email" type="email" :bind="email" placeholder=__("Email Address") autocomplete="email")
         .form-error(:if="emailError === 'duplicate'")!= __('There already exists an account with this email address. Please sign in instead.')
         .form-error(:if="emailError === 'invalid'")= __('This email address is not valid.')
 
@@ -37,7 +37,9 @@ block content
             option(value=c.id, selected=(c.id === country))= c.name
         span.placeholder= __('Country')
 
-      input(name="birthday" type="date" :bind="birthday" placeholder=__('Birthday') autocomplete="bday")
+      label.form-field
+        input(name="birthday" type="date" :bind="birthday" placeholder=__('Date of Birth') autocomplete="bday")
+        span.placeholder= __('Date of Birth')
         .form-error(:if="birthday && birthdayError")= __('This can’t be right…')
 
       label.form-checkbox!= __('I’ve read and accept the <a href="$0" target="_blank">Privacy Policy</a> and our <a href="$1" target="_blank">Terms of Service</a>.', config.accounts.privacyPolicy, config.accounts.termsOfUse)

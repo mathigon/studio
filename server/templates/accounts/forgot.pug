@@ -5,10 +5,9 @@ block vars
   - var styles = ['/accounts.css']
   - var scripts = ['/accounts.js']
 
-block content
-  h1 #[x-icon(name="lock" size=54)] #{__('Reset Password')}
-
+block main
   .container.narrow
+    h1 #[x-icon(name="lock" size=54)] #{__('Reset Password')}
     +flash(messages)
 
     form.form-large.form-min-height(method='POST')

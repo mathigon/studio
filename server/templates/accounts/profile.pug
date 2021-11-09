@@ -5,12 +5,12 @@ block vars
   - var styles = ['/accounts.css']
   - var scripts = ['/accounts.js']
 
-block content
-  h1
-    img.avatar(src=user.avatar(120) width=60 height=60)
-    | #{__('Account Settings')}
-
+block main
   .container.narrow
+    h1
+      img.avatar(src=user.avatar(120) width=60 height=60)
+      | #{__('Account Settings')}
+
     +flash(messages)
 
     h2.text-center= __('Personal Details')

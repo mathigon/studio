@@ -5,10 +5,9 @@ block vars
   - var styles = ['/accounts.css']
   - var scripts = ['/accounts.js']
 
-block content
-  h1 #[x-icon(name="lock" size=54)] #{__('Sign in')}
-
+block main
   .container.narrow
+    h1 #[x-icon(name="lock" size=54)] #{__('Sign in')}
     +flash(messages)
 
     if oAuthProviders.length

@@ -43,9 +43,12 @@ interface OAuthConfig {
 
 // Copy client secrets from secrets.yaml to oauth.yaml data file.
 const PROVIDERS = loadData('oauth') as Record<Provider, OAuthConfig>;
-for (const id of Object.keys(PROVIDERS)) PROVIDERS[id as Provider].id = id;
-if (CONFIG.accounts.oAuth) Object.assign(PROVIDERS, CONFIG.accounts.oAuth);
+for (const id of Object.keys(PROVIDERS) as Provider[]) {
+  PROVIDERS[id].id = id;
+  if (CONFIG.accounts.oAuth?.[id]) Object.assign(PROVIDERS[id], CONFIG.accounts.oAuth?.[id]);
+}
 
+// Export list of providers for PUG templates
 export const OAUTHPROVIDERS = Object.keys(CONFIG.accounts.oAuth || {}).map(p => PROVIDERS[p as Provider]);
 
 
