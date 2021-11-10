@@ -54,7 +54,7 @@ block main
 
     hr(style="margin: 2em 0")
     h2.text-center= __('Privacy Settings')
-    p!= __('Please review our <a href="$0" target="_blank">Privacy Policy</a> and <a href="$1" target="_blank">Terms of Service</a>. Make sure you understand what personal data we collect, and how we use that data to personalise and improve our content.', config.accounts.privacyPolicy, config.accounts.termsOfUse)
+    p!= __('Please review our <a href="$0" target="_blank">Privacy Policy</a> and our <a href="$1" target="_blank">Terms of Service</a>. Make sure you understand what personal data we collect, and how we use that data to personalise and improve our content.', config.accounts.privacyPolicy, config.accounts.termsOfUse)
     if user.deletionRequested
       p.m-red.b Your account is currently marked for deletion and will be removed in #{Math.floor(7 - (Date.now() - user.deletionRequested) / (1000 * 60 * 60 * 24))} days.
     .btn-row

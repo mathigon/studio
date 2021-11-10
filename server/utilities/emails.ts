@@ -23,12 +23,12 @@ function loadEmailTemplate(name: string) {
 
 type MailData = Omit<Sendgrid.MailDataRequired, 'from'|'to'> & {from?: string, to?: string, user?: UserDocument};
 
-export function sendEmail(options: MailData) {
+export async function sendEmail(options: MailData) {
   if (!options.from) options.from = `${CONFIG.siteName} <no_reply@${CONFIG.domain}>`;
   if (options.user && !options.to) options.to = `${options.user.fullName} <${options.user.email}>`;
 
   try {
-    return Sendgrid.send(options as Sendgrid.MailDataRequired);
+    return await Sendgrid.send(options as Sendgrid.MailDataRequired);
   } catch (error) {
     console.error(`Failed to send email to`, options.to, error);
   }

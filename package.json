@@ -10,6 +10,7 @@
   },
   "bin": {
     "mgon-build": "build/index.js",
+    "mgon-secrets": "build/secrets.js",
     "mgon-serve": "server/serve.ts",
     "mgon-screenshots": "tests/screenshots.js"
   },

@@ -55,11 +55,11 @@ accounts:
   mongoServer: mongodb://localhost:27017/mathigon1
   oAuth:
     google:
-      key: 1
-      secret: 1
+      clientId: 12345.apps.googleusercontent.com
+      clientSecret: 12345
     facebook:
-      key: 1
-      secret: 1
+      clientId: 12345
+      clientSecret: 12345
 
 courses:
   revealAll: true  # Reveal all steps at once, even if they have not all been completed

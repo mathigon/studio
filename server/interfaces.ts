@@ -136,7 +136,7 @@ export interface Config {
     cronNotificationsEmail?: string;
     sendgridKey?: string;
     mongoServer?: string;
-    oAuth?: Record<string, {key: string, secret: string}>;
+    oAuth?: Record<string, {clientId: string, clientSecret: string}>;
   }
 
   social: {

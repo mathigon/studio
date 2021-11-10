@@ -129,7 +129,10 @@ async function findOrCreateUser(req: express.Request, provider: Provider, profil
 // -----------------------------------------------------------------------------
 // OAuth Flow
 
-const host = (req: express.Request) => `${req.protocol}://${req.hostname}`;
+// We use req.headers.host rather than req.hostname because we need to include
+// the localhost port during local development. Note that the redirect URI
+// must exactly match a value set up with the third-party oAuth provider.
+const host = (req: express.Request) => `${req.protocol}://${req.headers.host}`;
 
 function login(req: express.Request, provider: Provider) {
   const config = PROVIDERS[provider];

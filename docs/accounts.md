@@ -31,11 +31,11 @@ accounts:
   # Federated Login Providers
   oAuth:
     facebook:
-      key: 12345
-      secret: 12345
+      clientId: 12345
+      clientSecret: 12345
     google:
-      key: 12345.apps.googleusercontent.com
-      secret: 12345
+      clientId: 12345.apps.googleusercontent.com
+      clientSecret: 12345
 ```
 
 You also need to bind the account URL routes. This should happen *before* any other routes you
@@ -66,6 +66,21 @@ Our accounts system expects a MongoDB database, although it can fall back to an 
 local development. Our server will automatically initialise all required collections and indices.
 The access URL which needs to be in the confideration should look something like this:
 `mongodb+srv://username:password@clustername.gcp.mongodb.net/dbname?retryWrites=true&w=majority`
+
+## Secret Management
+
+Many secrets, like the sendgrid API key, MongoDB URL or client secrets for federated login should
+not be committed to the publicly visible `config.yaml` file: instead, just use placeholders for
+local development.
+
+The secrets should instead be stored in the GitHub repo secrets manager. During the deployment
+progress, the `mgon-secrets` scripts allows you to write the production secrets into the project
+`config.yaml` file before uploading it to the server:
+
+```yaml
+- name: Secrets
+  run: mgon-secrets --mongo ${{ secrets.MONGODB }} --googleClientId ${{ secrets.GOOGLE_CLIENT_ID }} --googleClientSecret ${{ secrets.GOOGLE_CLIENT_SECRET }} --sendgrid ${{ secrets.SENDGRID_KEY }}
+```
 
 ## Security
 
