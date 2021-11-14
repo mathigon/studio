@@ -1,0 +1,9 @@
+| Hi #{user.shortName},#{'\n'}
+
+| Welcome to #{config.siteName}! When you’re logged in, we will save your progress data, and personalise the content based on your ability and interests.#{'\n'}
+
+if user.emailVerificationToken
+  | To get started, please confirm your email address by clicking this link: https://#{config.domain}/confirm/#{user.id}/#{user.emailVerificationToken}#{'\n'}
+  | (If you did not create a #{config.siteName} account you can simply ignore this email, or let us know by emailing #{config.accounts.supportEmail}.)
+else
+  | Get started: https://#{config.domain}/courses

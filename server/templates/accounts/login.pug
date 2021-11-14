@@ -1,0 +1,39 @@
+extends ../_layout
+
+block vars
+  - var title = __('Sign in')
+  - var styles = ['/accounts.css']
+  - var scripts = ['/accounts.js']
+
+block main
+  .container.narrow
+    h1 #[x-icon(name="lock" size=54)] #{__('Sign in')}
+    +flash(messages)
+
+    if oAuthProviders.length
+      .btn-row.text-center
+        for p in oAuthProviders
+          a.btn.btn-large(href=`/auth/${p.id}` class=p.id)
+            x-icon(name=p.id size=28)
+            | #{p.name}
+      hr
+
+    form(method="POST").form-large.form-min-height
+      input(type="hidden" name="_csrf" value=_csrf)
+
+      label.form-field
+        input(type="email" name="email" placeholder=__("Email") required autofocus=true autocomplete="email" value=req.body.email)
+        span.placeholder= __('Email')
+
+      label.form-field
+        input.form-field(type="password" name="password" placeholder=__("Password") required minlength="4" autocomplete="password")
+        span.placeholder= __('Password')
+
+      button.btn.btn-red.btn-large(type='submit')= __('Sign in')
+
+      p
+        a(href='/forgot')= __('Forgot Password')
+        | &nbsp; &nbsp; &nbsp;
+        a(href='/signup')= __('Create New Account')
+
+    include ../_footer

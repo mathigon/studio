@@ -4,17 +4,17 @@
 // =============================================================================
 
 
-import * as express from 'express';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as crypto from 'crypto';
-import * as yaml from 'js-yaml';
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import yaml from 'js-yaml';
 
-import {cache, Color, deepExtend} from '@mathigon/core';
-import {Config, Course, Section} from './interfaces';
+import {cache, Color, deepExtend, total} from '@mathigon/core';
+import {Config, Course, Section} from '../interfaces';
 
 
-export const STUDIO_DIR = path.join(__dirname, '../');
+export const STUDIO_DIR = path.join(__dirname, '../../');
 export const PROJECT_DIR = process.cwd();
 export const OUT_DIR = PROJECT_DIR + '/public';
 
@@ -42,6 +42,10 @@ export const loadJSON = cacheIfProd((file: string) => {
   if (!fs.existsSync(file)) return undefined;
   return JSON.parse(fs.readFileSync(file, 'utf8')) as unknown;
 });
+
+export const loadData = (file: string) => {
+  return loadYAML(path.join(__dirname, `../data/${file}.yaml`));
+};
 
 export const getCourse = cacheIfProd((courseId: string, locale = 'en'): Course|undefined => {
   const course = loadJSON(OUT_DIR + `/content/${courseId}/data_${locale}.json`) as Course;
@@ -78,6 +82,10 @@ export function loadCombinedYAML(file: string, deep = false) {
 // Configuration files
 export const CONFIG = loadCombinedYAML('config.yaml', true) as Config;
 export const CONTENT_DIR = path.join(PROJECT_DIR, CONFIG.contentDir);
+
+// List of all courses
+export const COURSES = fs.readdirSync(CONTENT_DIR)
+    .filter(id => id !== 'shared' && !id.includes('.') && !id.startsWith('_'));
 
 
 // -----------------------------------------------------------------------------
@@ -126,6 +134,47 @@ export function findNextSection(course: Course, section: Section) {
   if (nextSection) return {section: nextSection};
   const nextCourse = getCourse(course.nextCourse, course.locale)!;
   return {course: nextCourse, section: nextCourse.sections[0]};
+}
+
+/** Returns the last value in an arry for which a callback returns true. */
+export function findLastIndex<T>(array: T[], callback: (value: T, i: number) => boolean) {
+  for (let i = array.length - 1; i >= 0; i--) {
+    if (callback(array[i], i)) return i;
+  }
+  return -1;
+}
+
+export function age(birthDate: Date) {
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age = age - 1;
+  }
+  return age;
+}
+
+export function dateString(date: Date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return [year, month, day].join('-');
+}
+
+/** Returns the date a given (integer) number of days ago. */
+export function pastDate(daysBack: number) {
+  const date = new Date();
+  date.setDate(date.getDate() - daysBack);
+  return date;
+}
+
+/** Better handling for string query parameters. */
+export function q(req: express.Request, name: string) {
+  return req.query?.[name]?.toString() || '';
+}
+
+export function hash(str: string, n: number): number {
+  return total(str.split('').map(c => c.charCodeAt(0))) % n;
 }
 
 

@@ -6,10 +6,11 @@
   "repository": "mathigon/studio",
   "bugs": "https://github.com/mathigon/studio/issues",
   "engines": {
-    "node": "14.x"
+    "node": ">=12"
   },
   "bin": {
     "mgon-build": "build/index.js",
+    "mgon-secrets": "build/secrets.js",
     "mgon-serve": "server/serve.ts",
     "mgon-screenshots": "tests/screenshots.js"
   },
@@ -26,6 +27,7 @@
     "@mathigon/euclid": "1.0.3",
     "@mathigon/fermat": "1.0.4",
     "@mathigon/hilbert": "1.0.3",
+    "@sendgrid/mail": "7.6.0",
     "@types/compression": "1.7.2",
     "@types/cookie-parser": "1.4.2",
     "@types/express": "4.17.13",
@@ -35,13 +37,17 @@
     "@webcomponents/custom-elements": "1.5.0",
     "autoprefixer": "10.4.0",
     "autotrack": "2.4.1",
+    "bcryptjs": "2.4.3",
     "body-parser": "1.19.0",
     "chokidar": "3.5.2",
     "compression": "1.7.4",
+    "connect-mongo": "4.6.0",
     "cookie-parser": "1.4.5",
     "cssnano": "5.0.8",
+    "date-fns": "2.25.0",
     "esbuild": "0.9.7",
     "express": "4.17.1",
+    "express-flash": "0.0.2",
     "express-session": "1.17.2",
     "glob": "7.2.0",
     "html-entities": "2.3.2",
@@ -51,6 +57,9 @@
     "lusca": "1.7.0",
     "marked": "3.0.8",
     "mathjax": "3.1.2",
+    "mongodb-memory-server": "8.0.2",
+    "mongoose": "6.0.12",
+    "node-fetch": "2.6.6",
     "postcss": "8.3.11",
     "postcss-inline-svg": "5.0.0",
     "pug": "3.0.2",
@@ -60,9 +69,15 @@
     "typescript": "4.4.4",
     "validator": "13.7.0",
     "web-animations-js": "2.3.2",
+    "xss": "1.0.10",
     "yargs-parser": "20.2.9"
   },
   "devDependencies": {
+    "@types/bcryptjs": "2.4.2",
+    "@types/express-flash": "0.0.2",
+    "@types/node-fetch": "^2.5.12",
+    "@types/pug": "2.0.5",
+    "@types/validator": "13.6.6",
     "@typescript-eslint/eslint-plugin": "5.3.0",
     "@typescript-eslint/parser": "5.3.0",
     "eslint": "8.1.0",
@@ -71,8 +86,8 @@
     "tape": "5.3.1"
   },
   "optionalDependencies": {
-    "@google-cloud/text-to-speech": "3.3.1",
     "@google-cloud/secret-manager": "3.10.1",
+    "@google-cloud/text-to-speech": "3.3.1",
     "@google-cloud/translate": "6.3.1",
     "fluent-ffmpeg": "2.1.2",
     "license-checker": "25.0.1",

@@ -1,0 +1,24 @@
+extends ../_layout
+
+block vars
+  - var title = __('Reset Password')
+  - var styles = ['/accounts.css']
+  - var scripts = ['/accounts.js']
+
+block main
+  .container.narrow
+    h1 #[x-icon(name="lock" size=54)] #{__('Reset Password')}
+    +flash(messages)
+
+    form.form-large.form-min-height(method='POST')
+      input(type="hidden" name="_csrf" value=_csrf)
+
+      p= __('Enter your email address or username below, and we will send you instructions how to reset your password.')
+
+      label.form-field
+        input(type="email" name="email" placeholder=__("Email") required autocomplete="email" autofocus=req.body.email)
+        span.placeholder= __('Email')
+
+      button.btn.btn-red.btn-large(type='submit')= __('Reset Password')
+
+    include ../_footer

@@ -88,4 +88,4 @@ block main
     script(type="application/json")#glossary!= course.glossJSON
     script(type="application/json")#bios!= course.biosJSON
     script(type="application/json")#hints!= course.hintsJSON
-    script(type="application/json")#userdata!= progressJSON
+    script(type="application/json")#userdata!= progressData ? progressData.getJSON(section.id) : '{}'

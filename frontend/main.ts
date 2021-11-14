@@ -48,6 +48,14 @@ if ($cookies) {
   });
 }
 
+const $privacyModal = $('x-modal#privacy') as Modal|undefined;
+if ($privacyModal) {
+  $privacyModal.$('form')!.on('submit', (e: Event) => {
+    e.preventDefault();
+    fetch('/profile/accept-policies', {method: 'POST'});
+    $privacyModal.close();
+  });
+}
 
 // -----------------------------------------------------------------------------
 // Register Service Worker and Web App Banners

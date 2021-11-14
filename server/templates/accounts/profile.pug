@@ -1,0 +1,74 @@
+extends ../_layout
+
+block vars
+  - var title = __('Account Profile')
+  - var styles = ['/accounts.css']
+  - var scripts = ['/accounts.js']
+
+block main
+  .container.narrow
+    h1
+      img.avatar(src=user.avatar(120) width=60 height=60)
+      | #{__('Account Settings')}
+
+    +flash(messages)
+
+    h2.text-center= __('Personal Details')
+    form.form-large(action="/profile/details" method="POST")
+      input(type="hidden" name="_csrf" value=_csrf)
+      .form-row
+        label.form-field
+          input(type='text' name='first' required autocomplete="fname" placeholder=__("First Name") value=user.firstName)
+          span.placeholder= __('First Name')
+        label.form-field
+          input(type='text' name='last' required autocomplete="lname" placeholder=__("Last Name") value=user.lastName)
+          span.placeholder= __('Last Name')
+      label.form-field
+        input(type='email' name='email' required disabled=(!user.password) autocomplete="email" placeholder=__("Email") value=user.email)
+        span.placeholder= __('Email')
+        if user.emailVerificationToken
+          p.form-hint
+            strong.m-red= __('Email not verified!')
+            | #{" – "}
+            a(href="/profile/resend")= __('Resend verification email')
+      if user.birthday
+        label.form-field
+          input(type='text' name='birthday' disabled value=user.birthdayString placeholder=__("Date of Birth"))
+          span.placeholder= __('Date of Birth')
+      label.form-field
+        select(name='country')
+          for c in countries
+            option(value=c.id selected=(c.id === user.country))= c.name
+      button.btn.btn-red(type='submit')= __('Update Profile')
+
+    if user.password && !user.emailVerificationToken
+      hr(style="margin: 2em 0")
+      h2.text-center #[x-icon(name="lock" size=28)] #{__('Change Password')}
+      form.form-large.password-form(action='/profile/password' method='POST')
+        input(type="hidden" name="_csrf" value=_csrf)
+        label.form-field
+          input(type="password" name="oldpassword" required pattern=".{4,}" autocomplete="password" placeholder=__("Current Password"))
+          span.placeholder= __('Current Password')
+        x-password
+        button.btn.btn-red(type='submit')= __('Change Password')
+
+    hr(style="margin: 2em 0")
+    h2.text-center= __('Privacy Settings')
+    p!= __('Please review our <a href="$0" target="_blank">Privacy Policy</a> and our <a href="$1" target="_blank">Terms of Service</a>. Make sure you understand what personal data we collect, and how we use that data to personalise and improve our content.', config.accounts.privacyPolicy, config.accounts.termsOfUse)
+    if user.deletionRequested
+      p.m-red.b Your account is currently marked for deletion and will be removed in #{Math.floor(7 - (Date.now() - user.deletionRequested) / (1000 * 60 * 60 * 24))} days.
+    .btn-row
+      a.btn.btn-blue(href="/profile/data.json" download)= __('Download all my data')
+      if user.deletionRequested
+        a.btn.btn-green(href="/profile/undelete")= __('Don’t delete my account')
+      else
+        button.btn.btn-red(data-modal="delete")= __('Delete my account')
+    if !user.deletionRequested
+      x-modal#delete
+        button.close: x-icon(name="close")
+        .modal-body
+          h2 #[x-icon(name="delete" size=32)] #{__('Delete my account')}
+          p= __('Are you sure that you want to delete your $0 account and all associated data?', config.siteName)
+          .btn-row: a.btn.btn-red(href="/profile/delete")= __('Delete')
+
+    include ../_footer

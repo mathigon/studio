@@ -1,0 +1,11 @@
+//- Force users to accept privacy policies if they signed in using oAuth
+if user && !user.acceptedPolicies && req.path !== '/profile' && req.path !== config.accounts.privacyPolicy
+  x-modal#privacy.open: .modal-body
+    h2 #[x-icon(name="lock" size=32)] #{__('Welcome to $0!', config.siteName)}
+    p!= __('Please review our <a href="$0" target="_blank">Privacy Policy</a> and our <a href="$1" target="_blank">Terms of Service</a>. Make sure you understand what personal data we collect, and how we use that data to personalise and improve our content.', config.accounts.privacyPolicy, config.accounts.termsOfUse)
+    form.form-large.form-min-height
+      label.form-checkbox
+        | #{__('I’ve understood and agree to $0’s Privacy Policy and Terms of Service.', config.siteName)}
+        input(type="checkbox" name="policies" required)
+        .control
+      .btn-row: button.btn.btn-red(type="submit")= __('Continue')

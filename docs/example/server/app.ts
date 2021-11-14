@@ -10,6 +10,7 @@ new MathigonStudioApp()
     .get('/_ah/health', (req, res) => res.status(200).send('ok'))  // AppEngine Health Checks
     .secure()
     .setup({sessionSecret: 'hey!'})
+    .accounts()
     .get('/', (req, res) => res.render('home.pug', {}))
     .get('/courses', (req, res) => res.render('courses.pug', {}))
     .get('/custom', (req, res) => res.render('custom.pug', {}))

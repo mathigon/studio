@@ -1,0 +1,6 @@
+# See https://cloud.google.com/appengine/docs/flexible/nodejs/scheduling-jobs-with-cron-yaml
+
+cron:
+  - description: Accounts Cleanup
+    url: /cron/cleanup
+    schedule: every 24 hours

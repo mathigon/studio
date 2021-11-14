@@ -31,6 +31,9 @@ courses:
   revealAll: false
   audio: false
 
+accounts:
+  enabled: false
+
 tutor:
   enabled: true
   name: Archie

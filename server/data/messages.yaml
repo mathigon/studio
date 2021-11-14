@@ -1,0 +1,41 @@
+# Form Field Errors
+invalidEmail: The email address you entered is not valid.
+invalidBirthday: The birthday you entered is not valid.
+invalidUsername: The username you entered is not valid.
+blankPassword: Your password cannot be blank.
+passwordLength: Your password must be at least four characters long.
+usernameExists: There already exists an account with this username. Please sign in!
+acceptPolicies: Please accept out privacy policy and terms of service.
+accountExists: There already is a account with this email address. Please sign in!
+invalidName: Please provide a valid first and last name.
+cantChangeEmail: You have to set a password for your account, before changing your email address.
+
+# Authentication Errors
+invalidToken: This password reset link is invalid or has expired.
+invalidLogin: Some of the details you entered (email, username or password) were incorrect.
+accountNotFound: Unfortunately, we couldn’t find an account with this email address or username.
+verifyError: Unfortunately, we couldn’t verify your account.
+wrongPassword: Your current password is incorrect.
+passwordUnverifiedEmail: You can only change your password after you have verified your email address.
+missingParameters: This request contains missing or invalid parameters.
+unauthenticated: This request requires the user to be authenticated.
+unknown: Something went wrong. Please try again later!
+
+# Authentication Success
+verificationEmailSent: We’ve sent you another verification email!
+verifySuccess: You’ve successfully verified your email address.
+profileUpdated: You profile has been updated successfully.
+passwordChanged: Your password has been changed successfully.
+welcome: Welcome! You can verify your email address by clicking the link we just emailed you.
+settingsUpdated: Your privacy settings have ben updated successfully.
+confirmEmail: Please confirm your email address using the link we sent you when creating your account.
+emailSent: An email has been sent to $0 with further instructions.
+
+# Social Media Login
+socialLoginError: Unfortunately we couldn’t log you in with $0. Please try a different method!
+socialLoginLink: Your $0 account has been linked to your existing account with the same email address.
+
+# Account Changes
+emailVerificationToken: You have to verify your email address before you can change your password.
+markedForDeleted: Your account is now marked for deletion and will be removed in 7 days. Until then, you can undo this action using the link below.
+unmarkedForDeletion: Your account is no longer marked for deletion.

@@ -206,3 +206,29 @@ img.emoji { width: auto; }
   .close:hover { opacity: 1; }
   x-icon { display: block; }
 }
+
+x-modal#login {
+  width: 500px;
+  .modal-body { padding: 24px 16px 12px; }
+  h2 { text-align: center; }
+
+  .btn-row.social { display: flex; flex-wrap: wrap; justify-content: center; }
+  .btn-row.social .btn { margin: 6px; }
+
+  .hr { height: 1px; margin: 1em 8px; background: $light-grey; position: relative; }
+  .hr span {
+    background: white;
+    display: block;
+    left: 50%;
+    position: absolute;
+    text-align: center;
+    margin-top: -7px;
+    font-size: 14px;
+    color: $text-light;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 0 12px;
+    transform: translateX(-50%);
+  }
+}

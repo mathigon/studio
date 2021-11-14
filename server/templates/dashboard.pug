@@ -1,0 +1,62 @@
+extends _layout
+
+block vars
+  - var title = __('Student Dashboard')
+  - var styles = ['/dashboard.css']
+  - var scripts = ['/dashboard.js']
+
+block main
+  .container
+    h1
+      img.avatar(src=user.avatar(200) width=100 height=100)
+      | #{user.fullName}
+      span.subtitle= __('Student Dashboard')
+
+    .row.padded
+      .dashboard-body.grow
+        block dashboard-body
+          +flash(messages)
+          if recent.length
+            h2= __('Recent progress')
+            for course in recent
+              +course(course)
+          if recommended.length
+            h2= __('Recommended for you')
+            for course in recommended
+              +course(course)
+
+      .dashboard-sidebar: .sidebar-wrap
+        .sidebar-panel
+          block dashboard-sidebar
+            h2= __('Weekly Stats')
+            .stats-row
+              .stats
+                svg(width=110 height=96)
+                  path(d="M23.89,86.11a44,44,0,1,1,62.22,0")
+                  path.m-red(d="M23.89,86.11a44,44,0,1,1,62.22,0" stroke-dasharray=`${208 * stats.points / 100} 1000`)
+                h3.m-red= stats.points
+                .small= __('Points')
+              .stats
+                svg(width=110 height=96)
+                  path(d="M23.89,86.11a44,44,0,1,1,62.22,0")
+                  path.m-blue(d="M23.89,86.11a44,44,0,1,1,62.22,0" stroke-dasharray=`${208 * stats.minutes / 60} 1000`)
+                h3.m-blue= stats.minutes
+                .small= __('Minutes')
+
+        .sidebar-panel
+          h2= __('Connect with $0', config.siteName)
+          .connect.row
+            if config.social.twitter
+              a.btn.twitter(href=`https://twitter.com/${config.social.twitter.handle}` title="Twitter" target="_blank" rel="noopener")
+                x-icon(name="twitter" size=32)
+            if config.social.facebook
+              a.btn.facebook(href=`https://www.facebook.com/${config.social.facebook.page}/` title="Facebook" target="_blank" rel="noopener")
+                x-icon(name="facebook" size=32)
+            if config.social.instagram
+              a.btn.instagram(href=`https://www.instagram.com/${config.social.instagram.handle}/` title="Instagram" target="_blank" rel="noopener")
+                x-icon(name="instagram" size=32)
+            if config.social.youtube
+              a.btn.youtube(href=`https://www.youtube.com/c/${config.social.youtube.channel}` title="YouTube" target="_blank" rel="noopener")
+                x-icon(name="youtube" size=32)
+
+    include _footer
