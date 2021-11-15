@@ -9,12 +9,8 @@
 @import "./styles/forms";
 @import "./styles/maths";
 
-@import "./components/modal/modal";
-@import "./components/select/select";
-@import "./components/alert/alert";
-@import "./components/icon/icon";
+@import "../node_modules/@mathigon/boost/src/components/components";
 @import "./components/progress/progress";
-
 @import "./styles/header";
 @import "./styles/footer";
 @import "./styles/courses";

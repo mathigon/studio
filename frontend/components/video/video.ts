@@ -4,8 +4,7 @@
 // =============================================================================
 
 
-import {$N, Browser, CustomElementView, MediaView, register} from '@mathigon/boost';
-import {Draggable} from '../draggable/draggable';
+import {$N, Browser, CustomElementView, Draggable, MediaView, register} from '@mathigon/boost';
 import template from './video.pug';
 
 

@@ -5,9 +5,8 @@
 
 
 import {cumulative, last, sortBy, total} from '@mathigon/core';
-import {Browser, CustomElementView, register} from '@mathigon/boost';
+import {Browser, CustomElementView, Draggable, register} from '@mathigon/boost';
 import {Bounds} from '@mathigon/euclid';
-import {Draggable} from '../draggable/draggable';
 import {Step, StepComponent, UserData} from '../step/step';
 
 

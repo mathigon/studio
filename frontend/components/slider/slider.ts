@@ -5,8 +5,7 @@
 
 
 import {nearlyEquals} from '@mathigon/fermat';
-import {animate, AnimationResponse, CustomElementView, ease, Observable, register} from '@mathigon/boost';
-import {Draggable} from '../draggable/draggable';
+import {animate, AnimationResponse, CustomElementView, Draggable, ease, Observable, register} from '@mathigon/boost';
 import {Step, StepComponent} from '../step/step';
 import template from './slider.pug';
 

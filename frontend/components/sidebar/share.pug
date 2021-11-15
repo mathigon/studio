@@ -1,0 +1,19 @@
+.share-row
+  - var url = `https://${config.domain}${section.url}`
+  - var title = (section.title + ' – ' + course.title)
+  - var body = course.description
+  - var img = section.thumbnail
+
+  if config.social.googleClassroom
+    a.btn.classroom(title="Classroom" href=`https://classroom.google.com/share?url=${url}&title=${title}` target="_blank" rel="noopener")
+  if config.social.twitter
+    a.btn.twitter(title="Twitter" href=`https://twitter.com/intent/tweet?url=${url}&text=${title}&via=${config.social.twitter.handle}` target="_blank" rel="noopener")
+      x-icon(name="twitter" size=36)
+  if config.social.facebook
+    a.btn.facebook(title="Facebook" href=`https://www.facebook.com/dialog/share?app_id=${config.social.facebook.appId}&display=page&href=${url}` target="_blank" rel="noopener")
+      x-icon(name="facebook" size=36)
+  if config.social.pinterest
+    a.btn.pinterest(title="Pinterest" href=`https://pinterest.com/pin/create/bookmarklet/?media=${img}&url=${url}&description=${title}` target="_blank" rel="noopener"): x-icon(name="pinterest" size=36)
+  if config.social.reddit
+    a.btn.reddit(title="Reddit" href=`https://reddit.com/submit?url=${url}&title=${title}` target="_blank" rel="noopener")
+      x-icon(name="reddit" size=36)
