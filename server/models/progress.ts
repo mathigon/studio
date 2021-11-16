@@ -7,10 +7,10 @@
 import {FilterXSS} from 'xss';
 import {Document, Model, model, Schema} from 'mongoose';
 import express from 'express';
-import {total} from '@mathigon/core';
+import {safeToJSON, total} from '@mathigon/core';
 import {clamp} from '@mathigon/fermat';
 import {Section} from '../interfaces';
-import {findLastIndex, getCourse, safeToJson} from '../utilities/utilities';
+import {findLastIndex, getCourse} from '../utilities/utilities';
 
 type StepData = Record<string, {scores?: string[], data?: unknown}>;
 type MessageData = Array<{content?: string, kind?: string}>;
@@ -147,7 +147,7 @@ ProgressSchema.methods.updateData = function(sectionId: string, changes: ChangeD
     if (data) {
       // TODO Sanitize other data fields. Better validation?
       if (data['free-text']) data['free-text'] = sanitise.process(data['free-text'].slice(0, 500).trim());
-      const newData = Object.assign(safeToJson(stepData.data || '{}'), data);
+      const newData = Object.assign(safeToJSON(stepData.data, {}), data);
       stepData.data = JSON.stringify(newData);
     }
 

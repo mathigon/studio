@@ -114,19 +114,6 @@ export function lighten(c: string, amount: 0.15) {
   return Color.fromHsl(...hsl).hex;
 }
 
-export function safeToJson<T>(str: string, fallback?: T, allowedKeys?: string[]): T|undefined {
-  if (!str) return fallback;
-  try {
-    // Filter only specific keys in a JSON object.
-    const reviver = allowedKeys ? function(this: any, key: string, value: any) {
-      if (!key || Array.isArray(this) || allowedKeys.includes(key)) return value;
-    } : undefined;
-    return JSON.parse(str, reviver) || fallback;
-  } catch (e) {
-    return fallback;
-  }
-}
-
 /** Determine which section or course to link to at the end of this one. */
 export function findNextSection(course: Course, section: Section) {
   // TODO Personalise this, based on users' previous work

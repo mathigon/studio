@@ -13,13 +13,14 @@ import lusca from 'lusca';
 import session from 'express-session';
 import path from 'path';
 import flash from 'express-flash';
+import {safeToJSON} from '@mathigon/core';
 
 import {search, SEARCH_DOCS} from './search';
 import {CourseRequestOptions, ServerOptions} from './interfaces';
 import setupAuthEndpoints from './accounts';
 import {getMongoStore} from './utilities/mongodb';
 import {OAUTHPROVIDERS} from './utilities/oauth';
-import {cacheBust, CONFIG, CONTENT_DIR, COURSES, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust, safeToJson} from './utilities/utilities';
+import {cacheBust, CONFIG, CONTENT_DIR, COURSES, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities/utilities';
 import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './utilities/i18n';
 import {User, UserDocument} from './models/user';
 import {CourseAnalytics, LoginAnalytics} from './models/analytics';
@@ -316,7 +317,7 @@ export class MathigonStudioApp {
       const section = course?.sections.find(s => s.id === req.params.section);
       if (!course || !section) return next();
 
-      const changes = safeToJson<ChangeData>(req.body.data || '');
+      const changes = safeToJSON<ChangeData>(req.body.data, {});
       if (!changes) return res.status(400).send(STATUS_CODES[400]);
 
       const progress = (await Progress.lookup(req, course.id, true))!;
