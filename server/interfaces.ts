@@ -4,7 +4,7 @@
 // =============================================================================
 
 
-import * as express from 'express';
+import express from 'express';
 
 
 export interface Step {
@@ -75,9 +75,6 @@ export interface APIResponse<T> {
 }
 
 export interface CourseRequestOptions {
-  getProgressData?: (req: express.Request, course: Course, section: Section) => APIResponse<SectionProgressData>|undefined;
-  setProgressData?: (req: express.Request, course: Course, section: Section) => APIResponse<void>|undefined;
-  clearProgressData?: (req: express.Request, course: Course) => APIResponse<void>|undefined;
   sendFeedback?: (req: express.Request, course: Course) => APIResponse<void>|undefined;
   askTutor?: (req: express.Request, course: Course) => APIResponse<undefined>|undefined;
 }
@@ -128,6 +125,19 @@ export interface Config {
       }[]
     }[],
     copyright: string;
+  }
+
+  accounts: {
+    enabled: boolean;
+    minAge?: number;
+    privacyPolicy?: string;
+    termsOfUse?: string;
+    address?: string;
+    supportEmail?: string;
+    cronNotificationsEmail?: string;
+    sendgridKey?: string;
+    mongoServer?: string;
+    oAuth?: Record<string, {clientId: string, clientSecret: string}>;
   }
 
   social: {

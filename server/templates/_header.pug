@@ -2,7 +2,7 @@ include _mixins
 
 header
   block logo
-    a#logo(href="/" title=config.siteName)
+    a#logo(href=(user ? '/dashboard' : '/') title=config.siteName)
       != include(config.header.logo)
       if config.header.titleString
         span= config.header.titleString
@@ -28,10 +28,20 @@ header
     x-popup(animation="fade").nav-item
       block nav-user-btn
         button.nav-link.narrow.popup-target#login-btn
-          x-icon(name="settings")
+          if user
+            img.nav-user-icon.nav-large(src=user.avatar(56) alt=__('User'))
+          else
+            x-icon.nav-large(name="user")
 
       .popup-body
         block nav-user-body
+          if config.accounts.enabled
+            if user
+              a.nav-link(href="/dashboard") #[x-icon(name='dashboard')] #{__('Dashboard')}
+              a.nav-link(href="/profile") #[x-icon(name='settings')] #{__('Account Settings')}
+            else
+              button.nav-link(data-modal="login") #[x-icon(name="login")] #{__('Sign in')}
+              a.nav-link(href="/signup") #[x-icon(name='user')] #{__('Create New Account')}
           label.nav-link
             x-icon(name="brightness")
             | #{__('Dark Mode')}
@@ -43,6 +53,8 @@ header
               x-icon(name="language")
               | #{__('Change Language')}
               img(src=`/images/flags/${locale.flag}.png` width=24 height=24 alt="")
+          if user
+            a.nav-link(href="/logout") #[x-icon(name='logout')] #{__('Sign out $0', user.fullName)}
 
 if config.search.enabled && locale.id === 'en'
   x-modal#search(class=(req.query.search ? 'open' : undefined))
@@ -62,3 +74,31 @@ if availableLocales.length > 1
         a.locale-link(href=`https://${l.id === 'en' ? '' : l.id + '.'}${config.domain}${req.path}`)
           img(src=`/images/flags/${l.flag}.png` width=36 height=36 alt="")
           | #{l.name}
+
+if !user && config.accounts.enabled
+  +modal('login')
+    h2 #[x-icon(name="user" size=32)] #{__('Sign in to $0', config.siteName)}
+
+    if oAuthProviders.length
+      .btn-row.social
+        for p in oAuthProviders
+          a.btn(href=`/auth/${p.id}` class=p.id) #[x-icon(name=p.id)] #{p.name}
+      .hr: span= __('or')
+
+    form(method="POST" action="/login")
+      input(type="hidden" name="_csrf" value=_csrf)
+
+      label.form-field
+        input(type="email" name="email" placeholder=__('Email') required autocomplete="email")
+        span.placeholder #{__('Email')}
+
+      label.form-field
+        input#password.form-field(type="password" name="password" placeholder=__('Password') minlength="4" required autocomplete="password")
+        span.placeholder #{__('Password')}
+
+      p.btn-row
+        a(href='/signup') #{__('New Account')}
+        | &nbsp; &nbsp; &nbsp;
+        a(href='/forgot') #{__('Reset Password')}
+        | &nbsp; &nbsp; &nbsp;
+        button.btn.btn-red(type="submit") #{__('Sign in')}

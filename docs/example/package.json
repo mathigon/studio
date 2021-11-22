@@ -17,11 +17,11 @@
   },
   "dependencies": {
     "@mathigon/studio": "file:../..",
-    "ts-node": "10.2.1",
-    "typescript": "4.4.2"
+    "ts-node": "10.4.0",
+    "typescript": "4.4.4"
   },
   "devDependencies": {
-    "nodemon": "2.0.12",
+    "nodemon": "2.0.14",
     "npm-run-all": "4.1.5"
   }
 }

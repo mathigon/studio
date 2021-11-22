@@ -5,7 +5,7 @@
 
 
 import {Cache, stringDistance, unique} from '@mathigon/core';
-import {loadJSON, OUT_DIR} from './utilities';
+import {loadJSON, OUT_DIR} from './utilities/utilities';
 
 // TODO Ensure that these files have been generated before restarting!
 export const SEARCH_DOCS = loadJSON(OUT_DIR + '/search-docs.json') as Record<string, string> || {};

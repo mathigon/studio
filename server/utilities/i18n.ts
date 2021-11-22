@@ -4,17 +4,17 @@
 // =============================================================================
 
 
-import * as fs from 'fs';
-import * as path from 'path';
-import * as yaml from 'js-yaml';
-import * as express from 'express';
-import {CONFIG, IS_PROD, loadCombinedYAML, loadYAML, PROJECT_DIR, STUDIO_DIR} from './utilities';
+import fs from 'fs';
+import path from 'path';
+import yaml from 'js-yaml';
+import express from 'express';
+import {CONFIG, IS_PROD, loadCombinedYAML, loadData, loadYAML, PROJECT_DIR, STUDIO_DIR} from './utilities';
 
 
 export type Locale = {id: string, key: string, name: string, flag: string, dir?: string, google?: string};
 
-const COUNTRIES = loadYAML(__dirname + '/data/countries.yaml') as Record<string, string>;
-export const LOCALES = loadYAML(__dirname + '/data/locales.yaml') as Record<string, Locale>;
+const COUNTRIES = loadData('countries') as Record<string, string>;
+export const LOCALES = loadData('locales') as Record<string, Locale>;
 for (const id of Object.keys(LOCALES)) LOCALES[id].id = id;
 
 const EU_COUNTRIES = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES',
@@ -22,7 +22,7 @@ const EU_COUNTRIES = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES',
   'RO', 'SI', 'SK', 'FI', 'SE', 'GB'];
 
 // TODO Filter only valid locales!
-export const AVAILABLE_LOCALES = CONFIG.locales.map(l => LOCALES[l]);
+export const AVAILABLE_LOCALES = CONFIG.locales.map((l: string) => LOCALES[l]);
 
 
 // -----------------------------------------------------------------------------

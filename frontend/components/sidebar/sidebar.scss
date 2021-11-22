@@ -170,6 +170,24 @@ x-modal#feedback-success { width: 320px; text-align: center; }
 
 x-modal#share { width: 400px; }
 
+.share-row {
+  display: flex;
+  margin: -4px;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .btn {
+    width: 36px;
+    height: 36px;
+    margin: 4px;
+    padding: 8px;
+    min-width: 0;
+    border-radius: 8px;
+    box-shadow: none;
+    x-icon { margin: 0; }
+  }
+}
+
 #glossary-search {
   width: 600px;
   height: 440px;

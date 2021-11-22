@@ -1,0 +1,6 @@
+| Hi #{user.shortName},#{'\n'}
+
+| You recently changed the email address linked to your #{config.siteName} account. Please verify your new address using this link:
+| https://#{config.domain}/confirm/#{user.id}/#{user.emailVerificationToken}#{'\n'}
+
+| (If you do not have a #{config.siteName} account you can simply ignore this email, or let us know by emailing #{config.accounts.supportEmail}.)
