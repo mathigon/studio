@@ -3,6 +3,7 @@
   "compilerOptions": {
     "lib": ["es2019"],
     "types" : ["node"],
+    "esModuleInterop": true,
     "resolveJsonModule": true,
     "downlevelIteration": true,
     "module": "commonjs"

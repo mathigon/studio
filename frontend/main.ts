@@ -4,15 +4,9 @@
 // =============================================================================
 
 
-import {$, $$, $body, $html, bindAccessibilityEvents, Browser, InputView, Router} from '@mathigon/boost';
-import {Popup} from './components/popup/popup';
-import {Modal} from './components/modal/modal';
+import {$, $$, $body, $html, bindAccessibilityEvents, Browser, InputView, Modal, Popup, Router} from '@mathigon/boost';
 
-import './components/modal/modal';
-import './components/select/select';
-import './components/popup/popup';
-import './components/alert/alert';
-import './components/icon/icon';
+import '@mathigon/boost/dist/components';
 import './components/progress/progress';
 
 // See https://github.com/googleanalytics/autotrack
@@ -48,6 +42,14 @@ if ($cookies) {
   });
 }
 
+const $privacyModal = $('x-modal#privacy') as Modal|undefined;
+if ($privacyModal) {
+  $privacyModal.$('form')!.on('submit', (e: Event) => {
+    e.preventDefault();
+    fetch('/profile/accept-policies', {method: 'POST'});
+    $privacyModal.close();
+  });
+}
 
 // -----------------------------------------------------------------------------
 // Register Service Worker and Web App Banners

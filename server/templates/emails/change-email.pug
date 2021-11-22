@@ -1,0 +1,11 @@
+extends _template
+
+block preheader
+  | Verify your new email address for #{config.siteName}.
+
+block body
+  h1(style="font-size: 24px;margin:0 0 20px 0") Hi #{user.shortName},
+  p You recently changed the email address linked to your #{config.siteName} account. Please verify your new address using this link:
+  +button(`https://#{config.domain}/confirm/${user.id}/${user.emailVerificationToken}`, "Confirm your email")
+  p You can also copy and paste this URL into your browser: https://#{config.domain}/confirm/#{user.id}/#{user.emailVerificationToken}
+  p (If you do not have a #{config.siteName} account, you can simply ignore this email, or <a href="mailto:#{config.supportEmail}">let us know</a>.)

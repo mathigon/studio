@@ -1,0 +1,53 @@
+google:
+  name: Google
+  authorizeUrl: https://accounts.google.com/o/oauth2/auth
+  accessUrl: https://accounts.google.com/o/oauth2/token
+  profileUrl: https://www.googleapis.com/oauth2/v3/userinfo
+  profileMethod: POST
+  scope: profile email
+  profile:
+    id: ${sub}
+    firstName: ${given_name}
+    lastName: ${family_name}
+    email: ${email}
+    picture: ${picture}
+
+facebook:
+  name: Facebook
+  authorizeUrl: https://www.facebook.com/dialog/oauth
+  accessUrl: https://graph.facebook.com/oauth/access_token
+  profileUrl: https://graph.facebook.com/v3.2/me?fields=id,email,first_name,last_name
+  profileMethod: POST
+  scope: [public_profile, email]
+  profile:
+    id: ${id}
+    firstName: ${first_name}
+    lastName: ${last_name}
+    email: ${email}
+    picture: https://graph.facebook.com/${json.id}/picture?width=100
+
+microsoft:
+  name: Microsoft
+  authorizeUrl: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+  accessUrl: https://login.microsoftonline.com/common/oauth2/v2.0/token
+  profileUrl: https://graph.microsoft.com/v1.0/me/
+  profileMethod: GET
+  scope: https://graph.microsoft.com/.default
+  profile:
+    id: ${id}
+    firstName: ${givenName || displayName}
+    lastName: ${surname}
+    email: ${mail || userPrincipalName}
+
+ibm:
+  name: IBM
+  authorizeUrl: https://login.ibm.com/oidc/endpoint/default/authorize
+  accessUrl: https://login.ibm.com/oidc/endpoint/default/token
+  profileUrl: https://login.ibm.com/oidc/endpoint/default/userinfo
+  profileMethod: GET
+  scope: openid profile email
+  profile:
+    id: ${sub}
+    firstName: ${given_name}
+    lastName: ${family_name}
+    email: ${email}

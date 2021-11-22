@@ -1,0 +1,54 @@
+extends ../_layout
+
+block vars
+  - var title = __('Signup')
+  - var description = __('Create a free account, to save your progress data and help us personalise our content.')
+  - var styles = ['/accounts.css']
+  - var scripts = ['/accounts.js']
+
+block main
+  .container.narrow
+    h1 #[x-icon(name="user" size=54)] #{__('Create New Account')}
+    +flash(messages)
+
+    if oAuthProviders.length
+      .btn-row.text-center
+        for p in oAuthProviders
+          a.btn.btn-large(href=`/auth/${p.id}` class=p.id) #[x-icon(name=p.id size=28)] #{p.name}
+      hr
+
+    form(method="POST").form-large.form-min-height
+      input(type="hidden" name="_csrf" value=_csrf)
+
+      .form-row
+        label.form-field
+          input(type='text' name='first' required autocomplete="fname" placeholder=__("First Name"))
+          span.placeholder= __('First Name')
+        label.form-field
+          input(type='text' name='last' required autocomplete="lname" placeholder=__("Last Name"))
+          span.placeholder= __('Last Name')
+
+      label.form-field
+        input(name="email" type="email" required placeholder=__("Email Address") autocomplete="email")
+        span.placeholder= __('Email Address')
+
+      label.form-field.password
+        x-password
+
+      label.form-field
+        select(name='country' required)
+          for c in countries
+            option(value=c.id, selected=(c.id === country))= c.name
+        span.placeholder= __('Country')
+
+      label.form-field
+        input(name="birthday" type="date" :bind="birthday" placeholder=__('Date of Birth') autocomplete="bday" required)
+        span.placeholder= __('Date of Birth')
+
+      label.form-checkbox!= __('I’ve read and accept the <a href="$0" target="_blank">Privacy Policy</a> and our <a href="$1" target="_blank">Terms of Service</a>.', config.accounts.privacyPolicy, config.accounts.termsOfUse)
+        input(type="checkbox" name="policies" required)
+        .control
+
+      .btn-row: button.btn.btn-red.btn-large(type='submit')= __('Create Account')
+
+    include ../_footer

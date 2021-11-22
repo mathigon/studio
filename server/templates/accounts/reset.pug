@@ -1,0 +1,19 @@
+extends ../_layout
+
+block vars
+  - var title = __('Reset Password')
+  - var styles = ['/accounts.css']
+  - var scripts = ['/accounts.js']
+
+block main
+  .container.narrow
+    h1 #[x-icon(name="lock" size=54)] #{__('Reset Password')}
+    +flash(messages)
+
+    form.form-large.password-form.form-min-height(method="POST")
+      input(type="hidden" name="_csrf" value=_csrf)
+      p= __("Choose a new password for your account:")
+      x-password: x-icon(name="eye")
+      button.btn.btn-red.btn-large(type="submit")= __('Change Password')
+
+    include ../_footer

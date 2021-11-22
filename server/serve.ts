@@ -1,18 +1,14 @@
 #!/usr/bin/env -S ts-node --script-mode
 
-// A super really node server that can be used in development using mgon-serve.
+// A simple node server that can be used in development using mgon-serve.
 
-import * as fs from 'fs';
 import {MathigonStudioApp} from './app';
-import {CONTENT_DIR} from './utilities';
-
-const courses = fs.readdirSync(CONTENT_DIR)
-    .filter(id => id !== 'shared' && !id.includes('.') && !id.startsWith('_'));
+import {COURSES} from './utilities/utilities';
 
 new MathigonStudioApp()
     .secure()
     .setup({sessionSecret: 'hypatia'})
-    .get('/', (req, res) => res.render('home.pug', {courses}))
+    .get('/', (req, res) => res.render('home.pug', {courses: COURSES}))
     .course({})
     .errors()
     .listen(5000);
