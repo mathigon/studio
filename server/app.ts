@@ -20,7 +20,7 @@ import {CourseRequestOptions, ServerOptions} from './interfaces';
 import setupAuthEndpoints from './accounts';
 import {getMongoStore} from './utilities/mongodb';
 import {OAUTHPROVIDERS} from './utilities/oauth';
-import {cacheBust, CONFIG, CONTENT_DIR, COURSES, ENV, findNextSection, findPrevSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities/utilities';
+import {cacheBust, CONFIG, CONTENT_DIR, COURSES, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities/utilities';
 import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './utilities/i18n';
 import {User, UserDocument} from './models/user';
 import {CourseAnalytics, LoginAnalytics} from './models/analytics';
@@ -302,13 +302,14 @@ export class MathigonStudioApp {
       if (!course || !section) return next();
 
       const progressData = await Progress.lookup(req, course.id);
-      const nextUp = findNextSection(course, section);
-      const prevSection = findPrevSection(course, section);
+      const nextSection = findNextSection(course, section);
+      const prevSection = findNextSection(course, section, -1);
 
       if (req.user) CourseAnalytics.track(req.user.id);  // async
 
       res.locals.availableLocales = course.availableLocales.map(l => LOCALES[l]);
-      res.render('course', {course, section, lighten, progressData, nextUp, prevSection});
+      // Note: nextUp is provided as a legacy fallback for previous versions.
+      res.render('course', {course, section, lighten, progressData, nextSection, prevSection, nextUp: nextSection});
     });
 
     this.post('/course/:course/:section', async (req, res, next) => {

@@ -9,6 +9,7 @@ const path = require('path');
 const glob = require('glob');
 
 const {toTitleCase, last, words, throttle} = require('@mathigon/core');
+const {mod} = require('@mathigon/fermat');
 const {readFile, warning, loadYAML, OUTPUT, writeFile, textHash} = require('../utilities');
 const {writeTexCache} = require('./mathjax');
 const {parseStep, parseSimple} = require('./parser');
@@ -78,23 +79,11 @@ async function bundleYAML(file, directory, locale, filterKeys) {
   return result;
 }
 
-function getNextCourse(directory) {
-  // Find the next course alphabetically.
+function getNextCourse(directory, shift = 1) {
+  // Find the next (or previous if shift = -1) course alphabetically.
   const courseId = path.basename(directory);
   const allCourses = glob.sync('!(shared|_*|*.*)', {cwd: path.join(directory, '../')});
-  return allCourses[(allCourses.indexOf(courseId) + 1) % allCourses.length];
-}
-
-function getPrevCourse(directory) {
-  // Find the previous course.
-  const courseId = path.basename(directory);
-  const allCourses = glob.sync('!(shared|_*|*.*)', {cwd: path.join(directory, '../')});
-  const courseIndex = allCourses.indexOf(courseId);
-  if (courseIndex > 0) {
-    return allCourses[(courseIndex - 1) % allCourses.length];
-  } else {
-    return allCourses[0];
-  }
+  return allCourses[mod(allCourses.indexOf(courseId) + shift, allCourses.length)];
 }
 
 
@@ -121,7 +110,7 @@ async function parseCourse(directory, locale, allLocales = ['en']) {
   const course = {
     id: courseId, locale,
     nextCourse: parsed[0].next || getNextCourse(directory),
-    prevCourse: getPrevCourse(directory),
+    prevCourse: parsed[0].prev || getNextCourse(directory, -1),
     title: parsed[0].courseTitle || 'Untitled Course',
     description: parsed[0].description || '',
     color: parsed[0].color || '#2274e8',

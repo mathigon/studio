@@ -10,7 +10,7 @@ import path from 'path';
 import crypto from 'crypto';
 import yaml from 'js-yaml';
 
-import {cache, Color, deepExtend, total} from '@mathigon/core';
+import {cache, Color, deepExtend, last, total} from '@mathigon/core';
 import {Config, Course, Section} from '../interfaces';
 
 
@@ -114,21 +114,17 @@ export function lighten(c: string, amount: 0.15) {
   return Color.fromHsl(...hsl).hex;
 }
 
-/** Determine which section or course to link to at the end of this one. */
-export function findNextSection(course: Course, section: Section) {
+/**
+ * Determine which section or course to link to at the end of this one. Returns
+ * the next course if shift = 1, or the previous course if shift = -1.
+ */
+export function findNextSection(course: Course, section: Section, shift = 1) {
   // TODO Personalise this, based on users' previous work
-  const nextSection = course.sections[course.sections.indexOf(section) + 1];
+  const nextSection = course.sections[course.sections.indexOf(section) + shift];
   if (nextSection) return {section: nextSection};
-  const nextCourse = getCourse(course.nextCourse, course.locale)!;
-  return {course: nextCourse, section: nextCourse.sections[0]};
-}
-
-/** Determine which section or course is before this one. */
-export function findPrevSection(course: Course, section: Section) {
-  const prevSection = course.sections[course.sections.indexOf(section) - 1];
-  if (prevSection) return {section: prevSection};
-  const prevCourse = getCourse(course.prevCourse, course.locale)!;
-  return {course: prevCourse, section: prevCourse.sections[prevCourse.sections.length - 1]};
+  const nextCourse = getCourse(shift > 0 ? course.nextCourse : course.prevCourse, course.locale);
+  if (!nextCourse) return {section: shift > 0 ? course.sections[0] : last(course.sections)};
+  return {course: nextCourse, section: shift > 0 ? nextCourse.sections[0] : last(nextCourse.sections)};
 }
 
 /** Returns the last value in an arry for which a callback returns true. */
