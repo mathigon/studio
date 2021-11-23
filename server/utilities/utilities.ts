@@ -123,6 +123,14 @@ export function findNextSection(course: Course, section: Section) {
   return {course: nextCourse, section: nextCourse.sections[0]};
 }
 
+/** Determine which section or course is before this one. */
+export function findPrevSection(course: Course, section: Section) {
+  const prevSection = course.sections[course.sections.indexOf(section) - 1];
+  if (prevSection) return {section: prevSection};
+  const prevCourse = getCourse(course.prevCourse, course.locale)!;
+  return {course: prevCourse, section: prevCourse.sections[prevCourse.sections.length - 1]};
+}
+
 /** Returns the last value in an arry for which a callback returns true. */
 export function findLastIndex<T>(array: T[], callback: (value: T, i: number) => boolean) {
   for (let i = array.length - 1; i >= 0; i--) {
