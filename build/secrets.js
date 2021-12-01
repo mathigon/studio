@@ -30,7 +30,7 @@ const path = require('path');
     const clientId = argv[`${k}ClientId`];
     const clientSecret = argv[`${k}ClientSecret`];
     if (clientId) config.accounts.oAuth[k].clientId = clientId;
-    if (clientSecret) config.accounts.oAuth[k].clientId = clientSecret;
+    if (clientSecret) config.accounts.oAuth[k].clientSecret = clientSecret;
   }
 
   await writeFile(src, yaml.dump(config));
