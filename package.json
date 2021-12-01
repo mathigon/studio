@@ -70,7 +70,7 @@
     "validator": "13.7.0",
     "web-animations-js": "2.3.2",
     "xss": "1.0.10",
-    "yargs-parser": "20.2.9"
+    "yargs-parser": "21.0.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "2.4.2",
