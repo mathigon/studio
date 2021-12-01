@@ -58,7 +58,7 @@
     "marked": "3.0.8",
     "mathjax": "3.1.2",
     "mongodb-memory-server": "8.0.4",
-    "mongoose": "6.0.12",
+    "mongoose": "6.0.14",
     "node-fetch": "2.6.6",
     "postcss": "8.4.4",
     "postcss-inline-svg": "5.0.0",
