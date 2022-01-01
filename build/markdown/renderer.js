@@ -5,7 +5,7 @@
 
 
 const yaml = require('js-yaml');
-const marked = require('marked');
+const {marked} = require('marked');
 const pug = require('pug');
 const entities = require('html-entities');
 

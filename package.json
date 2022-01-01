@@ -1,12 +1,12 @@
 {
   "name": "@mathigon/studio",
   "description": "A platform for creating and hosting interactive, online courses.",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "license": "UNLICENSED",
   "repository": "mathigon/studio",
   "bugs": "https://github.com/mathigon/studio/issues",
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "bin": {
     "mgon-build": "build/index.js",
@@ -22,11 +22,11 @@
     "translate": "node build/index.js --translate --all --key google-service-account.json"
   },
   "dependencies": {
-    "@mathigon/boost": "1.0.8",
-    "@mathigon/core": "1.0.5",
-    "@mathigon/euclid": "1.0.4",
-    "@mathigon/fermat": "1.0.6",
-    "@mathigon/hilbert": "1.0.5",
+    "@mathigon/boost": "1.0.9",
+    "@mathigon/core": "1.0.6",
+    "@mathigon/euclid": "1.0.5",
+    "@mathigon/fermat": "1.0.7",
+    "@mathigon/hilbert": "1.0.6",
     "@sendgrid/mail": "7.6.0",
     "@types/compression": "1.7.2",
     "@types/cookie-parser": "1.4.2",
