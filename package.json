@@ -46,7 +46,7 @@
     "cssnano": "5.0.12",
     "date-fns": "2.27.0",
     "esbuild": "0.9.7",
-    "express": "4.17.1",
+    "express": "4.17.2",
     "express-flash": "0.0.2",
     "express-session": "1.17.2",
     "glob": "7.2.0",
