@@ -15,7 +15,7 @@ p svg, li svg, td svg { display: inline-block; }
 
 // Don't do this for rect, because rects in Illustrator exports have transforms.
 g, use, path, circle, line, polyline, image {
-  transform-origin: center /* rtl:ignore */;
+  transform-origin: center;
   transform-box: fill-box;  // See https://bugzilla.mozilla.org/show_bug.cgi?id=1209061
 }
 

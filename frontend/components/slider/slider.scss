@@ -7,7 +7,8 @@
 @import "../../styles/variables";
 
 x-slider {
-  margin: 20px auto 2em /* rtl:ignore */;
+  /* rtl:ignore */
+  margin: 20px auto 2em;
   width: calc(100% - 24px);
   max-width: 400px;
   display: block;
@@ -21,7 +22,7 @@ x-slider {
     position: relative;
   }
 
-  .play + .bar { margin-left: 40px /* rtl:ignore */; }
+  .play + .bar { /* rtl:ignore */ margin-left: 40px; }
 
   .knob {
     background: $primary;
@@ -29,11 +30,13 @@ x-slider {
     position: absolute;
     height: 20px;
     width: 20px;
-    margin:  -8px 0 0 -10px /* rtl:ignore */;
+    /* rtl:ignore */
+    margin:  -8px 0 0 -10px;
     touch-action: pan-y;
     transition: background .2s, transform .2s, box-shadow .2s;
     cursor: grab;
-    left: 0 /* rtl:ignore */;
+    /* rtl:ignore */
+    left: 0;
   }
 
   .knob:hover, .knob:active {
@@ -49,8 +52,10 @@ x-slider {
     height: 32px;
     padding: 4px;
     position: absolute;
-    top: -18px /* rtl:ignore */;
-    left: -8px /* rtl:ignore */;
+    /* rtl:begin:ignore */
+    top: -18px;
+    left: -8px;
+    /* rtl:end:ignore */
     color: mix($grey, white, 60%);
     transition: fill .2s, transform .2s;
     &:focus, &:hover { @include theme(color, $grey, white); transform: scale(1.2); }

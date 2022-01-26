@@ -32,8 +32,8 @@ x-var {
     transition: opacity .2s;
     x-icon, svg { display: block; color: white; }
   }
-  .left { left: 0 /* rtl:ignore */; padding-right: 4px /* rtl:ignore */; }
-  .right { right: 0 /* rtl:ignore */; padding-left: 4px /* rtl:ignore */; }
+  .left { /* rtl:ignore */ left: 0; /* rtl:ignore */ padding-right: 4px; }
+  .right { /* rtl:ignore */ right: 0; /* rtl:ignore */ padding-left: 4px; }
 
   .bubble {
     position: absolute;
@@ -79,7 +79,8 @@ x-var {
     position: absolute;
     top: 2px;
     bottom: 2px;
-    left: 2px /* rtl:ignore */;
+    /* rtl:ignore */
+    left: 2px;
   }
 
   &.on, &:hover {

@@ -11,7 +11,7 @@ x-progress {
 
   svg { display: block; margin: -14px; pointer-events: none; max-width: none; }
 
-  path.pie, path.done { transform: translate(12px, 12px) /* rtl:ignore */; }
+  path.pie, path.done { /* rtl:ignore */ transform: translate(12px, 12px); }
   path.pie { fill: none; transition: stroke-dasharray 0.2s; stroke: currentColor; }
 
   line { stroke: currentColor; stroke-width: 2px; }
