@@ -32,11 +32,12 @@ async function translate(key, allLocales = false, customKeys = []) {
     const file = process.cwd() + `/translations/${locale}/strings.yaml`;
 
     const data = loadYAML(file);
+    const newData = {};
     for (const str of strings) {
-      if (!data[str]) data[str] = await loadFromGoogle(api, str, options.google || locale);
+      newData[str] = data[str] || await loadFromGoogle(api, str, options.google || locale);
     }
 
-    await writeFile(file, yaml.dump(data, {sortKeys: true}));
+    await writeFile(file, yaml.dump(newData, {sortKeys: true}));
 
     // TODO Translate course content
   }
