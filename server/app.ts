@@ -144,7 +144,8 @@ export class MathigonStudioApp {
         country: req.country, locale: req.locale, __: req.__, env: ENV, req,
         availableLocales: AVAILABLE_LOCALES, config: CONFIG, include,
         href: href.bind(undefined, req), basedir: __dirname + '/templates',
-        search: {docs: SEARCH_DOCS}, showCookieConsent, getCourse, cacheBust,
+        search: {docs: SEARCH_DOCS}, showCookieConsent, getCourse,
+        cacheBust: (file: string) => cacheBust(file, req.locale),
         oAuthProviders: OAUTHPROVIDERS
       });
 

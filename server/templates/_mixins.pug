@@ -1,5 +1,5 @@
 mixin course(id)
-  // progressData is a global variable that contains all student course progress
+  //- progressData is a global variable that contains all student course progress
   - var course = getCourse(id, locale.id)
   - var p = progress ? progress[id] : undefined
   .course(lang=(course.locale !== locale.id ? course.locale : undefined))

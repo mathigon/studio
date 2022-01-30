@@ -12,6 +12,7 @@ import yaml from 'js-yaml';
 
 import {cache, Color, deepExtend, last, total} from '@mathigon/core';
 import {Config, Course, Section} from '../interfaces';
+import {Locale} from './i18n';
 
 
 export const STUDIO_DIR = path.join(__dirname, '../../');
@@ -174,21 +175,33 @@ export function hash(str: string, n: number): number {
 
 const FILE_NAME_CACHE = new Map<string, string>();
 
-export function cacheBust(file: string) {
-  // We only cache the result in production, to allow real-time updating.
-  if (IS_PROD && FILE_NAME_CACHE.has(file)) return FILE_NAME_CACHE.get(file)!;
+export function cacheBust(file: string, locale: Locale) {
   if (file.startsWith('http')) return file;
 
-  const content = resolve(file, 'public');
-  if (!content) return file;
+  // We only cache the result in production, to allow real-time updating.
+  const key = file + locale.id;
+  if (IS_PROD && FILE_NAME_CACHE.has(key)) return FILE_NAME_CACHE.get(key)!;
 
-  const token = crypto.createHash('md5').update(content).digest('hex').slice(0, 8);
-  const newFile = file.replace(/\.(\w+)$/g, `.${token}.$1`);
-  FILE_NAME_CACHE.set(file, newFile);
-  return newFile;
+  // Handle localised JS and CSS files
+  if (file.endsWith('.css')) {
+    const file1 = file.replace('.css', '.rtl.css');
+    if (locale?.dir === 'rtl' && fs.existsSync(OUT_DIR + file1)) file = file1;
+  } else if (file.endsWith('.js')) {
+    const file1 = file.replace('.js', `.${locale?.id}.js`);
+    if (locale?.id !== 'en' && fs.existsSync(OUT_DIR + file1)) file = file1;
+  }
+
+  // Hash the files for cache busting
+  if (fs.existsSync(OUT_DIR + file)) {
+    const content = fs.readFileSync(OUT_DIR + file, 'utf-8');
+    const token = crypto.createHash('md5').update(content).digest('hex').slice(0, 8);
+    file = file.replace(/\.(\w+)$/g, `.${token}.$1`);
+  }
+
+  FILE_NAME_CACHE.set(key, file);
+  return file;
 }
 
 export function removeCacheBust(file: string) {
-  return file.replace(/\.([a-z0-9]+)\.(js|css|svg|mp3)/,
-      (m, p1, p2) => p1 === 'min' ? `.min.${p2}` : `.${p2}`);
+  return file.replace(/\.([a-z0-9]{4,})\.(js|css|svg|mp3)/, (_1, _2, ext) => `.${ext}`);
 }
