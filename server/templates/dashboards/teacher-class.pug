@@ -1,0 +1,54 @@
+extends ../_layout
+
+block vars
+  - var title = __('Teacher Dashboard')
+  - var styles = ['/dashboard.css']
+  - var scripts = ['/dashboard.js']
+
+block main
+  .container
+    a.back(href="/dashboard") #[x-icon(name="back")] #{__('All Classes')}
+    .class-banner #{__('Class code')} #[strong= classroom.code]
+    h1= classroom.title
+      button.edit-class(data-modal="edit-class"): x-icon(name="settings" size=26)
+
+    .row.padded
+      .dashboard-body.grow
+        +flash(messages)
+
+        if studentData.length
+          .overflow-wrap: #roster
+          script#student-data(type="application/json")!= JSON.stringify(studentData)
+          script#course-data(type="application/json")!= JSON.stringify(courseData)
+
+        else
+          .empty-dashboard
+            x-icon(name="construction" size=80)
+            p= __('No students have joined this class yet.')
+
+      .dashboard-sidebar: .sidebar-wrap
+        .sidebar-panel
+          h2= __('Add Students')
+          p!= __('New students can join your class by using the code $0 when signing up for $1. If they already have an account, they can click “Add class code” in the sidebar of their student dashboard.', `<strong>${classroom.code}</strong>`, config.siteName)
+          p= __('It is your responsibility to obtain any necessary guardian consent before asking students to sign up.')
+
+    +modal('edit-class')
+      h2 #[x-icon(name="settings" size=32)] #{__('Class settings')}
+      form(method="POST")
+        input(type="hidden" name="_csrf" value=_csrf)
+        label.form-field
+          input(name="title" placeholder="Class name" value=classroom.title required maxlength=30)
+          span.placeholder= __('Class name')
+        p.btn-row
+          button.btn.btn-red(type="button" data-modal="delete-class")= __('Delete class')
+          button.btn.btn-blue(type="submit")= __('Save changes')
+
+    +modal('delete-class')
+      h2 #[x-icon(name="delete" size=32)] #{__('Delete class')}
+      form(action=`/dashboard/${classroom.code}/delete` method="POST")
+        p= __('Are you sure you want to delete this class? It is not possible to restore a class once deleted. Deleting a class won’t delete the accounts of students within that class.')
+        input(type="hidden" name="_csrf" value=_csrf)
+        p.btn-row
+          button.btn.btn-red(type="submit")= __('Delete class')
+
+    include ../_footer

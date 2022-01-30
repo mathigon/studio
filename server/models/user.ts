@@ -9,8 +9,8 @@ import bcrypt from 'bcryptjs';
 import * as date from 'date-fns';
 import {Document, Model, model, Schema, Types} from 'mongoose';
 
-import {age, hash} from '../utilities/utilities';
-import {normalizeEmail} from '../utilities/validate';
+import {age, CONFIG, hash, ONE_DAY} from '../utilities/utilities';
+import {normalizeEmail, normalizeUsername} from '../utilities/validate';
 
 export const USER_TYPES = ['student', 'teacher', 'parent'] as const;
 export type UserType = typeof USER_TYPES[number];
@@ -21,13 +21,15 @@ const INDEX = {index: true, unique: true, sparse: true};
 // Interfaces
 
 export interface UserBase {
-  email: string;
+  username?: string;
+  email?: string;
   previousEmails: string[];
 
   firstName: string;
   lastName: string;
   type: UserType;
   country: string;
+  school?: string;
   birthday?: Date;
   picture?: string;
   lastOnline?: Date;
@@ -39,6 +41,10 @@ export interface UserBase {
   oAuthTokens: string[];
   deletionRequested?: number;
   acceptedPolicies?: boolean;
+
+  isRestricted?: boolean;
+  guardianEmail?: string;
+  guardianConsentToken?: string;
 }
 
 export interface UserDocument extends UserBase, Document {
@@ -53,8 +59,9 @@ export interface UserDocument extends UserBase, Document {
   shortName: string;
   sortingName: string;
   birthdayString: string;
-  consentDaysRemaining: number;
+  consentDaysRemaining: string;
   age: number;
+  canUpgrade: boolean;
 
   // Methods
   checkPassword: (candidate: string) => boolean;
@@ -70,14 +77,24 @@ interface UserModel extends Model<UserDocument> {
 // -----------------------------------------------------------------------------
 // Schema
 
+function unrestricted(this: UserDocument) {
+  return !this.isRestricted;
+}
+
+function restricted(this: UserDocument) {
+  return !!this.isRestricted;
+}
+
 const UserSchema = new Schema<UserDocument, UserModel>({
-  email: {type: String, required: true, lowercase: true, ...INDEX, maxLength: 64},
+  username: {type: String, required: restricted, lowercase: true, ...INDEX, maxLength: 32},
+  email: {type: String, required: unrestricted, lowercase: true, ...INDEX, maxLength: 64},
   previousEmails: {type: [String], default: []},
 
   firstName: {type: String, default: '', maxLength: 32},
   lastName: {type: String, default: '', maxLength: 32},
   type: {type: String, enum: USER_TYPES, default: 'student'},
   country: {type: String, default: 'US'},
+  school: {type: String, maxLength: 32},
   birthday: Date,
   picture: String,
   lastOnline: Date,
@@ -86,29 +103,45 @@ const UserSchema = new Schema<UserDocument, UserModel>({
   passwordResetToken: {type: String, ...INDEX},
   passwordResetExpires: Number,
   emailVerificationToken: String,
-  oAuthTokens: {type: [String], default: [], ...INDEX},
+  oAuthTokens: {type: [String], default: [], index: true},
   deletionRequested: Number,
-  acceptedPolicies: Boolean
+  acceptedPolicies: Boolean,
+
+  isRestricted: {type: Boolean, default: false},
+  guardianEmail: {type: String, lowercase: true, required: restricted},
+  guardianConsentToken: {type: String, ...INDEX}
 }, {timestamps: true});
 
 UserSchema.virtual('fullName').get(function(this: UserDocument) {
-  return (`${this.firstName} ${this.lastName}`).trim();
+  return (`${this.firstName || ''} ${this.lastName || ''}`).trim() || this.username;
 });
 
 UserSchema.virtual('shortName').get(function(this: UserDocument) {
-  return this.firstName || this.lastName;
+  return this.firstName || this.lastName || this.username;
 });
 
 UserSchema.virtual('sortingName').get(function(this: UserDocument) {
-  return this.lastName || this.firstName;
+  return this.lastName || this.firstName || this.username || '';
 });
 
 UserSchema.virtual('birthdayString').get(function(this: UserDocument) {
   return this.birthday ? date.format(new Date(this.birthday), 'dd MMMM yyyy') : '';
 });
 
+UserSchema.virtual('consentDaysRemaining').get(function(this: UserDocument) {
+  if (!this.isRestricted || !this.guardianConsentToken) return undefined;
+  const accountAge = Math.floor((Date.now() - (+this.createdAt)) / ONE_DAY);
+  const daysLeft = Math.max(1, 7 - accountAge);
+  return `${daysLeft} day${daysLeft > 1 ? 's' : ''}`;
+});
+
 UserSchema.virtual('age').get(function(this: UserDocument) {
   return this.birthday ? age(this.birthday) : NaN;
+});
+
+UserSchema.virtual('canUpgrade').get(function(this: UserDocument) {
+  if (this.isRestricted) return this.age >= 13;
+  return this.type !== 'student' || !this.birthday || this.age >= 16;
 });
 
 UserSchema.pre<UserDocument>('save', async function(next) {
@@ -116,6 +149,11 @@ UserSchema.pre<UserDocument>('save', async function(next) {
     const salt = bcrypt.genSaltSync(10);
     this.password = bcrypt.hashSync(this.password, salt);
   }
+
+  if (this.isRestricted && !CONFIG.accounts.restricted) throw new Error('Restricted accounts are not supported.');
+  if (this.type === 'teacher' && !CONFIG.accounts.teachers) throw new Error('Teacher accounts are not supported.');
+  if (this.type === 'parent' && !CONFIG.accounts.parents) throw new Error('Parent accounts are not supported.');
+
   next();
 });
 
@@ -141,9 +179,11 @@ UserSchema.methods.getJSON = function(this: any, ...keys: string[]) {
   return data;
 };
 
-UserSchema.statics.lookup = async function(email: string) {
-  const cleanEmail = normalizeEmail(email);
-  return cleanEmail ? User.findOne({email}) : undefined;
+UserSchema.statics.lookup = async function(emailOrUsername: string) {
+  const cleanEmail = normalizeEmail(emailOrUsername);
+  if (cleanEmail) return User.findOne({email: cleanEmail});
+  const cleanUsername = normalizeUsername(emailOrUsername);
+  return cleanUsername ? User.findOne({username: cleanUsername}) : undefined;
 };
 
 // -----------------------------------------------------------------------------

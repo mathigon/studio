@@ -1,0 +1,11 @@
+extends _template
+
+block preheader
+  | #{student.name} has joined your #{config.siteName} class
+
+block body
+  h1(style="font-size: 24px;margin:0 0 20px 0") Dear #{user.shortName},
+
+  p We wanted to let you know that #[strong= student.fullName] has just joined your #{config.siteName} class using your unique class code. You can manage your students’ accounts on your #[a(href="https://#{config.domain}/dashboard") #{user.type} dashboard].
+
+  p Thanks for using #{config.siteName}!

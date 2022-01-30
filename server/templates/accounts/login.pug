@@ -22,8 +22,8 @@ block main
       input(type="hidden" name="_csrf" value=_csrf)
 
       label.form-field
-        input(type="email" name="email" placeholder=__("Email") required autofocus=true autocomplete="email" value=req.body.email)
-        span.placeholder= __('Email')
+        input(type="text" name="email" placeholder=__("Email or Username") required autofocus=true autocomplete="email" value=req.body.email)
+        span.placeholder= __('Email or Username')
 
       label.form-field
         input.form-field(type="password" name="password" placeholder=__("Password") required minlength="4" autocomplete="password")

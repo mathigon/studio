@@ -45,6 +45,9 @@ social:
 
 accounts:
   enabled: true
+  teachers: true
+  parents: true
+  restricted: true
   minAge: 13
   privacyPolicy: https://mathigon.org/policies
   termsOfUse: https://mathigon.org/policies#terms

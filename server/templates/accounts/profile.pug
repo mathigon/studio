@@ -10,36 +10,65 @@ block main
     h1
       img.avatar(src=user.avatar(120) width=60 height=60)
       | #{__('Account Settings')}
+      if user.type === 'student'
+        .subtitle= user.isRestricted ? __('Restricted Student') : __('Student')
+      else if user.type === 'teacher'
+        .subtitle= __('Teacher')
+      else if user.type === 'parent'
+        .subtitle= __('Parent')
 
     +flash(messages)
 
     h2.text-center= __('Personal Details')
     form.form-large(action="/profile/details" method="POST")
       input(type="hidden" name="_csrf" value=_csrf)
-      .form-row
+
+      if user.isRestricted
+        p.text-center= __('You have a restricted account for students aged 12 years or younger.')
         label.form-field
-          input(type='text' name='first' required autocomplete="fname" placeholder=__("First Name") value=user.firstName)
-          span.placeholder= __('First Name')
+          input(name="username" disabled value=user.username placeholder=__("Username"))
+          span.placeholder= __('Username')
         label.form-field
-          input(type='text' name='last' required autocomplete="lname" placeholder=__("Last Name") value=user.lastName)
-          span.placeholder= __('Last Name')
-      label.form-field
-        input(type='email' name='email' required disabled=(!user.password) autocomplete="email" placeholder=__("Email") value=user.email)
-        span.placeholder= __('Email')
-        if user.emailVerificationToken
-          p.form-hint
-            strong.m-red= __('Email not verified!')
-            | #{" – "}
-            a(href="/profile/resend")= __('Resend verification email')
-      if user.birthday
-        label.form-field
-          input(type='text' name='birthday' disabled value=user.birthdayString placeholder=__("Date of Birth"))
+          input(name="birthday" disabled value=user.birthdayString() placeholder=__("Date of Birth"))
           span.placeholder= __('Date of Birth')
-      label.form-field
-        select(name='country')
-          for c in countries
-            option(value=c.id selected=(c.id === user.country))= c.name
-      button.btn.btn-red(type='submit')= __('Update Profile')
+        label.form-field
+          input(type="email" name="guardianEmail" disabled value=user.guardianEmail)
+          span.placeholder= __('Guardian Email')
+          if !user.guardianConsent
+            p.form-hint #[strong.m-red #{__('Your parent or guardian has not yet approved your account.')}] #{__('They need to approve your account within $0, using the link in the email we sent them, or we need to delete your account.', user.consentDaysRemaining())} #[a(href="/profile/resend") #{__('Resend verification email')}]
+
+      else
+        .form-row
+          label.form-field
+            input(name="first" required autocomplete="fname" placeholder=__("First Name") value=user.firstName)
+            span.placeholder= __('First Name')
+          label.form-field
+            input(name="last" required autocomplete="lname" placeholder=__("Last Name") value=user.lastName)
+            span.placeholder= __('Last Name')
+        label.form-field
+          input(type="email" name="email" required disabled=(!user.password) autocomplete="email" placeholder=__("Email") value=user.email)
+          span.placeholder= __('Email')
+          if user.emailVerificationToken
+            p.form-hint
+              strong.m-red= __('Email not verified!')
+              | #{" – "}
+              a(href="/profile/resend")= __('Resend verification email')
+        if user.birthday
+          label.form-field
+            input(name="birthday" disabled value=user.birthdayString placeholder=__("Date of Birth"))
+            span.placeholder= __('Date of Birth')
+        if user.type === 'teacher'
+          label.form-field
+            input(name="school" value=user.school placeholder=__("School Name"))
+            span.placeholder= __('School Name')
+        label.form-field
+          select(name="country")
+            for c in countries
+              option(value=c.id selected=(c.id === user.country))= c.name
+          span.placeholder= __('Country')
+        button.btn.btn-red(type='submit')= __('Update Profile')
+
+    //- ------------------------------------------------------------------------
 
     if user.password && !user.emailVerificationToken
       hr(style="margin: 2em 0")
@@ -52,23 +81,51 @@ block main
         x-password
         button.btn.btn-red(type='submit')= __('Change Password')
 
+    //- ------------------------------------------------------------------------
+
+    if user.canUpgrade
+      hr(style="margin: 2em 0")
+      h2.text-center#upgrade= __('Change Account Type')
+      .btn-row.text-center
+        if user.type === 'student'
+          a.btn.btn-blue(data-modal="upgrade-teacher")= __('Teacher Account')
+          a.btn.btn-green(data-modal="upgrade-parent")= __('Parent Account')
+          +modal('upgrade-teacher')
+            h2 #[x-icon(name="user" size=32)] #{__('Change to Teacher Account')}
+            p= __('You currently have a student account. Changing to a teacher account will allow you to manage student accounts and track their progress.')
+            .btn-row: a.btn.btn-red(href="/profile/upgrade?type=teacher")= __('Continue')
+          +modal('upgrade-parent')
+            h2 #[x-icon(name="user" size=32)] #{__('Change to Parent Account')}
+            p= __('You currently have a student account. Changing to a parent account will allow you to manage your children’s accounts and track their progress.')
+            .btn-row: a.btn.btn-red(href="/profile/upgrade?type=parent")= __('Continue')
+        else
+          a.btn.btn-yellow(data-modal="upgrade-student")= __('Student Account')
+          +modal('upgrade-student')
+            h2 #[x-icon(name="user" size=32)] #{__('Change to Student Account')}
+            p= __('Are you sure that you want to change to a student account? You existing classes will be deleted and will no longer be able to manage students.')
+            .btn-row: a.btn.btn-red(href="/profile/upgrade?type=student")= __('Continue')
+
+    //- ------------------------------------------------------------------------
+
     hr(style="margin: 2em 0")
     h2.text-center= __('Privacy Settings')
-    p!= __('Please review our <a href="$0" target="_blank">Privacy Policy</a> and our <a href="$1" target="_blank">Terms of Service</a>. Make sure you understand what personal data we collect, and how we use that data to personalise and improve our content.', config.accounts.privacyPolicy, config.accounts.termsOfUse)
+    if !user.isRestricted
+      p!= __('Please review our <a href="$0" target="_blank">Privacy Policy</a> and our <a href="$1" target="_blank">Terms of Service</a>. Make sure you understand what personal data we collect, and how we use that data to personalise and improve our content.', config.accounts.privacyPolicy, config.accounts.termsOfUse)
     if user.deletionRequested
       p.m-red.b Your account is currently marked for deletion and will be removed in #{Math.floor(7 - (Date.now() - user.deletionRequested) / (1000 * 60 * 60 * 24))} days.
     .btn-row
       a.btn.btn-blue(href="/profile/data.json" download)= __('Download all my data')
       if user.deletionRequested
-        a.btn.btn-green(href="/profile/undelete")= __('Don’t delete my account')
+        form(action="/profile/undelete" method="POST")
+          input(type="hidden" name="_csrf" value=_csrf)
+          button.btn.btn-green(type="submit")= __('Don’t delete my account')
       else
         button.btn.btn-red(data-modal="delete")= __('Delete my account')
-    if !user.deletionRequested
-      x-modal#delete
-        button.close: x-icon(name="close")
-        .modal-body
+        +modal('delete')
           h2 #[x-icon(name="delete" size=32)] #{__('Delete my account')}
           p= __('Are you sure that you want to delete your $0 account and all associated data?', config.siteName)
-          .btn-row: a.btn.btn-red(href="/profile/delete")= __('Delete')
+          form.btn-row(action="/profile/delete" method="POST")
+            input(type="hidden" name="_csrf" value=_csrf)
+            button.btn.btn-red(type="submit")= __('Delete')
 
     include ../_footer
