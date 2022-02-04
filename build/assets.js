@@ -111,7 +111,7 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, o
   for (const locale of options.locales || ['en']) {
     const result = await esbuild.build({
       entryPoints: [srcPath],
-      define: {ENV: `"${options.env || 'WEB'}"`},  // could also be '"MOBILE"'
+      define: {ENV: `"${options.env || 'WEB'}"`, ICONS: 'undefined'},
       bundle: true,
       minify,
       globalName: options.name,

@@ -84,7 +84,7 @@ export class Slider extends CustomElementView implements StepComponent {
     this.trigger('slide-end');
   }
 
-  protected bindVariable(model: Observable, name: string) {
+  bindVariable(model: Observable, name: string) {
     model[name] = 0;
     this.on('move', (n: number) => model[name] = n);
     model.watch(() => this.set(model[name]));
