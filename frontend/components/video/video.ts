@@ -33,6 +33,7 @@ export class Video extends CustomElementView {
     $video.setAttr('poster', this.attr('poster') || src.replace(/mp4$/, 'jpg'));
     if (this.hasAttr('loop')) $video._el.loop = true;
     if (!this.hasAttr('audio')) $video._el.muted = true;
+    $video._el.preload = (this.attr('preload') === 'no') ? 'metadata' : 'auto';
     $N('source', {src, type: 'video/mp4'}, $video);
 
     if (this.hasAttr('credit')) {
