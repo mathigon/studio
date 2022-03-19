@@ -116,7 +116,7 @@ ProgressSchema.methods.getSectionData = async function(sectionId: string) {
   }
 
   const section = sectionId ? this.sections?.get(sectionId) : undefined;
-  const messages = this.messages?.map(m => ({content: m.content, type: m.kind}));
+  const messages = this.messages?.map((m: { content: any; kind: any; }) => ({content: m.content, type: m.kind}));
   return {completed: section?.completed, activeStep: section?.activeStep, messages, steps};
 };
 
@@ -177,7 +177,7 @@ ProgressSchema.methods.getJSON = function(sectionId?: string) {
   return JSON.stringify({
     completed: section ? section.completed : undefined,
     activeStep: section ? section.activeStep : undefined,
-    messages: this.messages?.map(m => ({content: m.content, kind: m.kind})),
+    messages: this.messages?.map((m: { content: any; kind: any; }) => ({content: m.content, kind: m.kind})),
     steps
   });
 };
