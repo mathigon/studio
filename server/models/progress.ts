@@ -108,7 +108,7 @@ ProgressSchema.virtual('activeSection').get(function(this: ProgressDocument) {
   return course.sections[p];
 });
 
-ProgressSchema.methods.getSectionData = async function(sectionId: string) {
+ProgressSchema.methods.getSectionData = async function(this: ProgressDocument, sectionId: string) {
   const steps: StepData = {};
   // TODO Only return data for steps in the requested section.
   for (const [key, step] of this.steps?.entries() || []) {
@@ -116,7 +116,7 @@ ProgressSchema.methods.getSectionData = async function(sectionId: string) {
   }
 
   const section = sectionId ? this.sections?.get(sectionId) : undefined;
-  const messages = this.messages?.map((m: { content: any; kind: any; }) => ({content: m.content, type: m.kind}));
+  const messages = this.messages?.map(m => ({content: m.content, type: m.kind}));
   return {completed: section?.completed, activeStep: section?.activeStep, messages, steps};
 };
 
@@ -165,7 +165,7 @@ ProgressSchema.methods.updateData = function(sectionId: string, changes: ChangeD
   return addedScores;
 };
 
-ProgressSchema.methods.getJSON = function(sectionId?: string) {
+ProgressSchema.methods.getJSON = function(this: ProgressDocument, sectionId?: string) {
   // TODO Only return data for steps in the requested section.
   const steps: StepData = {};
   for (const [key, data] of this.steps.entries()) {
@@ -177,7 +177,7 @@ ProgressSchema.methods.getJSON = function(sectionId?: string) {
   return JSON.stringify({
     completed: section ? section.completed : undefined,
     activeStep: section ? section.activeStep : undefined,
-    messages: this.messages?.map((m: { content: any; kind: any; }) => ({content: m.content, kind: m.kind})),
+    messages: this.messages?.map(m => ({content: m.content, kind: m.kind})),
     steps
   });
 };
