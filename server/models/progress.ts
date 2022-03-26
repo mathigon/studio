@@ -108,7 +108,7 @@ ProgressSchema.virtual('activeSection').get(function(this: ProgressDocument) {
   return course.sections[p];
 });
 
-ProgressSchema.methods.getSectionData = async function(sectionId: string) {
+ProgressSchema.methods.getSectionData = async function(this: ProgressDocument, sectionId: string) {
   const steps: StepData = {};
   // TODO Only return data for steps in the requested section.
   for (const [key, step] of this.steps?.entries() || []) {
@@ -165,7 +165,7 @@ ProgressSchema.methods.updateData = function(sectionId: string, changes: ChangeD
   return addedScores;
 };
 
-ProgressSchema.methods.getJSON = function(sectionId?: string) {
+ProgressSchema.methods.getJSON = function(this: ProgressDocument, sectionId?: string) {
   // TODO Only return data for steps in the requested section.
   const steps: StepData = {};
   for (const [key, data] of this.steps.entries()) {
