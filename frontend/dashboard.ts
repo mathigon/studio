@@ -5,7 +5,7 @@
 
 
 import {cache} from '@mathigon/core';
-import {$, $$, Browser, observe} from '@mathigon/boost';
+import {$, $$, Browser, observe, Popup} from '@mathigon/boost';
 import './main';
 
 
@@ -27,7 +27,7 @@ interface Student {
   avatar: string;
   minutes: number;
   recent: string[];
-  progress: Record<string, number>;
+  progress: Record<string, Record<string, number>>;
 }
 
 // -----------------------------------------------------------------------------
@@ -52,7 +52,29 @@ Browser.ready(() => {
 
   const $roster = $('#roster');
   if ($roster) {
-    const _students = JSON.parse($('#student-data')!.text) as Student[];
-    const _courses = JSON.parse($('#course-data')!.text) as Course[];
+    const students = JSON.parse($('#student-data')!.text) as Student[];
+    const courses = JSON.parse($('#course-data')!.text) as Course[];
+    const $popups = $roster.$$('x-popup') as Popup[];
+
+    const studentMap = new Map<string, Student>();
+    for (const s of students) studentMap.set(s.id, s);
+
+    const model = observe({
+      course: courses[0],
+      section: courses[0].sections[0],
+      student: undefined as Student|undefined,
+      setCourse: (courseId: string) => {
+        model.course = courses.find(c => c.id === courseId)!;
+        model.section = model.course.sections.find(s => !s.locked)!;
+        for (const $p of $popups) $p.close();
+      },
+      setSection: (s: any) => {
+        model.section = s;
+        for (const $p of $popups) $p.close();
+      },
+      getProgress: (student: string, section = 'total') => studentMap.get(student)?.progress[model.course.id]?.[section] || 0,
+      remove: (student: string) => (model.student = studentMap.get(student))
+    });
+    $roster.parents('.dashboard-body')[0].bindModel(model);
   }
 });

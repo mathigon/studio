@@ -138,7 +138,7 @@ Router.view('/signup', {
       let c = classCode.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
       if (c.length > 4) c = c.slice(0, 4) + '-' + c.slice(4, 8);
       model.classCode = c;
-      model.classCodeError = c.length !== 9 || (await validate(`classcode=${c}`)) !== 'valid';
+      model.classCodeError = c.length !== 9 || (await validate(`classcode=${c}`)) === 'invalid';
     });
 
     // Username validation
