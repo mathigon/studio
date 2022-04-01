@@ -50,7 +50,7 @@
     "express-flash": "0.0.2",
     "express-session": "1.17.2",
     "glob": "7.2.0",
-    "html-entities": "2.3.2",
+    "html-entities": "2.3.3",
     "html-minifier": "4.0.0",
     "js-yaml": "4.1.0",
     "jsdom": "19.0.0",
