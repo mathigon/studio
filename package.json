@@ -27,7 +27,7 @@
     "@mathigon/euclid": "1.0.9",
     "@mathigon/fermat": "1.0.8",
     "@mathigon/hilbert": "1.0.8",
-    "@sendgrid/mail": "7.6.1",
+    "@sendgrid/mail": "7.6.2",
     "@types/compression": "1.7.2",
     "@types/cookie-parser": "1.4.2",
     "@types/express": "4.17.13",
