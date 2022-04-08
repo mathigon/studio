@@ -85,7 +85,7 @@ const ProgressSchema = new Schema<ProgressDocument, ProgressModel>({
   messages: [{content: String, kind: {type: String, default: 'hint'}}]
 }, {timestamps: true});
 
-ProgressSchema.index({user: 1, course: 1}, {unique: true});
+ProgressSchema.index({userId: 1, courseId: 1}, {unique: true});
 
 ProgressSchema.virtual('activeSection').get(function(this: ProgressDocument) {
   const course = getCourse(this.courseId, 'en')!;
