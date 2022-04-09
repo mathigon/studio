@@ -6,7 +6,7 @@
 
 import {$, $$, $body, $html, bindAccessibilityEvents, Browser, InputView, Modal, Popup, Router} from '@mathigon/boost';
 
-import '@mathigon/boost/dist/components';
+import '@mathigon/boost/components';
 import './components/progress/progress';
 
 // See https://github.com/googleanalytics/autotrack
