@@ -22,6 +22,7 @@ const urls = (sitemap.match(/<loc>[\w+/:.-]+<\/loc>/g) || [])
     .map(l => new URL(l.slice(5, l.length - 6)).pathname);
 
 if (argv.urls) urls.push(...argv.urls.split(','));
+const filter = argv.filter?.split(',') || [];
 
 (async () => {
   const browser = await puppeteer.launch();
@@ -36,7 +37,8 @@ if (argv.urls) urls.push(...argv.urls.split(','));
   });
 
   for (const url of urls) {
-    await page.goto(`http://localhost:${port}${url}#full`);
+    if (filter.some(f => url.includes(f))) continue;
+    await page.goto(`http://localhost:${port}${url}#full`, {waitUntil: 'load', timeout: 0});
     await page.addStyleTag({content: CUSTOM_CSS});
     const file = (url.slice(1) || 'home').replace(/\//g, '-');
     await page.screenshot({path: `${dir}/${file}.png`, fullPage: true});
