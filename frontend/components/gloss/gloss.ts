@@ -5,7 +5,7 @@
 
 
 import {$, Browser, CustomElementView, ElementView, hover, register} from '@mathigon/boost';
-import {Modal} from '../modal/modal';
+import type {Modal} from '@mathigon/boost';
 import template from './gloss.pug';
 
 
@@ -49,6 +49,7 @@ export class Gloss extends CustomElementView {
   }
 
   show() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     activeGloss = this;
     this.addClass('on');
 

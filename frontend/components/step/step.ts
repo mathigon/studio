@@ -236,7 +236,7 @@ export class Step extends CustomElementView {
     this.on('complete', () => clearTimeout(timeout));
   }
 
-  get nextStep() {
+  get nextStep(): Step|undefined {
     if (!this.$course) return undefined;
     const i = this.$course.$steps.indexOf(this);
     return this.$course.$steps[i + 1];
