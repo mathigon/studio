@@ -8,28 +8,18 @@
     "automerge": true
   }, {
     "packagePatterns": ["typescript", "tslib", "ts-node"],
-    "groupName": "TypeScript",
+    "groupName": "Typescript",
     "automerge": true
   }, {
-    "packagePatterns": ["^@typescript-eslint", "^eslint", "tape", "puppeteer"],
-    "groupName": "Tests",
+    "packagePatterns": ["eslint", "tape", "puppeteer", "autoprefixer", "cssnano", "postcss", "sass", "rtlcss", "jsdom", "marked", "esbuild", "chokidar", "@types/", "yargs-parser", "html-entities", "html-minifier", "glob"],
+    "groupName": "Types, Test and Build",
     "automerge": true
   }, {
-    "packagePatterns": ["autoprefixer", "cssnano", "postcss", "sass", "rtlcss"],
-    "groupName": "CSS Build Tools",
-    "automerge": true
-  },{
-    "packagePatterns": ["jsdom", "marked"],
-    "groupName": "Markdown Parsing",
-    "automerge": true
+    "packagePatterns": ["body-parser", "express", "mongo", "bcryptjs", "cookie-parser", "lusca", "compression", "date-fns", "node-fetch", "validator", "xss"],
+    "groupName": "Server"
   }, {
-    "packagePatterns": ["^@google-cloud"],
-    "groupName": "Google Cloud Tools",
-    "automerge": true
-  }, {
-    "packagePatterns": ["^@types/"],
-    "groupName": "Types",
-    "automerge": true
+    "packagePatterns": ["@google-cloud", "@sendgrid"],
+    "groupName": "Sendgrid and Google Cloud Tools"
   }],
-  "ignoreDeps": ["esbuild", "mathjax"]
+  "ignoreDeps": ["mathjax", "fluent-ffmpeg", "license-checker"]
 }
