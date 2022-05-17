@@ -6,7 +6,7 @@
 
 @use "sass:map";
 @use "sass:math";
-@import "../../node_modules/@mathigon/boost/src/components/mixins";
+@import "@mathigon/boost/src/components/mixins";
 
 // Rainbow
 $red:    #cd0e66 !default;

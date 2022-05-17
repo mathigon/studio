@@ -14,6 +14,7 @@ const postcss = require('postcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const rtlcss = require('rtlcss');
+const {cache} = require('@mathigon/core');
 
 const {error, readFile, success, writeFile, CONFIG, STUDIO_ASSETS, PROJECT_ASSETS, CONTENT, OUTPUT, watchFiles, findFiles, textHash} = require('./utilities');
 const {parseCourse, COURSE_URLS, writeCache} = require('./markdown');
@@ -44,6 +45,9 @@ const safeAreaCSS = {
   }
 };
 
+const getNodePaths = cache((src) => [0, 1, 2, 3, 4, 5]
+    .map(i => path.join(src, '../'.repeat(i), 'node_modules')).filter(p => fs.existsSync(p)));
+
 async function bundleStyles(srcPath, destPath, minify = false, watch = false) {
   // TODO Use github.com/madyankin/postcss-modules to scope all component classes
   if (destPath.endsWith('.scss')) destPath = destPath.replace('.scss', '.css');
@@ -51,6 +55,7 @@ async function bundleStyles(srcPath, destPath, minify = false, watch = false) {
 
   const output = sass.renderSync({
     file: srcPath,
+    includePaths: getNodePaths(path.dirname(srcPath)),
     functions: {
       'uri-encode($str)': (str) => new sass.types.String(encodeURIComponent(str.getValue()))
     }

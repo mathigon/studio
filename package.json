@@ -1,7 +1,7 @@
 {
   "name": "@mathigon/studio",
   "description": "A platform for creating and hosting interactive, online courses.",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "license": "(MIT AND CC-BY-SA-4.0 AND OFL-1.1)",
   "repository": "mathigon/studio",
   "bugs": "https://github.com/mathigon/studio/issues",
