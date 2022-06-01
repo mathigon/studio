@@ -98,12 +98,11 @@ const pugPlugin = (__) => ({
   }
 });
 
-const externalPlugin = {
+const vuePlugin = {
   name: 'external',
   setup(build) {
-    // TODO Make the list of external dependencies configurable. Maybe we don't
-    // need this at all: Rollup has a .global configuration option?
-    build.onResolve({filter: /^(vue|THREE)$/}, args => ({path: args.path, external: true}));
+    build.onResolve({filter: /^vue$/}, args => ({path: args.path, namespace: 'vue'}));
+    build.onLoad({filter: /.*/, namespace: 'vue'}, () => ({contents: 'export default Vue'}));
   }
 };
 
@@ -122,8 +121,7 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, o
       globalName: options.name,
       platform: 'browser',
       format: 'iife',
-      plugins: [pugPlugin(str => options.translate?.(locale, str) || str), externalPlugin],
-      external: ['vue'],
+      plugins: [pugPlugin(str => options.translate?.(locale, str) || str), vuePlugin],
       target: ['es2016'],
       metafile: watch,
       write: false,
