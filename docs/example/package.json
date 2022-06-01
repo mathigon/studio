@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@mathigon/studio": "file:../..",
-    "ts-node": "10.7.0",
-    "typescript": "4.6.4"
+    "ts-node": "10.8.0",
+    "typescript": "4.7.2"
   },
   "devDependencies": {
     "nodemon": "2.0.16",
