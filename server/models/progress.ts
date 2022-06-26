@@ -147,7 +147,7 @@ ProgressSchema.methods.updateData = function(sectionId: string, changes: ChangeD
     if (data) {
       // TODO Sanitize other data fields. Better validation?
       if (data['free-text']) data['free-text'] = sanitise.process(data['free-text'].slice(0, 500).trim());
-      const newData = Object.assign(safeToJSON(stepData.data, {}), data);
+      const newData = Object.assign(safeToJSON(stepData.data, {}) as any, data);
       stepData.data = JSON.stringify(newData);
     }
 

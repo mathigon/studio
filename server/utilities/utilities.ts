@@ -76,7 +76,7 @@ export const include = cache((file: string, base = 'frontend/assets') => {
 export function loadCombinedYAML(file: string, deep = false) {
   const studio = loadYAML(path.join(STUDIO_DIR, file)) || {};
   const project = loadYAML(path.join(PROJECT_DIR, file)) || {};
-  deep ? deepExtend(studio, project, (a, b) => b) : Object.assign(studio, project);
+  deep ? deepExtend(studio, project, (a, b) => b) : Object.assign(studio as any, project);
   return studio as unknown;
 }
 
