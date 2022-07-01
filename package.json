@@ -48,9 +48,9 @@
     "compression": "1.7.4",
     "connect-mongo": "4.6.0",
     "cookie-parser": "1.4.6",
-    "cssnano": "5.1.10",
+    "cssnano": "5.1.12",
     "date-fns": "2.28.0",
-    "esbuild": "0.14.42",
+    "esbuild": "0.14.48",
     "express": "4.18.1",
     "express-flash": "0.0.2",
     "express-session": "1.17.3",
@@ -60,7 +60,7 @@
     "js-yaml": "4.1.0",
     "jsdom": "19.0.0",
     "lusca": "1.7.0",
-    "marked": "4.0.16",
+    "marked": "4.0.17",
     "mathjax": "3.1.2",
     "mongodb-memory-server": "8.6.0",
     "mongoose": "6.3.5",
@@ -69,7 +69,7 @@
     "postcss-inline-svg": "5.0.0",
     "pug": "3.0.2",
     "rtlcss": "3.5.0",
-    "sass": "1.52.1",
+    "sass": "1.53.0",
     "tslib": "2.4.0",
     "typescript": "4.7.4",
     "validator": "13.7.0",
@@ -78,9 +78,9 @@
     "yargs-parser": "21.0.1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "5.27.0",
-    "@typescript-eslint/parser": "5.27.0",
-    "eslint": "8.16.0",
+    "@typescript-eslint/eslint-plugin": "5.30.0",
+    "@typescript-eslint/parser": "5.30.0",
+    "eslint": "8.18.0",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-import": "2.26.0",
     "tape": "5.5.3"
@@ -91,6 +91,6 @@
     "@google-cloud/translate": "6.3.1",
     "fluent-ffmpeg": "2.1.2",
     "license-checker": "25.0.1",
-    "puppeteer": "14.1.2"
+    "puppeteer": "14.4.1"
   }
 }
