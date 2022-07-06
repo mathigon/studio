@@ -78,9 +78,9 @@
     "yargs-parser": "21.0.1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "5.30.0",
-    "@typescript-eslint/parser": "5.30.0",
-    "eslint": "8.18.0",
+    "@typescript-eslint/eslint-plugin": "5.30.5",
+    "@typescript-eslint/parser": "5.30.5",
+    "eslint": "8.19.0",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-import": "2.26.0",
     "tape": "5.5.3"
@@ -91,6 +91,6 @@
     "@google-cloud/translate": "7.0.0",
     "fluent-ffmpeg": "2.1.2",
     "license-checker": "25.0.1",
-    "puppeteer": "15.2.0"
+    "puppeteer": "15.3.1"
   }
 }
