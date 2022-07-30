@@ -90,7 +90,7 @@ export class Tutor extends CustomElementView {
     // Custom query input box
     const $footer = this.$('.chat-footer')!;
     this.$query = $footer.$('.input')!;
-    this.$query.onKeyDown('enter', e => {
+    this.$query.onKey('Enter', e => {
       e.preventDefault();
       this.askQuestion(this.$query.text.trim());
       this.$query.text = '';

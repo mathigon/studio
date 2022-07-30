@@ -76,7 +76,7 @@ export class Blank extends CustomElementView implements StepComponent {
       }
     });
 
-    this.$input.onKeyDown('enter', () => this.$input.blur());
+    this.$input.onKey('Enter', () => this.$input.blur());
 
     this.$input.on('focus', () => {
       this.addClass('on');

@@ -62,14 +62,14 @@ function closeLightbox() {
 }
 
 $lightbox.on('click touchmove', closeLightbox);
-Browser.onKey('escape', closeLightbox);
+$body.onKey('Escape', closeLightbox);
 
 $lightbox.on('scrollwheel touchmove', (e) => {
   e.preventDefault();
   e.stopPropagation();
 });
 
-Browser.onKey('space up down left right pagedown pageup', (e) => {
+$body.onKey('Space AllArrows PageDown PageUp', (e) => {
   if (isOpen) {
     e.preventDefault();
     e.stopPropagation();
