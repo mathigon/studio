@@ -132,7 +132,7 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, o
     const text = result.outputFiles[0].text.trim()
         .replace(/\/\*![\s\S]*?\*\//g, '')  // Remove comments
         .replace(/require\(['"]vue['"]\)/g, 'window.Vue')  // Fix imports;
-        .replace(/\/icons\.svg/, iconsPath);  // Cache busting for icons
+        .replace(/\/icons\.svg/g, iconsPath);  // Cache busting for icons
 
     // Replace localisation strings.
     const output = text.replace(/<<([\w\s:]+)>>/g, (_, str) => options.translate?.(locale, str) || str);
