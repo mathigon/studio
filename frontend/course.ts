@@ -101,7 +101,7 @@ export class Course extends CustomElementView {
     }, 1500);
     $reveal.$('.complete')!.one('click', () => this.complete());
 
-    Browser.onKey('Space', e => {
+    $body.onKey('Space', e => {
       e.preventDefault();
       this.nextStep();
       $reveal.addClass('off');
