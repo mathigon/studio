@@ -4,8 +4,7 @@
 // =============================================================================
 
 
-import {$, $N, CustomElementView, ElementView, FormView, InputView, post, register} from '@mathigon/boost';
-import {Modal} from '../modal/modal';
+import {$, $N, CustomElementView, ElementView, FormView, InputView, Modal, post, register} from '@mathigon/boost';
 
 // TODO Avoid all these $() lookups using global IDs.
 
