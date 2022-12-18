@@ -22,9 +22,9 @@
     "translate": "node build/index.js --translate --all --key google-service-account.json"
   },
   "dependencies": {
-    "@mathigon/boost": "1.2.4",
+    "@mathigon/boost": "1.2.5",
     "@mathigon/core": "1.1.4",
-    "@mathigon/euclid": "1.1.4",
+    "@mathigon/euclid": "1.1.6",
     "@mathigon/fermat": "1.1.4",
     "@mathigon/hilbert": "1.1.4",
     "@sendgrid/mail": "7.7.0",
