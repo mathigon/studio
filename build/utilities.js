@@ -86,7 +86,10 @@ function warning(message) {
 
 function error(file) {
   const shortFile = file.replace(commonPath, '');
-  return (error) => console.log(`\x1b[31m  ✖ [ERROR] Building ${shortFile}:\x1b[0m\n`, error);
+  return (error) => {
+    console.log(`\x1b[31m  ✖ [ERROR] Building ${shortFile}:\x1b[0m\n`, error);
+    process.exit(1);  // Crash the Node process
+  };
 }
 
 function textHash(text) {
