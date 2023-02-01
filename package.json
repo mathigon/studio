@@ -87,8 +87,8 @@
   },
   "optionalDependencies": {
     "@google-cloud/secret-manager": "4.2.0",
-    "@google-cloud/text-to-speech": "4.1.0",
-    "@google-cloud/translate": "7.0.5",
+    "@google-cloud/text-to-speech": "4.2.0",
+    "@google-cloud/translate": "7.1.0",
     "fluent-ffmpeg": "2.1.2",
     "license-checker": "25.0.1",
     "puppeteer": "19.4.1"
