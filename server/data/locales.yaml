@@ -1,5 +1,4 @@
 # Next popular languages (by Wikipedia audience)
-# he - Hebrew
 # cs - Czech
 # fi - Finnish
 # bn - Bengali
@@ -52,6 +51,11 @@ fr:
   key: French
   name: Français
   flag: fr
+
+he:
+  key: Hebrew
+  name: עִברִית
+  flag: il
 
 hi:
   key: Hindi
