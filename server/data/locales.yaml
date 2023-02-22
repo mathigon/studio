@@ -56,6 +56,7 @@ he:
   key: Hebrew
   name: עִברִית
   flag: il
+  dir: rtl
 
 hi:
   key: Hindi
