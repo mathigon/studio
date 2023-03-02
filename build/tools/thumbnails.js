@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
+const {globSync} = require('glob');
 const puppeteer = require('puppeteer');
 const pug = require('pug');
 const {CONTENT, PROJECT_ASSETS, OUTPUT, CONFIG, success} = require('../utilities');
@@ -38,8 +38,8 @@ async function makeThumbnail(page, course, section) {
 
 async function buildCourseThumbnails() {
   const start = Date.now();
-  const courses = glob.sync('content/*/data_*.json', {cwd: OUTPUT})
-      .map(c => require(path.join(OUTPUT, c)));
+  const courses = globSync('content/*/data_*.json', {cwd: OUTPUT})
+      .sort().map(c => require(path.join(OUTPUT, c)));
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();

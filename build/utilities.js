@@ -7,7 +7,7 @@
 const fs = require('fs');
 const path = require( 'path');
 const crypto = require('crypto');
-const glob = require( 'glob');
+const {globSync} = require( 'glob');
 const yaml = require('js-yaml');
 const chokidar = require('chokidar');
 const {deepExtend} = require('@mathigon/core');
@@ -62,7 +62,7 @@ function watchFiles(dependencies, callback) {
 }
 
 function findFiles(pattern, srcDir, destDir, flat = false) {
-  return glob.sync(pattern, {cwd: srcDir}).map(file => {
+  return globSync(pattern, {cwd: srcDir}).sort().map(file => {
     const outFile = flat ? path.basename(file) : file;
     return {src: path.join(srcDir, file), dest: path.join(destDir, outFile)};
   });
