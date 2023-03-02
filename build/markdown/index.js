@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
+const {globSync} = require('glob');
 
 const {toTitleCase, last, words, throttle} = require('@mathigon/core');
 const {mod} = require('@mathigon/fermat');
@@ -82,7 +82,7 @@ async function bundleYAML(file, directory, locale, filterKeys) {
 function getNextCourse(directory, shift = 1) {
   // Find the next (or previous if shift = -1) course alphabetically.
   const courseId = path.basename(directory);
-  const allCourses = glob.sync('!(shared|_*|*.*)', {cwd: path.join(directory, '../')});
+  const allCourses = globSync('!(shared|_*|*.*)', {cwd: path.join(directory, '../')}).sort();
   return allCourses[mod(allCourses.indexOf(courseId) + shift, allCourses.length)];
 }
 

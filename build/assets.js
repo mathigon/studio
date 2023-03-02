@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
+const {globSync} = require('glob');
 const esbuild = require('esbuild');
 const pug = require('pug');
 const sass = require('sass');
@@ -235,11 +235,12 @@ function getAssetFiles(pattern) {
   // Match abc.js as well as abc/index.js
   pattern = pattern.replace('*', '{*,*/index}');
 
-  const projectFiles = glob.sync(pattern, {cwd: PROJECT_ASSETS}).map(c => path.join(PROJECT_ASSETS, c));
+  const projectFiles = globSync(pattern, {cwd: PROJECT_ASSETS}).sort().map(c => path.join(PROJECT_ASSETS, c));
   const projectFileNames = projectFiles.map(p => basename(p));
 
   // Don't include any core files that are overwritten by the project.
-  const studioFiles = glob.sync(pattern, {cwd: STUDIO_ASSETS}).map(c => path.join(STUDIO_ASSETS, c))
+  const studioFiles = globSync(pattern, {cwd: STUDIO_ASSETS})
+      .sort().map(c => path.join(STUDIO_ASSETS, c))
       .filter(p => !projectFileNames.includes(basename(p)));
 
   return [...studioFiles, ...projectFiles].map(src => {
@@ -280,7 +281,7 @@ async function buildAssets(minify = false, watch = false, locales = ['en']) {
 
   // Course Markdown and YAML files
   // We run all course scripts in series, to avoid memory issues with large repositories.
-  const courses = glob.sync('!(shared|_*|*.*)', {cwd: CONTENT});
+  const courses = globSync('!(shared|_*|*.*)', {cwd: CONTENT}).sort();
   for (const id of courses) {
     for (const locale of locales) {
       await bundleMarkdown(id, locale, locales, watch).catch(error(`course ${id} [${locale}]`));

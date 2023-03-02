@@ -5,7 +5,7 @@
 
 
 const path = require('path');
-const glob = require('glob');
+const {globSync} = require('glob');
 const {unique} = require('@mathigon/core');
 const {parseYAML} = require('../markdown');
 const {OUTPUT, success, writeFile} = require('../utilities');
@@ -33,7 +33,7 @@ function wordClean(str) {
 async function loadDocuments(locale = 'en') {
   const documents = [];
 
-  const courses = glob.sync('*', {cwd: OUTPUT + '/content'}).map(c => path.join(OUTPUT, 'content', c, `data_${locale}.json`));
+  const courses = globSync('*', {cwd: OUTPUT + '/content'}).sort().map(c => path.join(OUTPUT, 'content', c, `data_${locale}.json`));
   const glossary = await parseYAML('shared', 'glossary.yaml', locale, 'text');
 
   for (const courseId of courses) {
