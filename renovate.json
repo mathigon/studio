@@ -15,11 +15,11 @@
     "groupName": "Types, Test and Build",
     "automerge": true
   }, {
-    "packagePatterns": ["body-parser", "express", "mongo", "bcryptjs", "cookie-parser", "lusca", "compression", "date-fns", "node-fetch", "validator", "xss"],
+    "packagePatterns": ["body-parser", "express", "mongo", "bcryptjs", "cookie-parser", "lusca", "compression", "date-fns", "validator", "xss"],
     "groupName": "Server"
   }, {
     "packagePatterns": ["@google-cloud", "@sendgrid"],
     "groupName": "Sendgrid and Google Cloud Tools"
   }],
-  "ignoreDeps": ["mathjax", "fluent-ffmpeg", "license-checker"]
+  "ignoreDeps": ["mathjax", "fluent-ffmpeg", "license-checker", "node-fetch"]
 }
