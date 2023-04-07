@@ -63,7 +63,7 @@
     "marked": "4.3.0",
     "mathjax": "3.1.2",
     "mongodb-memory-server": "8.12.2",
-    "mongoose": "6.10.5",
+    "mongoose": "7.0.3",
     "node-fetch": "2.6.9",
     "postcss": "8.4.21",
     "postcss-inline-svg": "6.0.0",
