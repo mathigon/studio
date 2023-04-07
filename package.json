@@ -46,7 +46,7 @@
     "body-parser": "1.20.2",
     "chokidar": "3.5.3",
     "compression": "1.7.4",
-    "connect-mongo": "4.6.0",
+    "connect-mongo": "5.0.0",
     "cookie-parser": "1.4.6",
     "cssnano": "6.0.0",
     "date-fns": "2.29.3",
