@@ -39,7 +39,7 @@
     "@types/node-fetch": "2.6.2",
     "@types/pug": "2.0.6",
     "@types/validator": "13.7.14",
-    "@webcomponents/custom-elements": "1.5.1",
+    "@webcomponents/custom-elements": "1.6.0",
     "autoprefixer": "10.4.13",
     "autotrack": "2.4.1",
     "bcryptjs": "2.4.3",
