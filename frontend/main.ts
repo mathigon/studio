@@ -57,9 +57,9 @@ if ($privacyModal) {
 navigator.serviceWorker?.register('/service_worker.js', {scope: '/'})
     .catch(() => console.warn('Unable to register Service Worker.'));
 
-window.addEventListener('beforeinstallprompt', (e: any) => {
-  e.prompt();
-});
+// window.addEventListener('beforeinstallprompt', (e: any) => {
+//   e.prompt();
+// });
 
 
 // -----------------------------------------------------------------------------

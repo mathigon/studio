@@ -25,7 +25,7 @@ if (argv.urls) urls.push(...argv.urls.split(','));
 const filter = argv.filter?.split(',') || [];
 
 (async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({headless: 'new'});
   const page = await browser.newPage();
   await page.setViewport({width: 1200, height: 960});
 
