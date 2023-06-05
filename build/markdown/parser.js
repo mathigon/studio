@@ -17,6 +17,8 @@ const {CONFIG, warning} = require('../utilities');
 
 const $$ = (el, query) => Array.from(el.querySelectorAll(query));
 
+marked.use({mangle: false, headerIds: false});
+
 
 // -----------------------------------------------------------------------------
 // Configuration
