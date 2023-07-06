@@ -12,8 +12,8 @@ accounts:
   minAge: 13
 
   # Required privacy information
-  privacyPolicy: https://mathigon.org/policies
-  termsOfUse: https://mathigon.org/terms
+  privacyPolicy: https://amplify.com/customer-privacy
+  termsOfUse: https://amplify.com/acceptable-use-policy
   address: 1 Main Street, London, United Kingdom
 
   # Support email that users can contact
