@@ -60,7 +60,7 @@
     "js-yaml": "4.1.0",
     "jsdom": "22.1.0",
     "lusca": "1.7.0",
-    "marked": "5.1.0",
+    "marked": "6.0.0",
     "mathjax": "3.1.2",
     "mongodb-memory-server": "8.13.0",
     "mongoose": "7.3.1",
@@ -78,8 +78,8 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "5.61.0",
-    "@typescript-eslint/parser": "5.61.0",
+    "@typescript-eslint/eslint-plugin": "6.2.1",
+    "@typescript-eslint/parser": "6.2.1",
     "eslint": "8.44.0",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-import": "2.27.5",
