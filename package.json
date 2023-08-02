@@ -70,7 +70,7 @@
     "pug": "3.0.2",
     "rtlcss": "4.1.0",
     "sass": "1.63.6",
-    "tslib": "2.6.0",
+    "tslib": "2.6.1",
     "typescript": "5.1.6",
     "validator": "13.9.0",
     "web-animations-js": "2.3.2",
