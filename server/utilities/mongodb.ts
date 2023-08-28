@@ -36,6 +36,6 @@ export async function connectMongo() {
 }
 
 export function getMongoStore() {
-  const clientPromise = connectMongo();  // async
+  const clientPromise = connectMongo() as any;  // async
   return MongoStore.create({clientPromise, touchAfter: 12 * 3600});
 }
