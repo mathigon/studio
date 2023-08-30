@@ -140,7 +140,7 @@ async function bundleScripts(srcPath, destPath, minify = false, watch = false, o
         .replace(/\/icons\.svg/g, iconsPath);  // Cache busting for icons
 
     // Replace localisation strings.
-    const output = text.replace(/<<([\w\s:]+)>>/g, (_, str) => options.translate?.(locale, str) || str);
+    const output = text.replace(/<<([\w\s-:]+)>>/g, (_, str) => options.translate?.(locale, str) || str);
 
     const dest = locale === 'en' ? destPath : destPath.replace('.js', `.${locale}.js`);
     await writeFile(dest, output);
