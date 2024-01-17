@@ -27,7 +27,7 @@
     "@mathigon/euclid": "1.1.16",
     "@mathigon/fermat": "1.1.13",
     "@mathigon/hilbert": "1.1.13",
-    "@sendgrid/mail": "7.7.0",
+    "@sendgrid/mail": "8.0.0",
     "@types/bcryptjs": "2.4.6",
     "@types/compression": "1.7.5",
     "@types/cookie-parser": "1.4.6",
