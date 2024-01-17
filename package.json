@@ -36,7 +36,7 @@
     "@types/express-session": "1.17.10",
     "@types/js-yaml": "4.0.9",
     "@types/lusca": "1.7.4",
-    "@types/node-fetch": "2.6.4",
+    "@types/node-fetch": "2.6.11",
     "@types/pug": "2.0.10",
     "@types/validator": "13.11.7",
     "@webcomponents/custom-elements": "1.6.0",
