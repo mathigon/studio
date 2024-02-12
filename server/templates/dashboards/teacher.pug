@@ -1,0 +1,36 @@
+extends ../_layout
+
+block vars
+  - var title = __('Teacher Dashboard')
+  - var styles = ['/dashboard.css']
+  - var scripts = ['/dashboard.js']
+
+block main
+  .container
+    h1
+      img.avatar(src=user.avatar(200) width=100 height=100)
+      | #{user.fullName}
+      span.subtitle= __('Teacher Dashboard')
+
+    +flash(messages)
+
+    .row.padded-thin(style="justify-content:left")
+      for classroom in classrooms
+        a.class-panel(href=`/dashboard/${classroom.code}`)
+          h3= classroom.title
+          p Class code: #{classroom.code}
+          - var size = classroom.students.length
+          p= !size ? __('No students') : size === 1 ? __('One student') : __('$0 students', size)
+      button.class-panel.new-class(data-modal="new-class") #[x-icon(name="plus" size=80)] #{__('Create new class')}
+
+    include ../_footer
+
+  +modal('new-class')
+    h2 #[x-icon(name="plus" size=32)] #{__('Create a new class')}
+    form.form-large(action="/dashboard/new" method="POST")
+      input(type="hidden" name="_csrf" value=_csrf)
+      p= __('Every class has a unique code, which allows you to link student accounts and track their progress. Students can be part of multiple different classes.')
+      label.form-field
+        input(name="title" type="text" placeholder="Class name" required maxlength=30)
+        span(class="placeholder")= __('Class name')
+      p.btn-row: button.btn.btn-red(type="submit")= __('Create')

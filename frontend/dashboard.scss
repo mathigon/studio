@@ -19,7 +19,6 @@ h1 .avatar {
 }
 h1 .subtitle { display: block; font-size: 60%; }
 
-
 .dashboard-body { width: 640px; max-width: calc(100% - 48px); }
 .overflow-wrap { margin: -32px -24px; padding: 32px 24px; min-height: 240px; @include overflow-scroll; }
 h2:first-child { margin-top: 0; }
@@ -89,4 +88,158 @@ form + p.caption { margin-top: 16px; }
   border-radius: 6px;
   margin: 0 6px 20px;
   x-icon { margin: 8px; }
+}
+
+
+// -----------------------------------------------------------------------------
+// Teacher Dashboards
+
+.class-panel {
+  width: 240px;
+  height: 150px;
+  border-radius: 8px;
+  padding: 16px 18px;
+  transition: transform .2s;
+  background: mix($blue, white, 20%);
+  h3 { font-size: 24px; margin-bottom: 4px; }
+  p { font-size: 16px; opacity: 0.7; margin: 0; }
+  &:hover, &:focus { transform: scale(1.05); }
+}
+
+.new-class {
+  background: $grey-background;
+  text-align: center;
+  font-weight: 600;
+  font-size: 24px;
+  color: rgba(black, 30%);
+  x-icon { display: block; margin: 0 auto; fill: rgba(black, 20%); }
+}
+
+a.back {
+  display: block;
+  font-size: 22px;
+  margin: 80px 0 -72px -8px;
+  width: fit-content;
+  padding: 0 16px 0 8px;
+  border-radius: 20px;
+  color: $medium-grey;
+  transition: background .2s, color .2s;
+  &:hover, &:focus { background: rgba($medium-grey, 30%); }
+  x-icon { display: inline-block; margin: 0 4px -4px 0; }
+}
+
+.edit-class {
+  padding: 8px;
+  margin: 0 0 0 10px;
+  cursor: pointer;
+  color: $medium-grey;
+  transition: color .2s;
+  x-icon { margin: 0; display: block; }
+  &:hover, &:focus { color: $grey; }
+}
+
+.class-banner {
+  float: right;
+  margin-top: 40px;
+  text-align: center;
+  background: mix($blue, white, 20%);
+  border-radius: 6px;
+  line-height: 1.3;
+  padding: 8px 12px;
+  strong { display: block; font-size: 24px; }
+}
+
+.class-row {
+  display: flex;
+  align-items: center;
+  padding-bottom: 8px;
+  margin: 0 20px 8px;
+  border-bottom: 1px solid #aaa;
+  @include ellipsis;
+
+  img { border-radius: 100%; margin-right: 10px; }
+  h3 { margin: 0; font-size: 16px; font-weight: 400; }
+
+  button { opacity: 0; cursor: pointer; transition: opacity .2s; padding: 6px 0 6px 6px; }
+  &:hover button { opacity: 0.3; }
+  button:hover, button:focus { opacity: 0.6; }
+  button x-icon { display: block; }
+}
+
+
+// -----------------------------------------------------------------------------
+// Roster
+
+#roster {
+  $highlight: mix(white, $light-grey);
+  $highlight-dark: mix($dark-mode, white, 75%);
+
+  font-size: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 110px;
+  min-width: 640px;
+
+  .cell {
+    border-bottom: 1px solid mix($medium-grey, white);
+    transition: color .2s, background .2s, border .2s;
+    line-height: 32px;
+    padding: 4px 6px;
+    @include ellipsis;
+    &.c1 { border-right: 2px solid $medium-grey; }
+    &.c2 { padding-left: 12px; }
+    &.c3 { padding-right: 12px; border-right: 2px solid $medium-grey; }
+    &.c4 { text-align: center; }
+    &.title { font-weight: 600; border-bottom: 2px solid $medium-grey; }
+    &.title.c2 { padding-right: 20px; }
+    &.interactive { cursor: pointer; }
+    &.interactive:hover, &.interactive:focus { @include theme(background, $highlight, $highlight-dark); }
+  }
+
+  .avatar, .course-img {
+    display: block;
+    float: left;
+    margin-right: 10px;
+    width: 32px;
+    height: 32px;
+    background: $grey;
+  }
+  .avatar { border-radius: 100%; }
+  .course-img { border-radius: 3px; background-size: cover; background-position: center; }
+
+  .popup-body {
+    position: absolute;
+    z-index: 2;
+    @include theme(background, white, mix($dark-mode, white, 90%));
+    max-height: 240px;
+    left: -3px;
+    right: -3px;
+    top: -9px;
+    border-radius: 8px;
+    padding: 5px;
+    box-shadow: 2px 6px 28px rgba(black, 40%);
+    transition: max-height .3s;
+    @include overflow-scroll;
+  }
+
+  .popup-row {
+    padding: 5px 7px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 3px;
+    line-height: 32px;
+    font-weight: 600;
+    @include ellipsis;
+    &.active, &:not(.locked):hover { @include theme(background, $highlight, $highlight-dark); }
+    &.locked { cursor: default; color: $text-light; padding: 2px 7px; }
+  }
+
+  .popup.section { top: -6px; left: -9px; }
+  .popup.section .popup-row { padding: 2px 7px 6px; }
+
+  .progress { height: 20px; @include theme(background, rgba(black, 8%), rgba(white, 8%)); border-radius: 10px; margin-top: 6px; overflow: hidden; }
+  .progress .bar { background: currentColor; height: 100%; border-radius: 0 10px 10px 0; transition: width .2s; }
+  .popup-row .progress { height: 3px; margin-top: -3px; }
+
+  .arrow { position: absolute; left: -18px; top: 5px; fill: none;
+    stroke: $medium-grey; stroke-width: 2px; stroke-linecap: round; }
 }

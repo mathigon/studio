@@ -1,0 +1,55 @@
+extends ../_layout
+
+block vars
+  - var title = __('Parent Dashboard')
+  - var styles = ['/dashboard.css']
+  - var scripts = ['/dashboard.js']
+
+block main
+  .container
+    h1
+      img.avatar(src=user.avatar(200) width=100 height=100)
+      | #{user.fullName}
+      span.subtitle= __('Parent Dashboard')
+
+    .row.padded
+      .dashboard-body.grow
+        block dashboard-body
+          +flash(messages)
+          if studentData.length
+            for student in studentData
+              h2= student.data.fullName
+              if student.courses.length
+                for course in student.courses
+                  +course(course, student.progress[course])
+              else
+                .no-courses
+                  x-icon(name="construction" size=40)
+                  | #{__('$0 has not started any courses.', student.data.shortName)}
+          else
+            .empty-dashboard
+              x-icon(name="construction" size=80)
+              p= __('No students are linked to your account yet.')
+
+      .dashboard-sidebar: .sidebar-wrap
+        .sidebar-panel
+          h2 #{__('Class code')}: #[strong= classroom.code]
+        .sidebar-panel
+          h2= __('Linked Students')
+          for student in studentData
+            .class-row
+              img(src=student.data.avatar(80) alt="Avatar" width=40 height=40)
+              .grow
+                h3= student.data.fullName
+                if student.data.isRestricted
+                  .small Restricted
+              button(data-modal=`remove-${student.data.id}`): x-icon(name="delete")
+              +modal(`remove-${student.data.id}`)(style="width: 440px")
+                h2 #[x-icon(name="delete" size=32)] #{__('Remove Student')}
+                form.form-large(action=`/dashboard/remove/${student.data.id}` method="POST")
+                  p!= __('Are you sure you want to remove $0 from your parent dashboard? To revert this action, they will have to add your class code again on their student dashboard.', `<strong>${student.data.fullName}</strong>`)
+                  input(type="hidden" name="_csrf" value=_csrf)
+                  p.btn-row: button.btn.btn-red(type="submit")= __('Remove')
+          p(class=(studentData.length ? 'small' : ''))!= __('Your children should use your unique code $0 when signing up for $1. If they already have an account, they can click “Add class code” in the sidebar of their student dashboard.', `<strong>${classroom.code}</strong>`, config.siteName)
+
+    include ../_footer

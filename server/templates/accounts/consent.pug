@@ -1,0 +1,19 @@
+extends ../_layout
+
+block vars
+  - var title = __('Child Account Approval')
+  - var styles = ['/accounts.css']
+  - var scripts = ['/accounts.js']
+
+block main
+  .container.narrow
+    h1 #[x-icon(name="lock" size=54)] #{__('Child Account Approval')}
+    +flash(messages)
+
+    h2.text-center= __('Thanks for approving your child’s $0 account!', config.siteName)
+    if parent
+      p.text-center You can track their progress on your #[a(href="/dashboard") #{parent.type} dashboard].
+    else
+      p.text-center!= __('You can create a <a href="/signup#parent">new parent account</a> to track your child’s progress. If you already have a $0 account, you can convert it to a parent account on your <a href="/profile">profile page</a>, and then ask your child to link your unique class code on their student dashboard.', config.siteName)
+
+    include ../_footer

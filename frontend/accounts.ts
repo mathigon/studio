@@ -4,8 +4,12 @@
 // =============================================================================
 
 
-import {$, CustomElementView, FormView, InputView, observe, register, Router} from '@mathigon/boost';
+import {cache} from '@mathigon/core';
+import {$, Browser, CustomElementView, FormView, observe, register, Router} from '@mathigon/boost';
 import './main';
+
+
+const validate = cache((query: string) => fetch(`/validate?${query}`).then(r => r.text()));
 
 
 // -----------------------------------------------------------------------------
@@ -91,16 +95,63 @@ Router.setup({
   }
 });
 
+Router.paths('/login', '/forgot', '/reset', '/reset/:token', '/profile');
+
+
+// -----------------------------------------------------------------------------
+// Signup Form
+
 Router.view('/signup', {
   enter($el) {
-    const $bday = $el.$('input[name="birthday"]') as InputView;
-    $bday.change((date) => {
-      const age = (Date.now() - (+new Date(date))) / (1000 * 60 * 60 * 24 * 365);
-      if (age < 0 || age > 100) return $bday.setValidity('Please enter a valid date of birth.');
-      if (age < 13) return $bday.setValidity('You have to be at least 13 years old to create an account.');
-      $bday.setValidity('');
+    const hash = Browser.getHash();
+    const year = 1000 * 60 * 60 * 24 * 365;
+
+    const model = observe({
+      step: 1,
+      next: () => (model.step = 2),
+      back: () => (model.step = 1),
+      changeType: () => (model.step = 1),
+
+      type: ['student', 'teacher', 'parent'].includes(hash) ? hash : 'student',
+      birthday: Browser.isIOS ? '2000-01-01' : '',  // Prefill on iOS to fix styling
+      classCode: '',
+      username: '',
+      email: '',
+      isRestricted: false,
+
+      birthdayError: false,
+      classCodeError: false,
+      emailError: '',
+      usernameError: ''
     });
+
+    // Birthday validation
+    model.watch(({birthday}) => {
+      const age = (Date.now() - (+new Date(birthday))) / year;
+      model.birthdayError = age < 1 || age > 110;
+      model.isRestricted = (age < 13);
+    });
+
+    // Class code validation
+    model.watch(async ({classCode}) => {
+      if (!classCode) return model.classCodeError = false;
+      let c = classCode.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+      if (c.length > 4) c = c.slice(0, 4) + '-' + c.slice(4, 8);
+      model.classCode = c;
+      model.classCodeError = c.length !== 9 || (await validate(`classcode=${c}`)) === 'invalid';
+    });
+
+    // Username validation
+    model.watch(async ({username}) => {
+      const u = model.username = username.toLowerCase().replace(/[^a-z0-9]/g, '');
+      model.usernameError = u.length < 4 ? 'short' : await validate(`username=${u}`);
+    });
+
+    // Email validation
+    model.watch(async ({email}) => {
+      model.emailError = await validate(`email=${email}`);
+    });
+
+    $el.bindModel(model);
   }
 });
-
-Router.paths('/login', '/forgot', '/reset', '/reset/:token', '/profile');

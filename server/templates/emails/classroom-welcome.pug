@@ -1,0 +1,9 @@
+extends _template
+
+block preheader
+  | Welcome to #{config.siteName}!
+
+block body
+  h1(style="font-size: 24px;margin:0 0 20px 0") Hi #{user.shortName},
+  p Welcome to #{config.siteName}! Your teacher #[em= teacher.shortName] has just created a new account for you. You can sign in using Google, by clicking the link below. We will save your work, personalise our content, and share your progress with your teachers.
+  +button(`https://${config.domain}/login`, "Sign in")

@@ -22,7 +22,8 @@ export const OUT_DIR = PROJECT_DIR + '/public';
 export const ENV = process.env.NODE_ENV || 'development';
 export const IS_PROD = ENV === 'production';
 
-export const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
+export const ONE_DAY = 1000 * 60 * 60 * 24;
+export const ONE_YEAR = ONE_DAY * 365;
 
 
 // -----------------------------------------------------------------------------

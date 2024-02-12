@@ -6,7 +6,7 @@ blankPassword: Your password cannot be blank.
 passwordLength: Your password must be at least four characters long.
 usernameExists: There already exists an account with this username. Please sign in!
 acceptPolicies: Please accept out privacy policy and terms of service.
-accountExists: There already is a account with this email address. Please sign in!
+accountExists: There already is a account with this email address or username. Please sign in!
 invalidName: Please provide a valid first and last name.
 cantChangeEmail: You have to set a password for your account, before changing your email address.
 
@@ -39,3 +39,28 @@ socialLoginLink: Your $0 account has been linked to your existing account with t
 emailVerificationToken: You have to verify your email address before you can change your password.
 markedForDeleted: Your account is now marked for deletion and will be removed in 7 days. Until then, you can undo this action using the link below.
 unmarkedForDeletion: Your account is no longer marked for deletion.
+
+# Classes and Guardian Consent
+invalidClassCode: The class code you entered is not valid.
+passwordNoGuardianConsent: Your parent or guardian has to approve your account before you can change your password.
+guardianConsentEmailSent: We’ve sent another verification email to your parent or guardian!
+guardianWelcome: Welcome to $0! We have sent a notification email to your parent or guardian. They have seven days to approve your account using the link in the email.
+consentError: todo
+upgradeVerifyError: Please verify your email address before changing your account type.
+downgradeError: You cannot change your account type while you have students linked to your classes. Please remove those first and then try again!
+upgradeAccount: Your account has been changed to a $0 account! Get started by sharing your unique class code with any students you want to link to your dashboard.
+downgradeAccount: Your account has been changed to a student account! You can now join classes with a class code provided by your teacher.
+removeClassCodeError: An error occured while trying to unlink this student account.
+removeClassCode: Successfully unlinked $0 from your account!
+joinClassError: An error occured while trying to add this class code.
+joinClass: You have successfully linked $0 to your account!
+alreadyJoinedClassError: This class code is already linked to your account!
+classDeleted: Your class “$0” has been successfully deleted!
+cantDeleteClass: Unfortunately, you don’t have permission to delete this class.
+tooManyClasses: Unfortunately, you have reached the limit for classes per account.
+
+# Google Classroom Integration
+classroomError: An error occurred while trying to import your data from Google Classroom. Please try again!
+classroomImport: Successfully imported $0 new students from your Google Classroom roster.
+classroomNoCourses: Your Google Classroom account does not contain any courses we can import.
+classroomNoStudents: Your Google Classroom course did not contain any new students to import.

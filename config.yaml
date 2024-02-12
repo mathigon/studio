@@ -33,6 +33,9 @@ courses:
 
 accounts:
   enabled: false
+  teachers: false
+  parents: false
+  restricted: false
 
 tutor:
   enabled: true
