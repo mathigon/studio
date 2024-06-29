@@ -91,6 +91,6 @@
     "@google-cloud/translate": "7.2.2",
     "fluent-ffmpeg": "2.1.2",
     "license-checker": "25.0.1",
-    "puppeteer": "20.9.0"
+    "puppeteer": "22.11.2"
   }
 }
