@@ -46,7 +46,7 @@
     "body-parser": "1.20.2",
     "chokidar": "3.5.3",
     "compression": "1.7.4",
-    "connect-mongo": "4.6.0",
+    "connect-mongo": "5.1.0",
     "cookie-parser": "1.4.6",
     "cssnano": "6.0.3",
     "date-fns": "2.30.0",
@@ -62,8 +62,9 @@
     "lusca": "1.7.0",
     "marked": "6.0.0",
     "mathjax": "3.1.2",
-    "mongodb-memory-server": "8.16.0",
-    "mongoose": "7.4.3",
+    "mongodb-memory-server": "9.4.1",
+    "mongodb": "6.8.0",
+    "mongoose": "8.5.2",
     "node-fetch": "2.6.9",
     "postcss": "8.4.33",
     "postcss-inline-svg": "6.0.0",
@@ -91,6 +92,6 @@
     "@google-cloud/translate": "7.2.2",
     "fluent-ffmpeg": "2.1.2",
     "license-checker": "25.0.1",
-    "puppeteer": "22.11.2"
+    "puppeteer": "22.15.0"
   }
 }
