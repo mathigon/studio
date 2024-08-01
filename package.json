@@ -87,7 +87,7 @@
   },
   "optionalDependencies": {
     "@google-cloud/secret-manager": "5.0.1",
-    "@google-cloud/text-to-speech": "4.2.3",
+    "@google-cloud/text-to-speech": "5.0.0",
     "@google-cloud/translate": "7.2.2",
     "fluent-ffmpeg": "2.1.2",
     "license-checker": "25.0.1",
