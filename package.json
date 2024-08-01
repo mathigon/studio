@@ -22,11 +22,11 @@
     "translate": "node build/index.js --translate --all --key google-service-account.json"
   },
   "dependencies": {
-    "@mathigon/boost": "1.2.21",
-    "@mathigon/core": "1.1.16",
-    "@mathigon/euclid": "1.1.18",
-    "@mathigon/fermat": "1.1.15",
-    "@mathigon/hilbert": "1.1.15",
+    "@mathigon/boost": "1.2.27",
+    "@mathigon/core": "1.1.19",
+    "@mathigon/euclid": "1.2.0",
+    "@mathigon/fermat": "1.1.20",
+    "@mathigon/hilbert": "1.1.20",
     "@sendgrid/mail": "8.0.0",
     "@types/bcryptjs": "2.4.6",
     "@types/compression": "1.7.5",
