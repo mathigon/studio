@@ -67,7 +67,7 @@
     "node-fetch": "2.6.9",
     "postcss": "8.4.33",
     "postcss-inline-svg": "6.0.0",
-    "pug": "3.0.2",
+    "pug": "3.0.3",
     "rtlcss": "4.1.1",
     "sass": "1.70.0",
     "tslib": "2.6.3",
