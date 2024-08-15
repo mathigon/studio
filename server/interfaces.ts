@@ -129,6 +129,9 @@ export interface Config {
 
   accounts: {
     enabled: boolean;
+    teachers: boolean;
+    parents: boolean;
+    restricted: boolean;
     minAge?: number;
     privacyPolicy?: string;
     termsOfUse?: string;

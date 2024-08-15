@@ -8,6 +8,11 @@ database. You can enable and configure this functionality using the `accounts` k
 accounts:
   emabled: true
 
+  # Whether teacher, parent and restricted accounts (for students aged <13) are supported.
+  teachers: boolean;
+  parents: boolean;
+  restricted: boolean;
+
   # Minimum age allowed for users
   minAge: 13
 

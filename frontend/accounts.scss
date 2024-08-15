@@ -10,6 +10,7 @@
 
 h1 { text-align: center; margin-bottom: 1.5em; }
 h1 x-icon { margin: 0 8px -14px; }
+h1 .subtitle { display: block; font-size: 60%; }
 
 .form-min-height { min-height: 360px; }
 .m-red { color: $red; }
@@ -46,4 +47,33 @@ x-password {
     &:hover, &:focus { opacity: 0.5; }
     &.on { opacity: 1; }
   }
+}
+
+.signup-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+  button {
+    border: 2px solid $blue;
+    text-align: center;
+    padding: 6px 0;
+    font-weight: 600;
+    width: 100px;
+    color: $blue;
+    transition: color .2s, background .2s;
+    &:first-child { border-radius: 6px 0 0 6px; border-right: none; }
+    &:last-child { border-radius: 0 6px 6px 0;  border-left: none; }
+    &:hover { background: rgba($blue, 20%); }
+    &.active { background: $blue; color: white; cursor: default; }
+  }
+}
+
+.signup-box {
+  max-width: 580px;
+  min-height: 400px;
+  margin: 0 auto;
+  .btn-row { display: flex; flex-wrap: wrap; justify-content: center; margin: 8px 0 0; }
+  .btn { display: block; min-width: 120px; margin: 8px; }
+  .alternative { text-align: center; font-size: 16px; font-weight: 600; }
+  .alternative { a, .a { display: inline-block; margin: 12px 16px 0; } }
 }

@@ -1,0 +1,104 @@
+extends ../_layout
+
+block vars
+  - var title = __('Teacher Dashboard')
+  - var styles = ['/dashboard.css']
+  - var scripts = ['/dashboard.js']
+
+block main
+  .container
+    a.back(href="/dashboard") #[x-icon(name="back")] #{__('All Classes')}
+    .class-banner #{__('Class code')} #[strong= classroom.code]
+    h1= classroom.title
+      button.edit-class(data-modal="edit-class"): x-icon(name="settings" size=26)
+
+    .row.padded
+      .dashboard-body.grow
+        +flash(messages)
+
+        if studentData.length && courseData.length
+          .overflow-wrap: #roster
+            //- Title Row
+            .cell.title.c1= __('Student Name')
+            x-popup.r
+              .cell.title.c2.interactive.popup-target
+                .course-img(style="background-color:${course.color};background-image:url(${course.icon})")
+                | ${course.title}
+              .popup-body
+                for course in courseData
+                  .popup-row(@click=`setCourse(${course.id})` :class=`course.id === ${course.id} ? 'active' : ''` tabindex=0)
+                    .course-img(style=`background-color:${course.color};background-image:url(${course.icon})`)
+                    | #{ course.title }
+                    .progress: .bar(style=`color:${course.color};width:${course.progress}%`)
+            x-popup.r
+              svg.arrow(width=15 height=32): path(d="M3 3L12 16L3 29")
+              .cell.title.c3.interactive.popup-target ${section.title}
+              .popup-body
+                div(:for="s in course.sections" tabindex=0)
+                  .popup-row.locked(:if="s.locked") ${s.title}
+                  .popup-row(:if="!s.locked" @click="setSection(s)" :class="section.id === s.id ? 'active' : ''")
+                    | ${s.title}
+                    .progress: .bar(style="color:${course.color};width:${s.progress}%")
+            .cell.title.c4= __('Weekly Time')
+
+            //- Body Rows
+            for student in studentData
+              .cell.c1.interactive(tabindex="0" data-modal=`student-${student.id}`)
+                img.avatar(src=student.avatar alt="" width=32 height=32)
+                | #{student.name}
+              .cell.c2: .progress: .bar(style=("color:${course.color};width:${getProgress('" + student.id + "')}%"))
+              .cell.c3: .progress: .bar(style=("color:${course.color};width:${getProgress('" + student.id + "',section.id)}%"))
+              .cell.c4 #{student.minutes} min
+
+          script#student-data(type="application/json")!= JSON.stringify(studentData)
+          script#course-data(type="application/json")!= JSON.stringify(courseData)
+
+          for student in studentData
+            +modal(`student-${student.id}`)
+              h2= student.name
+              // TODO Student dashboard
+              button.btn.btn-red(data-modal="remove-student" @click=`remove('${student.id}')`) #[x-icon(name="delete")] #{__('Remove student')}
+
+          +modal('remove-student')(style="width: 440px")
+            h2 #[x-icon(name="delete" size=32)] #{__('Remove Student')}
+            form.form-large(action=("/dashboard/" + classroom.code + "/remove/${student.id}") method="POST")
+              p!= __('Are you sure you want to remove $0 from your teacher dashboard? To revert this action, they will have to add your class code again on their student dashboard.', '<strong>${student.name}</strong>')
+              p!= __('$0 will continue to be able to use their Mathigon account independently. Please ensure that they have any required parent or guardian consent to do so.', '<strong>${student.name}</strong>')
+              input(type="hidden" name="_csrf" value=_csrf)
+              p.btn-row: button.btn.btn-red(type='submit')= __('Remove')
+
+        else if studentData.length
+          .empty-dashboard
+            x-icon(name="construction" size=80)
+            p= __('Your students have not yet started any courses.')
+        else
+          .empty-dashboard
+            x-icon(name="construction" size=80)
+            p= __('No students have joined this class yet.')
+
+      .dashboard-sidebar: .sidebar-wrap
+        .sidebar-panel
+          h2= __('Add Students')
+          p!= __('New students can join your class by using the code $0 when signing up for $1. If they already have an account, they can click “Add class code” in the sidebar of their student dashboard.', `<strong>${classroom.code}</strong>`, config.siteName)
+          p= __('It is your responsibility to obtain any necessary guardian consent before asking students to sign up.')
+
+    +modal('edit-class')
+      h2 #[x-icon(name="settings" size=32)] #{__('Class settings')}
+      form(method="POST")
+        input(type="hidden" name="_csrf" value=_csrf)
+        label.form-field
+          input(name="title" placeholder="Class name" value=classroom.title required maxlength=30)
+          span.placeholder= __('Class name')
+        p.btn-row
+          button.btn.btn-red(type="button" data-modal="delete-class")= __('Delete class')
+          button.btn.btn-blue(type="submit")= __('Save changes')
+
+    +modal('delete-class')
+      h2 #[x-icon(name="delete" size=32)] #{__('Delete class')}
+      form(action=`/dashboard/${classroom.code}/delete` method="POST")
+        p= __('Are you sure you want to delete this class? It is not possible to restore a class once deleted. Deleting a class won’t delete the accounts of students within that class.')
+        input(type="hidden" name="_csrf" value=_csrf)
+        p.btn-row
+          button.btn.btn-red(type="submit")= __('Delete class')
+
+    include ../_footer

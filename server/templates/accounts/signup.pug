@@ -11,44 +11,90 @@ block main
     h1 #[x-icon(name="user" size=54)] #{__('Create New Account')}
     +flash(messages)
 
-    if oAuthProviders.length
-      .btn-row.text-center
+    if config.accounts.teachers || config.accounts.parents
+      x-select.signup-tabs(:bind="type" @change="changeType()")
+        button(value="student")= __('Student')
+        if config.accounts.teachers
+          button(value="teacher")= __('Teacher')
+        if config.accounts.parents
+          button(value="parent")= __('Parent')
+
+    mixin socialButtons()
+      .btn-row.text-center&attributes(attributes)
         for p in oAuthProviders
-          a.btn.btn-large(href=`/auth/${p.id}` class=p.id) #[x-icon(name=p.id size=28)] #{p.name}
-      hr
+          a.btn.btn-large(href=`/auth/${p.id}?` class=p.id) #[x-icon(name=p.id size=28)] #{p.name}
+          // TODO ?type='+type+'&birthday='+birthday+'&classCode='+classCode"
+        button.btn.btn-red.btn-large(type="button" @click="next()") #[x-icon(name="email" size=28)] #{__('Email')}
 
-    form(method="POST").form-large.form-min-height
-      input(type="hidden" name="_csrf" value=_csrf)
-
-      .form-row
+    .signup-box
+      form(:if="type === 'student' && step === 1")
         label.form-field
-          input(type='text' name='first' required autocomplete="fname" placeholder=__("First Name"))
-          span.placeholder= __('First Name')
+          input(type="date" name="birthday" :bind="birthday" placeholder=__('Date of Birth') autocomplete="bday" required :class="birthdayError ? 'invalid' : ''")
+          span.placeholder= __('Date of Birth')
+          p.form-error(:if="birthday && birthdayError")= __('This can’t be right…')
         label.form-field
-          input(type='text' name='last' required autocomplete="lname" placeholder=__("Last Name"))
-          span.placeholder= __('Last Name')
+          input(:bind="classCode" placeholder="Class code (optional)" :class="classCodeError ? 'invalid' : ''")
+          span.placeholder= __('Class code (optional)')
+          p.form-error(:if="classCode && classCodeError")= __('This class code is not valid.')
+          p.form-hint= __('You might get a class code from a teacher or parent. It consists of eight numbers or letters.')
+        div(:if="birthday && !birthdayError && (!classCode || !classCodeError)")
+          +socialButtons()(:if="classCode || !isRestricted")
+          .btn-row(:if="!classCode && isRestricted")
+            button.btn.btn-red.btn-large(type="button" @click="next()")= __('Continue')
 
-      label.form-field
-        input(name="email" type="email" required placeholder=__("Email Address") autocomplete="email")
-        span.placeholder= __('Email Address')
+      form(:if="type !== 'student' && step === 1")
+        +socialButtons()
 
-      label.form-field.password
-        x-password
+      form(:if="type === 'student' && isRestricted && !classCode && step === 2" method="POST")
+        input(type="hidden" name="_csrf" value=_csrf)
+        input(type="hidden" name="type" value="student")
+        input(type="hidden" name="birthday" :value="birthday")
+        label.form-field
+          input(name="username" :bind="username" pattern="[a-zA-Z1-9]{4,}" placeholder=__('Username') required :class="usernameError ? 'invalid' : ''")
+          span.placeholder= __('username')
+          p.form-error(:if="usernameError === 'duplicate'")= __('There already exists an account with this username.')
+          p.form-hint= __('Your username can contain letters and numbers. For security, don’t use your real name.')
+        label.form-field
+          input(type="email" name="email" placeholder=__('Guardian Email') required autocomplete="email")
+          span.placeholder= __('Guardian Email')
+          p.form-hint= __('We need to notify your parent or guardian about your account.')
+        label.form-field.password
+          x-password
+        .btn-row: button.btn.btn-red.btn-large(type="submit")= __('Create account')
+        p.alternative: button.a(type="button" @click="back()")= __('Go back')
 
-      label.form-field
-        select(name='country' required)
-          for c in countries
-            option(value=c.id, selected=(c.id === country))= c.name
-        span.placeholder= __('Country')
-
-      label.form-field
-        input(name="birthday" type="date" :bind="birthday" placeholder=__('Date of Birth') autocomplete="bday" required)
-        span.placeholder= __('Date of Birth')
-
-      label.form-checkbox!= __('I’ve read and accept the <a href="$0" target="_blank">Privacy Policy</a> and our <a href="$1" target="_blank">Terms of Service</a>.', config.accounts.privacyPolicy, config.accounts.termsOfUse)
-        input(type="checkbox" name="policies" required)
-        .control
-
-      .btn-row: button.btn.btn-red.btn-large(type='submit')= __('Create Account')
+      form(:if="(type !== 'student' || classCode || !isRestricted) && step === 2" method="POST")
+        input(type="hidden" name="_csrf" value=_csrf)
+        input(type="hidden" name="type" :value="type")
+        input(type="hidden" name="code" :value="classCode" :if="type === 'student' && classCode")
+        input(type="hidden" name="birthday" :value="birthday" :if="type === 'student'")
+        .form-row
+          label.form-field
+            input(name="first" required autocomplete="fname" placeholder=__("First name"))
+            span.placeholder= __('First name')
+          label.form-field
+            input(name="last" required autocomplete="lname" placeholder=__("Last name"))
+            span.placeholder= __('Last name')
+        label.form-field
+          input(name="email" type="email" required autocomplete="email" placeholder=__("Email Address"))
+          span.placeholder= __('Email Address')
+          .form-error(:if="emailError === 'duplicate'")!= __('There already exists an account with this email address. Please <a data-modal="login">sign in</a> instead.')
+          .form-error(:if="emailError === 'invalid'")= __('This email address is not valid.')
+        label.form-field.password
+          x-password
+        label.form-field(:if="type === 'teacher'")
+          input(name="school" required placeholder=__("School name"))
+          span.placeholder= __('School name')
+        label.form-field
+          select(name="country" required)
+            for c in countries
+              option(value=c.id selected=(c.id === country))= c.name
+          span.placeholder= __('Country')
+        div
+          label.form-checkbox!= __('I’ve read and accept the <a href="$0" target="_blank">Privacy Policy</a> and our <a href="$1" target="_blank">Terms of Service</a>.', config.accounts.privacyPolicy, config.accounts.termsOfUse)
+            input(type="checkbox" name="policies" required)
+            .control
+        .btn-row: button.btn.btn-red.btn-large(type="submit")= __('Create Account')
+        p.alternative: button.a(type="button" @click="back()")= __('Go back')
 
     include ../_footer

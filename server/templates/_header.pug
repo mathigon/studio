@@ -89,8 +89,8 @@ if !user && config.accounts.enabled
       input(type="hidden" name="_csrf" value=_csrf)
 
       label.form-field
-        input(type="email" name="email" placeholder=__('Email') required autocomplete="email")
-        span.placeholder #{__('Email')}
+        input(name="email" placeholder=__('Email or Username') required autocomplete="email")
+        span.placeholder #{__('Email or Username')}
 
       label.form-field
         input#password.form-field(type="password" name="password" placeholder=__('Password') minlength="4" required autocomplete="password")

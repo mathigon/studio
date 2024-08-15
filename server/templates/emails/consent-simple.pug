@@ -1,0 +1,16 @@
+| Hi,#{'\n'}
+
+| This email is to let you know that your child just created a #{config.siteName} account with username #{user.username}, and provided your email address as their parent or guardian.#{'\n'}
+
+| In order to comply with child privacy laws, we require your consent before your child can use #{config.siteName}. Please have a look at our Privacy Policy (#{config.accounts.privacyPolicy}) and Terms of Use (#{config.accounts.termsOfUse}).#{'\n'}
+
+| Then, grant your approval by clicking the link below. If you do not approve, your child’s account will be deactivated in 7 days:
+| https://#{config.domain}/consent/#{user.consentToken}#{'\n'}
+
+| Your child will have a #[em restricted account], which means we will collect no personal information other than their country and date of birth. By approving your child’s account, you agree to our Terms of Use and Privacy Policy.#{'\n'}
+
+| If you believe you received this email in error, you can safely ignore it and we will remove your email address from our system.#{'\n'}
+
+| Please contact us if you have any questions, and thanks for allowing your child to learn with us.#{'\n'}
+
+| The #{config.siteName} Team

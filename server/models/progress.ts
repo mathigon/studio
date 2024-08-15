@@ -54,6 +54,7 @@ interface ProgressModel extends Model<ProgressDocument> {
   lookup: (req: express.Request, courseId: string, createNew?: boolean) => Promise<ProgressDocument|undefined>;
   delete: (req: express.Request, courseId: string) => Promise<boolean>;
   getUserData: (userId: string) => Promise<UserProgress>;
+  getUserDataMap: (userId: string) => Promise<Record<string, Record<string, number>>>;
   getRecentCourses: (userId: string) => Promise<string>;
 }
 
@@ -199,6 +200,20 @@ ProgressSchema.statics.getUserData = async function(userId: string) {
   const data = new Map<string, ProgressDocument>();
   const courses = await Progress.find({userId}, '-steps -messages').exec();
   for (const c of courses) data.set(c.courseId, c);
+  return data;
+};
+
+// Same as above, but in JSON format to send to client.
+ProgressSchema.statics.getUserDataMap = async function(userId: string) {
+  const progress = await this.getUserData(userId);
+  const data: Record<string, Record<string, number>> = {};
+  for (const p of progress.values()) {
+    if (!p.progress) continue;
+    data[p.courseId] = {total: p.progress};
+    for (const [id, s] of p.sections.entries()) {
+      if (s.progress) data[p.courseId][id] = s.progress;
+    }
+  }
   return data;
 };
 

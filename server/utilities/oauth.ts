@@ -7,12 +7,13 @@
 import express from 'express';
 import {URLSearchParams} from 'url';
 import fetch from 'node-fetch';
+import {Classroom} from '../models/classroom';
 
 import {Progress} from '../models/progress';
 import {User} from '../models/user';
 import {sendWelcomeEmail} from './emails';
 import {CONFIG, loadData, q} from './utilities';
-import {normalizeEmail} from './validate';
+import {checkBirthday, isClassCode, normalizeEmail, sanitizeType} from './validate';
 
 
 // -----------------------------------------------------------------------------
@@ -180,6 +181,15 @@ export async function oAuthLogin(req: express.Request) {
   if (!CONFIG.accounts.oAuth?.[req.params.provider]) return;
   const provider = req.params.provider as Provider;
 
+  // Save pending user information to session storage.
+  const birthday = checkBirthday(q(req, 'birthday'));
+  const classCode = q(req, 'classCode');
+  req.session.pending = {
+    type: sanitizeType(q(req, 'type')),
+    birthday: birthday ? +birthday : undefined,
+    classCode: isClassCode(classCode) ? classCode : undefined
+  };
+
   const redirect = login(req, provider);
   return redirect ? {redirect} : {error: 'socialLoginError', params: [PROVIDERS[provider].title]};
 }
@@ -190,5 +200,19 @@ export async function oAuthCallback(req: express.Request) {
 
   const profile = await getProfile(req, provider);
   const user = profile ? await findOrCreateUser(req, provider, profile) : undefined;
+
+  if (user?.isRestricted) user.isRestricted = user.guardianConsentToken = undefined;
+
+  // Apply information that users provided before clicking the OAuth button.
+  const pending = req.session.pending;
+  if (user && pending) {
+    if (pending.type && user.type === 'student') user.type = pending.type;
+    if (!user.birthday && pending.birthday) user.birthday = new Date(pending.birthday);
+    const classroom = pending.classCode ? await Classroom.lookup(pending.classCode) : undefined;
+    if (classroom) await classroom.addStudent(user);
+    req.session.pending = undefined;
+    if (user.type !== 'student') await Classroom.make('Default Class', user).save();
+  }
+
   return user ? {user} : {error: 'socialLoginError', params: [PROVIDERS[provider].title]};
 }

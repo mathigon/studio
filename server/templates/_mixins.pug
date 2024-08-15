@@ -1,7 +1,7 @@
-mixin course(id)
+mixin course(id, myProgress)
   //- progressData is a global variable that contains all student course progress
   - var course = getCourse(id, locale.id)
-  - var p = progress ? progress[id] : undefined
+  - var p = myProgress || (progress ? progress[id] : undefined)
   .course(lang=(course.locale !== locale.id ? course.locale : undefined))
     .course-img(style=`background-color: ${course.color}; background-image: url(${course.icon || course.hero});`)
     h3
@@ -41,3 +41,17 @@ mixin modal(id)
     button.close: x-icon(name="close")
     .modal-body
       block
+
+mixin socialButtons()
+  if config.social.twitter
+    a.btn.twitter(href=`https://twitter.com/${config.social.twitter.handle}` title="Twitter" target="_blank" rel="noopener")
+      x-icon(name="twitter" size=32)
+  if config.social.facebook
+    a.btn.facebook(href=`https://www.facebook.com/${config.social.facebook.page}/` title="Facebook" target="_blank" rel="noopener")
+      x-icon(name="facebook" size=32)
+  if config.social.instagram
+    a.btn.instagram(href=`https://www.instagram.com/${config.social.instagram.handle}/` title="Instagram" target="_blank" rel="noopener")
+      x-icon(name="instagram" size=32)
+  if config.social.youtube
+    a.btn.youtube(href=`https://www.youtube.com/c/${config.social.youtube.channel}` title="YouTube" target="_blank" rel="noopener")
+      x-icon(name="youtube" size=32)

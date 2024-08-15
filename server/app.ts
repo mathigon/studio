@@ -18,9 +18,10 @@ import {safeToJSON} from '@mathigon/core';
 import {search, SEARCH_DOCS} from './search';
 import {CourseRequestOptions, ServerOptions} from './interfaces';
 import setupAuthEndpoints from './accounts';
+import setupDashboardEndpoints from './dashboards';
 import {getMongoStore} from './utilities/mongodb';
 import {OAUTHPROVIDERS} from './utilities/oauth';
-import {cacheBust, CONFIG, CONTENT_DIR, COURSES, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities/utilities';
+import {cacheBust, CONFIG, CONTENT_DIR, ENV, findNextSection, getCourse, href, include, IS_PROD, lighten, ONE_YEAR, OUT_DIR, PROJECT_DIR, promisify, removeCacheBust} from './utilities/utilities';
 import {AVAILABLE_LOCALES, getCountry, getLocale, isInEU, Locale, LOCALES, translate} from './utilities/i18n';
 import {User, UserDocument} from './models/user';
 import {CourseAnalytics, LoginAnalytics} from './models/analytics';
@@ -43,6 +44,7 @@ declare global {
 declare module 'express-session' {
   interface SessionData {
     auth?: {user?: string};
+    pending?: {birthday?: number, type?: 'student'|'teacher'|'parent', classCode?: string};
   }
 }
 
@@ -124,13 +126,6 @@ export class MathigonStudioApp {
       store: CONFIG.accounts.enabled ? getMongoStore() : undefined
     }));
 
-    this.app.use(lusca({
-      csrf: {blocklist: options?.csrfBlocklist},  // Cross Site Request Forgery
-      hsts: {maxAge: 31536000},                   // Strict-Transport-Security
-      nosniff: true,                              // X-Content-Type-Options
-      xssProtection: true                        // X-XSS-Protection
-    }));
-
     this.app.use((req, res, next) => {
       req.url = removeCacheBust(req.url);
       req.country = getCountry(req);
@@ -148,6 +143,13 @@ export class MathigonStudioApp {
         cacheBust: (file: string) => cacheBust(file, req.locale),
         oAuthProviders: OAUTHPROVIDERS
       });
+
+      this.app.use(lusca({
+        csrf: {blocklist: options?.csrfBlocklist},  // Cross Site Request Forgery
+        hsts: {maxAge: 31536000},                   // Strict-Transport-Security
+        nosniff: true,                              // X-Content-Type-Options
+        xssProtection: true                         // X-XSS-Protection
+      }));
 
       next();
     });
@@ -265,19 +267,7 @@ export class MathigonStudioApp {
     });
 
     setupAuthEndpoints(this);
-
-    this.get('/dashboard', async (req, res) => {
-      if (!req.user) return res.redirect('/login');
-
-      const progress = await Progress.getUserData(req.user.id);
-      const stats = await CourseAnalytics.getLastWeekStats(req.user.id);
-      const recent = (await Progress.getRecentCourses(req.user.id)).slice(0, 6);
-
-      const items = Math.min(4, 6 - recent.length);
-      const recommended = COURSES.filter(x => !progress.has(x)).slice(0, items);
-
-      res.render('dashboard', {progress, recent, recommended, stats});
-    });
+    setupDashboardEndpoints(this);
 
     return this;
   }

@@ -16,8 +16,8 @@ block main
       p= __('Enter your email address or username below, and we will send you instructions how to reset your password.')
 
       label.form-field
-        input(type="email" name="email" placeholder=__("Email") required autocomplete="email" autofocus=req.body.email)
-        span.placeholder= __('Email')
+        input(type="text" name="email" placeholder=__("Email or Username") required autocomplete="email" autofocus=req.body.email)
+        span.placeholder= __('Email or Username')
 
       button.btn.btn-red.btn-large(type='submit')= __('Reset Password')
 
