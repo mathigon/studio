@@ -81,7 +81,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "6.4.0",
     "@typescript-eslint/parser": "6.4.0",
-    "eslint": "8.57.0",
+    "eslint": "8.57.1",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-import": "2.29.1",
     "tape": "5.8.1"
