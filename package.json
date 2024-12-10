@@ -66,7 +66,7 @@
     "mongodb": "6.8.0",
     "mongoose": "8.5.2",
     "node-fetch": "2.6.9",
-    "postcss": "8.4.40",
+    "postcss": "8.4.41",
     "postcss-inline-svg": "6.0.0",
     "pug": "3.0.3",
     "rtlcss": "4.2.0",
