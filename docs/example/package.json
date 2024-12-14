@@ -21,7 +21,7 @@
     "typescript": "5.5.4"
   },
   "devDependencies": {
-    "nodemon": "3.1.4",
-    "npm-run-all2": "5.0.0"
+    "nodemon": "3.1.9",
+    "npm-run-all2": "5.0.2"
   }
 }
